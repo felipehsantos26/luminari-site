@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
+// 📧 Puxa o serviço de e-mail que criamos na pasta services
 const { enviarEmailsComissao } = require('./services/emailService');
 
 const app = express();
@@ -11,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-// 🔐 BANCO DE DADOS DE CUPONS (Simulando e-mails reais dos parceiros para o futuro)
+// 🔐 BANCO DE DADOS DE CUPONS
 const cuponsValidos = {
     "THAIS10": { desconto: 0.10, iEmail: "felipeh.santos26@gmail.com" },
     "FELIPE15": { desconto: 0.15, iEmail: "felipeh.santos26@gmail.com" }
@@ -30,16 +31,14 @@ app.post('/api/vendas/validar-cupom', (req, res) => {
     return res.status(400).json({ valido: false, message: "Cupom inválido." });
 });
 
-// Rota 2: Criar Pagamento
+// Rota 2: Criar Pagamento (O GATILHO DE E-MAIL FOI REMOVIDO DAQUI!)
 app.post('/api/vendas/criar-pagamento', async (req, res) => {
     const { cupom } = req.body;
 
     let precoFinal = PRECO_ORIGINAL;
-    let emailDoInfluenciador = "";
 
     if (cupom && cuponsValidos[cupom]) {
         precoFinal = PRECO_ORIGINAL * (1 - cuponsValidos[cupom].desconto);
-        emailDoInfluenciador = cuponsValidos[cupom].iEmail;
     }
 
     try {
@@ -53,6 +52,7 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
                 }
             ],
             metadata: {
+                // Passamos o cupom aqui para o Mercado Pago guardar e nos devolver no Webhook depois
                 cupom_utilizado: cupom || "NENHUM"
             },
             back_urls: {
@@ -76,23 +76,13 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
         });
 
         if (!response.ok) {
-            console.log(`\n❌ O MERCADO PAGO RECUSOU A REQUISIÇÃO (Status: ${response.status})`);
             return res.status(400).json({ error: true, mensagem_real: "Erro na API do Mercado Pago." });
         }
 
         const preference = await response.json();
 
         if (preference.init_point) {
-            const valorComissao = cupom && cuponsValidos[cupom] ? (precoFinal * 0.15) : 0;
-            
-            // Dispara os e-mails
-            enviarEmailsComissao({
-                cupom: cupom || "NENHUM (Venda Direta pelo Site)",
-                precoPago: precoFinal,
-                comissao: valorComissao,
-                emailInfluenciador: emailDoInfluenciador // Passa o e-mail do banco, mas o service cuida do redirecionamento de teste
-            });
-
+            // Retorna apenas a URL de pagamento. Nenhum e-mail é disparado ainda!
             return res.json({ init_point: preference.init_point });
         }
 
@@ -104,10 +94,62 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
     }
 });
 
+// 🚨 ROTA 3: WEBHOOK SEGURO DO MERCADO PAGO
+// O Mercado Pago vai chamar essa rota automaticamente quando o pagamento mudar de status
+app.post('/api/vendas/webhook', async (req, res) => {
+    const { action, data } = req.body;
+
+    // Só processa se recebermos dados com um ID de pagamento válido
+    if (data && data.id) {
+        try {
+            const tokenLimpo = process.env.MP_ACCESS_TOKEN ? process.env.MP_ACCESS_TOKEN.trim() : '';
+            
+            // Consultamos a API do Mercado Pago para conferir se o pagamento foi pago mesmo
+            const mpResponse = await fetch(`https://mercadopago.com{data.id}`, {
+                headers: { 'Authorization': `Bearer ${tokenLimpo}` }
+            });
+
+            if (mpResponse.ok) {
+                const pagamentoInfo = await mpResponse.json();
+
+                // 🔥 SÓ ENVIA O E-MAIL SE O STATUS FOR "approved" (Dinheiro na conta!)
+                if (pagamentoInfo.status === 'approved') {
+                    // Resgatamos o cupom que deixamos salvo no metadado lá no passo 2
+                    const cupomUsado = pagamentoInfo.metadata.cupom_utilizado;
+                    const precoPago = pagamentoInfo.transaction_amount;
+
+                    let valorComissao = 0;
+                    let emailInfluenciador = "felipeh.santos26@gmail.com";
+
+                    if (cupomUsado && cuponsValidos[cupomUsado]) {
+                        valorComissao = precoPago * 0.15;
+                        emailInfluenciador = cuponsValidos[cupomUsado].iEmail;
+                    }
+
+                    console.log(`💰 Sucesso! Pagamento aprovado. ID: ${data.id}. Disparando e-mails legítimos...`);
+                    
+                    // O e-mail agora é disparado com segurança máxima pós-venda
+                    await enviarEmailsComissao({
+                        cupom: cupomUsado === "NENHUM" ? "NENHUM (Venda Direta pelo Site)" : cupomUsado,
+                        precoPago: precoPago,
+                        comissao: valorComissao,
+                        emailInfluenciador: emailInfluenciador
+                    });
+                }
+            }
+        } catch (error) {
+            console.error("❌ Erro ao ler dados do Webhook:", error);
+        }
+    }
+
+    // O Mercado Pago exige que o servidor retorne um status 200 rápido para confirmar o aviso
+    return res.status(200).send('OK');
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`==================================================`);
-    console.log(`🚀 SERVIDOR INTEGRADO COM MERCADO PAGO & RESEND`);
-    console.log(`🌐 Rodando em: http://localhost:${PORT}`);
+    console.log(`🚀 SERVIDOR COM WEBHOOK ATIVO E PRONTO PARA A VERCEL`);
+    console.log(`🌐 Rodando na porta: ${PORT}`);
     console.log(`==================================================`);
 });
