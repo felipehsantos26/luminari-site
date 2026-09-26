@@ -94,28 +94,38 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
     }
 });
 
-// 🚨 ROTA 3: WEBHOOK SEGURO DO MERCADO PAGO
-// O Mercado Pago vai chamar essa rota automaticamente quando o pagamento mudar de status
+// 🚨 ROTA 3: WEBHOOK SUPER BLINDADO DO MERCADO PAGO
 app.post('/api/vendas/webhook', async (req, res) => {
-    const { action, data } = req.body;
+    // O Mercado Pago pode mandar o ID direto em data.id ou dentro de resource para orders
+    const { data, resource, action } = req.body;
 
-    // Só processa se recebermos dados com um ID de pagamento válido
+    // Descobre o ID do pagamento de forma inteligente, não importa o formato do evento
+    let pagamentoId = null;
     if (data && data.id) {
+        pagamentoId = data.id;
+    } else if (resource) {
+        // Se vier como URL (ex: https://mercadopago.com), pega só o número do final
+        pagamentoId = resource.split('/').pop();
+    }
+
+    // Se encontramos um ID e a ação tem a ver com pagamento ou pedido
+    if (pagamentoId && (!action || action.includes('payment') || action.includes('order'))) {
         try {
             const tokenLimpo = process.env.MP_ACCESS_TOKEN ? process.env.MP_ACCESS_TOKEN.trim() : '';
             
-            // Consultamos a API do Mercado Pago para conferir se o pagamento foi pago mesmo
-            const mpResponse = await fetch(`https://mercadopago.com{data.id}`, {
+            // Consulta oficial na API do Mercado Pago para checar o status real
+            const mpResponse = await fetch(`https://mercadopago.com{pagamentoId}`, {
                 headers: { 'Authorization': `Bearer ${tokenLimpo}` }
             });
 
             if (mpResponse.ok) {
                 const pagamentoInfo = await mpResponse.json();
 
-                // 🔥 SÓ ENVIA O E-MAIL SE O STATUS FOR "approved" (Dinheiro na conta!)
+                // 🔥 SÓ ENVIA O E-MAIL SE O STATUS FOR "approved"
                 if (pagamentoInfo.status === 'approved') {
-                    // Resgatamos o cupom que deixamos salvo no metadado lá no passo 2
-                    const cupomUsado = pagamentoInfo.metadata.cupom_utilizado;
+                    // Busca os metadados com segurança contra valores nulos
+                    const metadata = pagamentoInfo.metadata || {};
+                    const cupomUsado = metadata.cupom_utilizado;
                     const precoPago = pagamentoInfo.transaction_amount;
 
                     let valorComissao = 0;
@@ -126,15 +136,16 @@ app.post('/api/vendas/webhook', async (req, res) => {
                         emailInfluenciador = cuponsValidos[cupomUsado].iEmail;
                     }
 
-                    console.log(`💰 Sucesso! Pagamento aprovado. ID: ${data.id}. Disparando e-mails legítimos...`);
+                    console.log(`💰 Sucesso real! Pagamento aprovado. ID: ${pagamentoId}. Disparando e-mails legítimos...`);
                     
-                    // O e-mail agora é disparado com segurança máxima pós-venda
                     await enviarEmailsComissao({
-                        cupom: cupomUsado === "NENHUM" ? "NENHUM (Venda Direta pelo Site)" : cupomUsado,
+                        cupom: !cupomUsado || cupomUsado === "NENHUM" ? "NENHUM (Venda Direta pelo Site)" : cupomUsado,
                         precoPago: precoPago,
                         comissao: valorComissao,
                         emailInfluenciador: emailInfluenciador
                     });
+                } else {
+                    console.log(`ℹ️ Notificação para o ID ${pagamentoId}, mas o status é '${pagamentoInfo.status}' (Não disparar e-mail).`);
                 }
             }
         } catch (error) {
@@ -142,9 +153,10 @@ app.post('/api/vendas/webhook', async (req, res) => {
         }
     }
 
-    // O Mercado Pago exige que o servidor retorne um status 200 rápido para confirmar o aviso
+    // Sempre responde 200 rápido para o Mercado Pago não ficar reenviando o mesmo aviso
     return res.status(200).send('OK');
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
