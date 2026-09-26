@@ -56,9 +56,9 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
                 cupom_utilizado: cupom || "NENHUM"
             },
             back_urls: {
-                success: "https://mercadopago.com.br",
-                failure: "https://mercadopago.com.br",
-                pending: "https://mercadopago.com.br"
+                success: "https://www.instagram.com/felipeh.santos26/",
+                failure: "https://www.instagram.com/thais.ki.satux/",
+                pending: "https://www.instagram.com/glico.lumi.angel/"
             },
             auto_return: "approved"
         };
@@ -114,7 +114,7 @@ app.post('/api/vendas/webhook', async (req, res) => {
             const tokenLimpo = process.env.MP_ACCESS_TOKEN ? process.env.MP_ACCESS_TOKEN.trim() : '';
             
             // Consulta oficial na API do Mercado Pago para checar o status real
-            const mpResponse = await fetch(`https://mercadopago.com{pagamentoId}`, {
+            const mpResponse = await fetch(`https://api.mercadopago.com/v1/payments/${pagamentoId}`, {
                 headers: { 'Authorization': `Bearer ${tokenLimpo}` }
             });
 
