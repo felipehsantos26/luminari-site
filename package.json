@@ -1,0 +1,24 @@
+{
+  "name": "luminari-site",
+  "version": "1.0.0",
+  "description": "Site e checkout da Luminária Inteligente SmartGlucolamp",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.4",
+    "express": "^5.2.1",
+    "mercadopago": "^3.6.1",
+    "resend": "^6.30.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

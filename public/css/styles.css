@@ -1,0 +1,217 @@
+1. CONFIGURAÇÕES GERAIS E CORES (Reset de Fábrica)
+------------------------------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f8fafc;
+    color: #1e293b;
+    line-height: 1.6;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* -------------------------------------------------------------
+   2. CABEÇALHO (Navbar)
+------------------------------------------------------------- */
+.navbar {
+    background-color: #ffffff;
+    padding: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.logo {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2563eb; /* Azul tecnológico */
+    letter-spacing: -0.5px;
+}
+
+/* -------------------------------------------------------------
+   3. BLOCO PRINCIPAL (Hero Section) - Responsivo (Mobile-First)
+------------------------------------------------------------- */
+.hero-section {
+    padding: 40px 0;
+}
+
+/* Por padrão (no celular), as coisas ficam uma embaixo da outra */
+.hero-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Forçando a foto da Thaís a ficar perfeita e não quebrar a tela */
+.product-gallery {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.product-img {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    object-fit: cover;
+}
+
+/* Textos da Oferta */
+.product-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tag {
+    align-self: flex-start;
+    background-color: #dbeafe;
+    color: #1e40af;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 50px;
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #0f172a;
+    margin-bottom: 15px;
+}
+
+.description {
+    color: #64748b;
+    font-size: 1.05rem;
+    margin-bottom: 25px;
+}
+
+/* -------------------------------------------------------------
+   4. CAIXA DE CHECKOUT (Preço, Cupom e Botão)
+------------------------------------------------------------- */
+.checkout-box {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.01), 0 2px 4px -1px rgba(0,0,0,0.01);
+}
+
+.price-container {
+    margin-bottom: 20px;
+}
+
+.old-price {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+    display: block;
+}
+
+.current-price {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+/* Campo de Cupom */
+.coupon-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.coupon-group input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.coupon-group input:focus {
+    border-color: #2563eb;
+}
+
+.coupon-group button {
+    background-color: #0f172a;
+    color: #ffffff;
+    border: none;
+    padding: 0 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.coupon-group button:hover {
+    background-color: #1e293b;
+}
+
+/* Mensagens do Cupom */
+.message {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+.message.success { color: #16a34a; } /* Verde para sucesso */
+.message.error { color: #dc2626; }   /* Vermelho para erro */
+
+/* Botão de Compra Chamativo */
+.btn-primary {
+    width: 100%;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+}
+
+/* -------------------------------------------------------------
+   5. MUDANÇA PARA COMPUTADORES (Telas Maiores que 768px)
+------------------------------------------------------------- */
+@media (min-width: 768px) {
+    .hero-section {
+        padding: 80px 0;
+    }
+    
+    /* No computador, a foto fica do lado esquerdo e o texto do lado direito */
+    .hero-grid {
+        flex-direction: row;
+        align-items: center;
+        gap: 60px;
+    }
+
+    .product-gallery, .product-info {
+        flex: 1; /* Divide o espaço meio a meio */
+    }
+
+    h1 {
+        font-size: 2.8rem;
+    }
+}

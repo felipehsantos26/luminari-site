@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luminária Inteligente | Monitoramento de Glicemia em Tempo Real</title>
+    <!-- Aqui estamos avisando o site que o estilo visual virá da pasta css -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- 1. Cabeçalho com o nome da sua marca -->
+    <header class="navbar">
+        <div class="container">
+            <span class="logo">SmartGlucolamp</span>
+        </div>
+    </header>
+
+    <!-- 2. Bloco Principal da Oferta (Hero Section) -->
+    <main class="hero-section container">
+        <div class="hero-grid">
+            
+            <!-- Lado Esquerdo: Imagem da Luminária -->
+            <div class="product-gallery">
+                <!-- Se você ainda não tiver a foto, não tem problema, vai aparecer um ícone quadrado indicando que falta a imagem -->
+                <img src="assets/thais_lele.jpeg" alt="Luminária Inteligente mudando de cor" class="product-img">
+            </div>
+
+            <!-- Lado Direito: Textos de Venda e Preço -->
+            <div class="product-info">
+                <span class="tag">Inovação em Saúde & Tecnologia</span>
+                <h1>Sua saúde monitorada através das cores</h1>
+                <p class="description">
+                    Uma luminária inteligente que se conecta ao seu sensor de glicemia e muda de cor em tempo real. Mais tranquilidade para o seu dia a dia e proteção visual para quem você ama.
+                </p>
+
+                <!-- Bloco de Preço, Cupom e Botão de Compra -->
+                <div class="checkout-box">
+                    <div class="price-container">
+                        <span class="old-price">R$ 299,00</span>
+                        <!-- Esse ID 'display-price' vai nos ajudar a mudar o preço via código quando o cupom entrar -->
+                        <span class="current-price" id="display-price">R$ 299,00</span>
+                    </div>
+
+                    <!-- Setor Isolado do Cupom de Desconto -->
+                    <div class="coupon-group">
+                        <input type="text" id="coupon-input" placeholder="Digite o cupom do influenciador">
+                        <button id="apply-coupon-btn">Aplicar</button>
+                    </div>
+                    <!-- Esta tag abaixo serve para mostrar mensagens como "Cupom aplicado!" ou "Cupom inválido" -->
+                    <p id="coupon-message" class="message"></p>
+
+                    <!-- Botão de Compra Principal -->
+                    <button id="buy-btn" class="btn-primary">Garantir Minha Luminária</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Avisando o site para ler o arquivo JavaScript que vai cuidar do cupom e do botão -->
+   <script src="js/checkout.js?v=1"></script>
+</body>
+</html>
