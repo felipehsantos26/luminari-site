@@ -275,15 +275,17 @@ app.post('/api/vendas/webhook', async (req, res) => {
                     } 
 
                     // Enviamos o pacote completo contendo também o e-mail real do comprador capturado
+                                      // 📬 Enviamos o pacote completo contendo também o e-mail real do comprador capturado
                     await enviarEmailsComissao({ 
                         cupom: !cupomUsado || cupomUsado === "NENHUM" ? "NENHUM (Venda Direta pelo Site)" : cupomUsado, 
                         precoPago: precoPago, 
                         comissao: valorComissao, 
                         emailInfluenciador: emailInfluenciador,
                         entrega: dadosEntregaCliente,
-                        // 📥 CAPTURA O E-MAIL DO COMPRADOR DIRETAMENTE DO MERCADO PAGO
-                        emailComprador: pagamentoInfo.payer?.email || "felipeh.santos26@gmail.com"
+                        // 🛡️ CORREÇÃO DE SEGURANÇA: Garante que se o MP não devolver o e-mail, ele envia para você testar!
+                        emailComprador: (pagamentoInfo.payer && pagamentoInfo.payer.email) ? pagamentoInfo.payer.email : "felipeh.santos26@gmail.com"
                     });
+
 
                     // Limpa a memória para manter o servidor leve
                     delete pedidosTemporarios[idPedidoAmarrado];
