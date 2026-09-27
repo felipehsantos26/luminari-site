@@ -130,7 +130,7 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
         precoProduto = PRECO_ORIGINAL * (1 - cuponsValidos[cupom].desconto); 
     } 
 
-    let valorFrete = fretePreco ? Number(fretePreco) : 0.00;
+    let valorFrete = 0.01
 
     // 🔑 GERA UM CARIMBO ÚNICO PARA O PEDIDO (Chave Única)
     const idPedido = `PEDIDO-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
