@@ -139,14 +139,17 @@ buyBtn.addEventListener('click', async () => {
         buyBtn.disabled = true;
 
         // Avisa o servidor enviando o cupom e também o serviço de frete escolhido
+                // Envia o cupom, o ID do frete e o PREÇO REAL do frete selecionado
         const response = await fetch('/api/vendas/criar-pagamento', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 cupom: activeCoupon,
-                freteId: selectedShippingId
+                freteId: selectedShippingId,
+                fretePreco: selectedShippingCost // 🚚 Envia o preço real da tela!
             })
         });
+
 
         const data = await response.json();
 

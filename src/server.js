@@ -104,15 +104,18 @@ app.post('/api/frete/calcular', async (req, res) => {
 
 // Rota 2: Criar Pagamento com Coleta de Dados e Frete Real Embutido
 // Rota 2: Criar Pagamento com Coleta de Dados e Frete Real Embutido (SOMA CORRIGIDA!)
+// Rota 2: Criar Pagamento com Frete Dinâmico Real
 app.post('/api/vendas/criar-pagamento', async (req, res) => { 
-    const { cupom, freteId } = req.body; 
+    const { cupom, freteId, fretePreco } = req.body; // 📥 Captura o preço real vindo do site
 
     let precoProduto = PRECO_ORIGINAL; 
     if (cupom && cuponsValidos[cupom]) { 
         precoProduto = PRECO_ORIGINAL * (1 - cuponsValidos[cupom].desconto); 
     } 
 
-    let valorFrete = 0.00;
+    // Se o cliente mandou o preço real da tela, usa ele! Caso contrário, usa zero.
+    let valorFrete = fretePreco ? Number(fretePreco) : 0.00;
+
     let nomeFrete = "Entrega Padrão";
 
     // Se o cliente escolheu um frete real, o servidor valida o preço por segurança
