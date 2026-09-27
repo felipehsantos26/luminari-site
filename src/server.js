@@ -157,9 +157,11 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
             .eq('id', 1)
             .single();
 
-        if (erroEstoque || !estoqueAtual) {
-            return res.status(500).json({ error: true, mensagem_real: "Erro ao consultar o estoque no banco real." });
+                if (erroEstoque || !estoqueAtual) {
+            console.error("❌ Detalhes do erro no Supabase:", erroEstoque);
+            return res.status(200).json({ error: true, mensagem_real: "Ops! Erro ao consultar o estoque no banco real." });
         }
+
 
         // Se o contador do banco real estiver zerado, barra o comprador aqui!
         if (estoqueAtual.quantidade_disponivel <= 0) {
