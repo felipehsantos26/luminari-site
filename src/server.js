@@ -276,15 +276,17 @@ app.post('/api/vendas/webhook', async (req, res) => {
 
                     // Enviamos o pacote completo contendo também o e-mail real do comprador capturado
                                       // 📬 Enviamos o pacote completo contendo também o e-mail real do comprador capturado
+                                        // 📬 Puxa o e-mail que o cliente digitou nativamente no formulário do seu site!
                     await enviarEmailsComissao({ 
                         cupom: !cupomUsado || cupomUsado === "NENHUM" ? "NENHUM (Venda Direta pelo Site)" : cupomUsado, 
                         precoPago: precoPago, 
                         comissao: valorComissao, 
                         emailInfluenciador: emailInfluenciador,
                         entrega: dadosEntregaCliente,
-                        // 🛡️ CORREÇÃO DE SEGURANÇA: Garante que se o MP não devolver o e-mail, ele envia para você testar!
-                        emailComprador: (pagamentoInfo.payer && pagamentoInfo.payer.email) ? pagamentoInfo.payer.email : "felipeh.santos26@gmail.com"
+                        // 🌟 MUDANÇA AQUI: Lê o e-mail que veio direto da memória do seu site!
+                        emailComprador: dadosEntregaCliente.email || "felipeh.santos26@gmail.com"
                     });
+
 
 
                     // Limpa a memória para manter o servidor leve
