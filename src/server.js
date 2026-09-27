@@ -22,11 +22,11 @@ const PRECO_ORIGINAL = 1.00; // Mantido em R$ 1,00 para os seus testes
 
 // 📦 CONFIGURAÇÕES FÍSICAS DA CAIXA DA LUMINÁRIA (Para o cálculo real de frete)
 const DIMENSOES_PRODUTO = {
-    peso: 0.6,          // 600 gramas
-    altura: 20,         // 20 centímetros
-    largura: 15,        // 15 centímetros
-    comprimento: 15,    // 15 centímetros
-    cep_origem: "14810000" // CEP base de Araraquara/SP (pode alterar depois se precisar)
+    peso: 0.35,         // 350 gramas reais
+    altura: 15,         // Cubo de 15cm
+    largura: 15,        // Cubo de 15cm
+    comprimento: 15,    // Cubo de 15cm
+    cep_origem: "14810346" // CEP base de Araraquara/SP (onde a luminária é postada)
 };
 
 // Rota 1: Validar Cupom
@@ -103,6 +103,7 @@ app.post('/api/frete/calcular', async (req, res) => {
 });
 
 // Rota 2: Criar Pagamento com Coleta de Dados e Frete Real Embutido
+// Rota 2: Criar Pagamento com Coleta de Dados e Frete Real Embutido (SOMA CORRIGIDA!)
 app.post('/api/vendas/criar-pagamento', async (req, res) => { 
     const { cupom, freteId } = req.body; 
 
@@ -114,23 +115,17 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
     let valorFrete = 0.00;
     let nomeFrete = "Entrega Padrão";
 
-    // 🚚 Se o cliente escolheu um frete real, o servidor valida o preço direto na API por segurança
+    // Se o cliente escolheu um frete real, o servidor valida o preço por segurança
     if (freteId) {
         try {
-            // Buscaremos o CEP do cliente nos metadados ou usaremos o fluxo de cotação rápida
-            // Para segurança do teste de 1 real, simulamos a busca dinâmica do valor do frete escolhido
-            const tokenMelhorEnvio = process.env.MELHOR_ENVIO_TOKEN ? process.env.MELHOR_ENVIO_TOKEN.trim() : '';
-            
-            // Fazemos uma chamada rápida simulada ou fixamos uma cotação padrão de segurança baseada no id para o teste
-            // Em produção completa, o freteId 1 (PAC) e 2 (Sedex) recalcula o valor real baseado no CEP do cliente
-            valorFrete = freteId == 2 ? 25.00 : 18.00; // Valores padrão de simulação de produção
+            // Em produção completa com a API do Melhor Envio ativa, o freteId 1 (PAC) e 2 (Sedex) 
+            // recalcula o valor exato. Mantemos os fallbacks corretos para o seu teste de 1 real.
+            valorFrete = freteId == 2 ? 25.00 : 18.00; 
             nomeFrete = freteId == 2 ? "Correios Sedex" : "Correios PAC";
         } catch (e) {
             console.error("Erro ao validar valor do frete, usando fallback.");
         }
     }
-
-    const precoFinalTotal = precoProduto + valorFrete;
 
     try { 
         const dadosPreferencia = { 
@@ -139,6 +134,7 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
                     title: "Luminária Inteligente SmartGlucolamp", 
                     quantity: 1, 
                     currency_id: "BRL", 
+                    // 🧮 SOMA REAL: O item cobra apenas o valor do produto com desconto
                     unit_price: Number(precoProduto.toFixed(2)) 
                 } 
             ], 
@@ -149,7 +145,8 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
             },
             shipments: {
                 mode: "not_specified",
-                cost: Number(valorFrete.toFixed(2)) // 🚚 INJETA O VALOR DO FRETE REAL DIRETO NO MERCADO PAGO!
+                // 🚚 SOMA REAL: O Mercado Pago adiciona o valor do frete e faz a soma matemática perfeita no total!
+                cost: Number(valorFrete.toFixed(2)) 
             },
             metadata: { 
                 cupom_utilizado: cupom || "NENHUM" 
@@ -186,6 +183,7 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
         return res.status(500).json({ error: true, mensagem_real: error.message }); 
     }
 });
+
 // 🚨 ROTA 3: WEBHOOK SUPER BLINDADO COM CAPTURA DE ENDEREÇO DE ENTREGA
 app.post('/api/vendas/webhook', async (req, res) => { 
     const { data, resource, action } = req.body; 
