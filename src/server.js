@@ -24,7 +24,7 @@ const DIMENSOES_PRODUTO = {
     altura: 15,         // Cubo de 15cm
     largura: 15,        // Cubo de 15cm
     comprimento: 15,    // Cubo de 15cm
-    cep_origem: "14810000" // CEP base de Araraquara/SP
+    cep_origem: 14810000 // CEP base de Araraquara/SP
 };
 
 // 🗄️ BANCO DE DADOS TEMPORÁRIO EM MEMÓRIA (Mantido apenas para segurar o endereço até o Pix aprovar)
@@ -84,15 +84,16 @@ app.post('/api/frete/calcular', async (req, res) => {
         const tokenMelhorEnvio = process.env.MELHOR_ENVIO_TOKEN ? process.env.MELHOR_ENVIO_TOKEN.trim() : '';
 
         const corpoCalculo = {
-            from: { postal_code: DIMENSOES_PRODUTO.cep_origem },
-            to: { postal_code: cep },
+            // 🛡️ Garante que ambos os CEPs sejam enviados como números puros para a API
+            from: { postal_code: Number(DIMENSOES_PRODUTO.cep_origem) },
+            to: { postal_code: Number(cep) },
             products: [
                 {
                     id: "luminaria",
-                    width: DIMENSOES_PRODUTO.largura,
-                    height: DIMENSOES_PRODUTO.altura,
-                    length: DIMENSOES_PRODUTO.comprimento,
-                    weight: DIMENSOES_PRODUTO.peso,
+                    width: Number(DIMENSOES_PRODUTO.largura),
+                    height: Number(DIMENSOES_PRODUTO.altura),
+                    length: Number(DIMENSOES_PRODUTO.comprimento),
+                    weight: Number(DIMENSOES_PRODUTO.peso),
                     insurance_value: 100.00,
                     quantity: 1
                 }
