@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 // 🌐 Ativa as rotas do painel administrativo
-app.use('/api/admin', adminRoutes);
+app.use('/api/admin/', adminRoutes);
 
 
 // 💰 PREÇO DE TESTE MANTIDO EM R\$ 1,00 PARA A SUA VALIDAÇÃO RÁPIDA DE CUSTO ZERO
