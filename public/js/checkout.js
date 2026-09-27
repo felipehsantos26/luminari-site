@@ -5,15 +5,20 @@ const couponMessage = document.getElementById('coupon-message');
 const displayPrice = document.getElementById('display-price');
 const buyBtn = document.getElementById('buy-btn');
 
-// 🚚 Novos elementos mapeados para o cálculo de frete real
+// 🚚 Elementos mapeados para o formulário de entrega e frete
+const clientNameInput = document.getElementById('client-name-input');
+const clientPhoneInput = document.getElementById('client-phone-input');
 const cepInput = document.getElementById('cep-input');
 const calculateShippingBtn = document.getElementById('calculate-shipping-btn');
 const shippingOptions = document.getElementById('shipping-options');
 const shippingMessage = document.getElementById('shipping-message');
+const streetInput = document.getElementById('street-input');
+const numberInput = document.getElementById('number-input');
+const complementInput = document.getElementById('complement-input');
 
-// Variáveis de controle do estado da compra (guardam os valores selecionados)
+// Variáveis de controle do estado da compra
 let activeCoupon = "";
-let baseProductPrice = 1.00; // Alinhado com o preço de teste do seu server.js atual
+let baseProductPrice = 1.00; // Preço de teste alinhado com o servidor
 let selectedShippingCost = 0.00;
 let selectedShippingId = "";
 
@@ -33,7 +38,7 @@ applyCouponBtn.addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch('/api/vendas/validar-cupom', {
+        const response = await fetch('/api/vendas/validar-coupon', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ cupom: couponCode })
@@ -55,7 +60,7 @@ applyCouponBtn.addEventListener('click', async () => {
     }
 });
 
-// 🚚 NOVA AÇÃO: Clicar no botão "Calcular Frete" (Chama a API do Melhor Envio via Servidor)
+// 🚚 Clicar no botão "Calcular Frete"
 calculateShippingBtn.addEventListener('click', async () => {
     const cepValue = cepInput.value.trim().replace('-', '');
 
@@ -83,7 +88,6 @@ calculateShippingBtn.addEventListener('click', async () => {
             shippingMessage.innerText = "Selecione a opção de entrega:";
             shippingMessage.className = "message success";
 
-            // Monta os botões de seleção de frete de forma bonita na interface
             opcoesFrete.forEach(opcao => {
                 const itemFrete = document.createElement('div');
                 itemFrete.style.padding = "10px";
@@ -101,7 +105,6 @@ calculateShippingBtn.addEventListener('click', async () => {
                     </label>
                 `;
 
-                // Quando o cliente clica na opção do frete, recalcula o total na hora!
                 itemFrete.addEventListener('click', () => {
                     const radioButton = itemFrete.querySelector('input[type="radio"]');
                     radioButton.checked = true;
@@ -113,7 +116,7 @@ calculateShippingBtn.addEventListener('click', async () => {
                 shippingOptions.appendChild(itemFrete);
             });
         } else {
-            shippingMessage.innerText = "Não encontramos opções de frete para este CEP. Verifique o número.";
+            shippingMessage.innerText = "Erro nas transportadoras. Usando opções de segurança.";
             shippingMessage.className = "message error";
         }
 
@@ -128,9 +131,21 @@ calculateShippingBtn.addEventListener('click', async () => {
 
 // 3. Ação de clicar no botão principal "Garantir Minha Luminária"
 buyBtn.addEventListener('click', async () => {
-    // 🚚 SEGURANÇA: Se o cliente ainda não selecionou um frete real, barra a compra!
+    // 🛡️ TRAVA DE SEGURANÇA PROFISSIONAL: Captura os textos e valida se algum está em branco
+    const nome = clientNameInput.value.trim();
+    const telefone = clientPhoneInput.value.trim();
+    const cep = cepInput.value.trim();
+    const rua = streetInput.value.trim();
+    const numero = numberInput.value.trim();
+    const complementoBairro = complementInput.value.trim();
+
+    if (!nome || !telefone || !cep || !rua || !numero || !complementoBairro) {
+        alert("⚠️ ATENÇÃO: Por favor, preencha todos os campos dos Dados de Entrega antes de prosseguir com o pagamento!");
+        return;
+    }
+
     if (selectedShippingCost === 0 && selectedShippingId === "") {
-        alert("Por favor, preencha seu CEP e selecione uma opção de frete antes de continuar.");
+        alert("⚠️ ATENÇÃO: Por favor, clique em 'Calcular Frete' e selecione uma opção de entrega disponível.");
         return;
     }
 
@@ -138,22 +153,28 @@ buyBtn.addEventListener('click', async () => {
         buyBtn.innerText = "Processando...";
         buyBtn.disabled = true;
 
-        // Avisa o servidor enviando o cupom e também o serviço de frete escolhido
-                // Envia o cupom, o ID do frete e o PREÇO REAL do frete selecionado
+        // Pacote completo de dados enviado para o servidor processar e guardar
         const response = await fetch('/api/vendas/criar-pagamento', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 cupom: activeCoupon,
                 freteId: selectedShippingId,
-                fretePreco: selectedShippingCost // 🚚 Envia o preço real da tela!
+                fretePreco: selectedShippingCost,
+                // Injeta os dados cadastrados pelo usuário para o backend usar no e-mail
+                clienteInfo: {
+                    nome: nome,
+                    telefone: telefone,
+                    cep: cep,
+                    rua: rua,
+                    numero: numero,
+                    complemento: complementoBairro
+                }
             })
         });
 
-
         const data = await response.json();
 
-        // Se o servidor devolveu o link do Mercado Pago com sucesso
         if (response.ok && data.init_point) {
             buyBtn.innerText = "Redirecionando...";
             window.location.href = data.init_point;
@@ -171,7 +192,6 @@ buyBtn.addEventListener('click', async () => {
     }
 });
 
-// Função auxiliar para mostrar as mensagens bonitas na tela (Verde ou Vermelho)
 function showResponse(text, type) {
     couponMessage.innerText = text;
     couponMessage.className = `message ${type}`;

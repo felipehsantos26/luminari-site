@@ -50,19 +50,33 @@
                     <!-- Esta tag abaixo serve para mostrar mensagens como "Cupom aplicado!" ou "Cupom inválido" -->
                     <p id="coupon-message" class="message"></p>
 
-                    <!-- 🚚 NOVO: Setor de Cálculo de Frete Real -->
-                    <div class="frete-group" style="margin-top: 15px; margin-bottom: 15px;">
-                        <div class="coupon-group">
-                            <input type="text" id="cep-input" placeholder="Digite seu CEP (Ex: 01001000)" maxlength="9">
+                    <!-- 🚚 FORMULÁRIO DE DADOS PESSOAIS E ENTREGA OBRIGATÓRIOS -->
+                    <div class="delivery-form" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+                        <h3 style="font-size: 16px; margin-bottom: 12px; color: #333;">Dados de Entrega</h3>
+                        
+                        <input type="text" id="client-name-input" placeholder="Nome Completo" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                        
+                        <input type="text" id="client-phone-input" placeholder="Telefone com DDD (Ex: 16999999999)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+
+                        <div class="coupon-group" style="margin-bottom: 10px;">
+                            <input type="text" id="cep-input" placeholder="CEP (Ex: 15010020)" maxlength="9">
                             <button id="calculate-shipping-btn">Calcular Frete</button>
                         </div>
+                        
                         <!-- Local onde vão aparecer as opções de frete (Sedex / PAC) para o cliente selecionar -->
-                        <div id="shipping-options" style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;"></div>
-                        <p id="shipping-message" class="message"></p>
+                        <div id="shipping-options" style="margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;"></div>
+                        <p id="shipping-message" class="message" style="margin-bottom: 10px;"></p>
+
+                        <input type="text" id="street-input" placeholder="Endereço / Rua" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" id="number-input" placeholder="Número" style="width: 35%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                            <input type="text" id="complement-input" placeholder="Complemento / Bairro" style="width: 65%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                        </div>
                     </div>
 
                     <!-- Botão de Compra Principal -->
-                    <button id="buy-btn" class="btn-primary">Garantir Minha Luminária</button>
+                    <button id="buy-btn" class="btn-primary" style="margin-top: 10px;">Garantir Minha Luminária</button>
                 </div>
             </div>
 
