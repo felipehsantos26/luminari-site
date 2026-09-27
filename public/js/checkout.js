@@ -8,6 +8,7 @@ const buyBtn = document.getElementById('buy-btn');
 // 🚚 Elementos mapeados para o formulário de entrega e frete
 const clientNameInput = document.getElementById('client-name-input');
 const clientPhoneInput = document.getElementById('client-phone-input');
+const clientEmailInput = document.getElementById('client-email-input');
 const cepInput = document.getElementById('cep-input');
 const calculateShippingBtn = document.getElementById('calculate-shipping-btn');
 const shippingOptions = document.getElementById('shipping-options');
@@ -135,13 +136,14 @@ buyBtn.addEventListener('click', async () => {
         // 🛡️ TRAVA DE SEGURANÇA PROFISSIONAL: Captura os textos e valida se os campos obrigatórios estão preenchidos
     const nome = clientNameInput.value.trim();
     const telefone = clientPhoneInput.value.trim();
+    const email = clientEmailInput.value.trim();
     const cep = cepInput.value.trim();
     const rua = streetInput.value.trim();
     const numero = numberInput.value.trim();
     const complementoBairro = complementInput.value.trim(); // Continua coletando, mas não obriga mais!
 
     // 🌟 COMPLEMENTO REMOVIDO DA VALIDAÇÃO ABAIXO (AGORA É OPCIONAL!)
-    if (!nome || !telefone || !cep || !rua || !numero) {
+    if (!nome || !telefone || !email || !cep || !rua || !numero) {
         alert("⚠️ ATENÇÃO: Por favor, preencha todos os campos obrigatórios dos Dados de Entrega (Nome, Telefone, CEP, Rua e Número) antes de prosseguir!");
         return;
     }
@@ -168,6 +170,7 @@ buyBtn.addEventListener('click', async () => {
                 clienteInfo: {
                     nome: nome,
                     telefone: telefone,
+                    email: email,
                     cep: cep,
                     rua: rua,
                     numero: numero,
