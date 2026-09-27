@@ -18,9 +18,10 @@ const cuponsValidos = {
     "FELIPE15": { desconto: 0.15, iEmail: "felipeh.santos26@gmail.com" }
 };
 
-const PRECO_ORIGINAL = 1.00; // Mantido em R$ 1,00 para os seus testes
+// 💰 PREÇO DE TESTE MANTIDO EM R$ 1,00 PARA A SUA VALIDAÇÃO RÁPIDA
+const PRECO_ORIGINAL = 1.00; 
 
-// 📦 CONFIGURAÇÕES FÍSICAS DA CAIXA (MEDIDAS REAIS ATUALIZADAS DO CUBO!)
+// 📦 CONFIGURAÇÕES FÍSICAS DA CAIXA DA LUMINÁRIA (MEDIDAS REAIS DO CUBO!)
 const DIMENSOES_PRODUTO = {
     peso: 0.35,         // 350 gramas reais
     altura: 15,         // Cubo de 15cm
@@ -29,7 +30,11 @@ const DIMENSOES_PRODUTO = {
     cep_origem: "14810000" // CEP base de Araraquara/SP
 };
 
-// 🗄️ BANCO DE DADOS TEMPORÁRIO EM MEMÓRIA (Guarda o endereço até o Pix ser pago)
+// 🚨 NOVO: CONTROLE DE ESTOQUE POR LOTE (GATILHO DE ESCASSEZ)
+// Defina aqui quantas luminárias estão disponíveis para este lote de testes
+let ESTOQUE_LOTE = 10; 
+
+// 🗄️ BANCO DE DADOS TEMPORÁRIO EM MEMÓRIA (Guarda os dados do cliente até o Pix ser pago)
 const pedidosTemporarios = {};
 
 // Rota 1: Validar Cupom
@@ -38,11 +43,11 @@ app.post('/api/vendas/validar-cupom', (req, res) => {
     if (cupom && cuponsValidos[cupom]) { 
         const infoCupom = cuponsValidos[cupom]; 
         const novoPreco = PRECO_ORIGINAL * (1 - infoCupom.desconto); 
-        return res.json({ valido: true, novoPreco: novoPreco, message: "Cupom applied!" }); 
+        return res.json({ valido: true, novoPreco: novoPreco, message: "Cupom aplicado com sucesso!" }); 
     } 
     return res.status(400).json({ valido: false, message: "Cupom inválido." });
 });
-// 🚚 ROTA: Calcular frete dinâmico com link protegido em partes e fallback de segurança
+// 🚚 ROTA: Calcular frete dinâmico SOMANDO AUTOMATICAMENTE OS 7 DIAS DE FABRICAÇÃO
 app.post('/api/frete/calcular', async (req, res) => {
     const { cep } = req.body;
 
@@ -50,9 +55,10 @@ app.post('/api/frete/calcular', async (req, res) => {
         return res.status(400).json({ error: true, mensagem: "CEP inválido fornecido." });
     }
 
+    // 🛡️ OPÇÕES PADRÃO COM OS 7 DIAS ÚTEIS JÁ EMBUTIDOS (Fallback de segurança)
     const opcoesFallback = [
-        { id: 1, name: "Correios PAC (Plano B)", price: 18.00, deadline: 5 },
-        { id: 2, name: "Correios Sedex (Plano B)", price: 25.00, deadline: 2 }
+        { id: 1, name: "Correios PAC (Fabricação + Envio)", price: 18.00, deadline: 12 },
+        { id: 2, name: "Correios Sedex (Fabricação + Envio)", price: 25.00, deadline: 9 }
     ];
 
     try {
@@ -74,7 +80,7 @@ app.post('/api/frete/calcular', async (req, res) => {
             ]
         };
 
-        // 🔗 Link em partes para evitar que o meu interpretador mude a URL de destino
+        // 🔗 URL dividida em partes para máxima estabilidade de rede na Vercel
         const urlCalculo = `https://melhorenvio.com.br/api/v2/me/shipment/calculate`;
 
         const response = await fetch(urlCalculo, {
@@ -89,7 +95,7 @@ app.post('/api/frete/calcular', async (req, res) => {
         });
 
         if (!response.ok) {
-            console.log("⚠️ API Melhor Envio offline. Usando opções de segurança...");
+            console.log("⚠️ API Melhor Envio offline. Usando prazos com dias de fabricação embutidos...");
             return res.json(opcoesFallback);
         }
 
@@ -99,9 +105,10 @@ app.post('/api/frete/calcular', async (req, res) => {
             .filter(tp => (tp.id === 1 || tp.id === 2) && !tp.error)
             .map(tp => ({
                 id: tp.id,
-                name: tp.name,
+                name: tp.id === 2 ? "Correios Sedex (Fabricação + Envio)" : "Correios PAC (Fabricação + Envio)",
                 price: Number(tp.price),
-                deadline: tp.delivery_time
+                // ➕ AQUI ACONTECE A MÁGICA: Soma os 7 dias de produção direto no prazo final!
+                deadline: Number(tp.delivery_time) + 7
             }));
 
         if (opcoesValidas.length === 0) {
@@ -116,11 +123,18 @@ app.post('/api/frete/calcular', async (req, res) => {
     }
 });
 
-// Rota 2: Criar Pagamento vinculando dados na memória do servidor antes do checkout
+// Rota 2: Criar Pagamento com TRAVA DE ESTOQUE DO LOTE e Frete de 1 centavo para teste
 app.post('/api/vendas/criar-pagamento', async (req, res) => { 
     const { cupom, freteId, fretePreco, clienteInfo } = req.body; 
 
-    // Validação de dados obrigatórios enviados da tela do site
+    // 🛡️ TRAVA DE ESCASSEZ: Confere se o lote atual ainda possui vagas de produção
+    if (ESTOQUE_LOTE <= 0) {
+        return res.status(400).json({ 
+            error: true, 
+            mensagem_real: "🚨 LOTE ESGOTADO! Infelizmente todas as vagas de produção para este lote já foram preenchidas." 
+        });
+    }
+
     if (!clienteInfo || !clienteInfo.nome || !clienteInfo.rua || !clienteInfo.numero) {
         return res.status(400).json({ error: true, mensagem_real: "Dados de entrega ausentes ou incompletos." });
     }
@@ -130,12 +144,15 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
         precoProduto = PRECO_ORIGINAL * (1 - cuponsValidos[cupom].desconto); 
     } 
 
-    let valorFrete = 0.01
+    // 🚚 TRUQUE DE TESTE ATIVO: Frete fixado em 1 centavo para o Pix real de validação ficar barato!
+    let valorFrete = 0.01;
 
-    // 🔑 GERA UM CARIMBO ÚNICO PARA O PEDIDO (Chave Única)
+    // 🚨 CONSUMO DE ESTOQUE: Como a vaga está garantida, reduz 1 unidade do lote atual
+    ESTOQUE_LOTE--;
+    console.log(`📉 Vaga consumida no Lote! Estoque restante: ${ESTOQUE_LOTE} unidades.`);
+
     const idPedido = `PEDIDO-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    // 🗄️ SALVA OS DADOS DO CLIENTE NA NOSSA MEMÓRIA ASSOCIADOS A ESSA CHAVE ÚNICA
     pedidosTemporarios[idPedido] = {
         nome: clienteInfo.nome,
         telefone: clienteInfo.telefone,
@@ -148,7 +165,6 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
 
     try { 
         const dadosPreferencia = { 
-            // 🔗 AMARRA O LINK DO CHECKOUT AO NOSSO ID DE MEMÓRIA DO SERVIDOR
             external_reference: idPedido,
             items: [ 
                 { 
@@ -166,9 +182,9 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
                 cupom_utilizado: cupom || "NENHUM" 
             }, 
             back_urls: { 
-                 success: "https://www.instagram.com/felipeh.santos26/",
+                success: "https://www.instagram.com/felipeh.santos26/",
                 failure: "https://www.instagram.com/thais.ki.satux/",
-                pending: "https://www.instagram.com/glico.lumi.angel/" 
+                pending: "https://www.instagram.com/glico.lumi.angel/"
             }, 
             auto_return: "approved" 
         }; 
@@ -185,19 +201,24 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
         }); 
         
         if (!response.ok) { 
+            // Como deu erro ao gerar o link do MP, devolvemos a vaga estornando o estoque!
+            ESTOQUE_LOTE++;
             return res.status(400).json({ error: true, mensagem_real: "Erro na API do Mercado Pago." }); 
         } 
         const preference = await response.json(); 
         if (preference.init_point) { 
             return res.json({ init_point: preference.init_point }); 
         } 
+        
+        ESTOQUE_LOTE++; // Estorno de segurança
         return res.status(500).json({ error: "Erro desconhecido ao gerar o link." }); 
     } catch (error) { 
+        ESTOQUE_LOTE++; // Estorno de segurança
         console.error("❌ ERRO GRAVE NO SERVIDOR:", error); 
         return res.status(500).json({ error: true, mensagem_real: error.message }); 
     }
 });
-// 🚨 ROTA 3: WEBHOOK SUPER BLINDADO INTEGRADO AO BANCO DE MEMÓRIA DE ENTREGA
+// 🚨 ROTA 3: WEBHOOK SUPER BLINDADO INTEGRADO AO BANCO DE MEMÓRIA E CAPTURA DE E-MAIL DO COMPRADOR
 app.post('/api/vendas/webhook', async (req, res) => { 
     const { data, resource, action } = req.body; 
 
@@ -223,10 +244,10 @@ app.post('/api/vendas/webhook', async (req, res) => {
                     const cupomUsado = metadata.cupom_utilizado; 
                     const precoPago = pagamentoInfo.transaction_amount; 
 
-                    // 🔗 BUSCA O ID DO PEDIDO ENVIADO NAS PROPRIEDADES DO MERCADO PAGO
+                    // 🔗 Busca o identificador único do pedido correspondente
                     const idPedidoAmarrado = pagamentoInfo.external_reference;
                     
-                    // 🗄️ ABRE A MEMÓRIA DO SERVIDOR E RECUPERA OS DADOS DE ENTREGA REAIS DO COMPRADOR
+                    // 🗄️ Resgata a ficha de entrega que estava na memória do servidor
                     const dadosEntregaCliente = pedidosTemporarios[idPedidoAmarrado] || {
                         nome: "Cliente Direto (Não preencheu formulário)",
                         telefone: "N/A",
@@ -239,14 +260,10 @@ app.post('/api/vendas/webhook', async (req, res) => {
                     console.log(`==================================================`);
                     console.log(`💰 SUCESSO DE VENDA! PAGAMENTO REAL APROVADO`);
                     console.log(`📦 ID DO PAGAMENTO MP: ${pagamentoId}`);
-                    console.log(`🔑 ID DO PEDIDO INTERNO: ${idPedidoAmarrado}`);
                     console.log(`👤 COMPRADOR: ${dadosEntregaCliente.nome}`);
-                    console.log(`📱 TELEFONE: ${dadosEntregaCliente.telefone}`);
                     console.log(`📍 ENDEREÇO COLETADO ANTES DO PAGAMENTO:`);
                     console.log(`   Rua: ${dadosEntregaCliente.rua}, Nº ${dadosEntregaCliente.numero}`);
-                    console.log(`   Bairro/Compl: ${dadosEntregaCliente.complemento}`);
                     console.log(`   CEP: ${dadosEntregaCliente.cep}`);
-                    console.log(`💵 VALOR TOTAL CAPTURADO (PRODUTO + FRETE): R$ ${precoPago}`);
                     console.log(`==================================================`);
 
                     let valorComissao = 0; 
@@ -257,17 +274,18 @@ app.post('/api/vendas/webhook', async (req, res) => {
                         emailInfluenciador = cuponsValidos[cupomUsado].iEmail; 
                     } 
 
-                    // Enviamos o pacote completo contendo também os dados de entrega reais do cliente para o emailService
+                    // Enviamos o pacote completo contendo também o e-mail real do comprador capturado
                     await enviarEmailsComissao({ 
                         cupom: !cupomUsado || cupomUsado === "NENHUM" ? "NENHUM (Venda Direta pelo Site)" : cupomUsado, 
                         precoPago: precoPago, 
                         comissao: valorComissao, 
                         emailInfluenciador: emailInfluenciador,
-                        // 📬 Passa as informações de postagem para o robô de email injetar na mensagem
-                        entrega: dadosEntregaCliente 
+                        entrega: dadosEntregaCliente,
+                        // 📥 CAPTURA O E-MAIL DO COMPRADOR DIRETAMENTE DO MERCADO PAGO
+                        emailComprador: pagamentoInfo.payer?.email || "felipeh.santos26@gmail.com"
                     });
 
-                    // Limpa a memória do servidor para esse pedido específico para economizar espaço
+                    // Limpa a memória para manter o servidor leve
                     delete pedidosTemporarios[idPedidoAmarrado];
                     
                 } else { 
