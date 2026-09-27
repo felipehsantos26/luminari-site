@@ -125,30 +125,35 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
 
 
     try {
-        const dadosPreferencia = {
-
+                const dadosPreferencia = { 
             items: [ 
                 { 
                     title: "Luminária Inteligente SmartGlucolamp", 
                     quantity: 1, 
                     currency_id: "BRL", 
-                    // 🧮 SOMA REAL: O item cobra apenas o valor do produto com desconto
                     unit_price: Number(precoProduto.toFixed(2)) 
                 } 
             ], 
+            // 👤 OBRIGA O MERCADO PAGO A COLETAR DADOS REAIS DO COMPRADOR
             payer: {
-                phone: {},
-                identification: {},
-                address: {}
+                phone: { area_code: "11", number: "999999999" }, // Envia um padrão para ativar o campo
+                identification: { type: "CPF", number: "" },    // Obriga a abertura do campo de CPF na tela
+                address: { zip_code: "", street_name: "", street_number: 0 } // Desbloqueia os campos de endereço
             },
+            // 🚚 CONFIGURAÇÃO PROFISISONAL DE FRETE
             shipments: {
                 mode: "not_specified",
-                // 🚚 SOMA REAL: O Mercado Pago adiciona o valor do frete e faz a soma matemática perfeita no total!
-                cost: Number(valorFrete.toFixed(2)) 
+                cost: Number(valorFrete.toFixed(2)),
+                receiver_address: {
+                    zip_code: "", // Deixar vazio força o Mercado Pago a abrir o formulário para o cliente preencher!
+                    street_name: "",
+                    street_number: 0
+                }
             },
             metadata: { 
                 cupom_utilizado: cupom || "NENHUM" 
-            }, 
+            },
+
             back_urls: { 
                 success: "https://www.instagram.com/felipeh.santos26/",
                 failure: "https://www.instagram.com/thais.ki.satux/",
