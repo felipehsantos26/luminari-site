@@ -119,16 +119,16 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
     let nomeFrete = "Entrega Padrão";
 
     // Se o cliente escolheu um frete real, o servidor valida o preço por segurança
-    if (freteId) {
-        try {
+    //if (freteId) {
+       // try {
             // Em produção completa com a API do Melhor Envio ativa, o freteId 1 (PAC) e 2 (Sedex) 
             // recalcula o valor exato. Mantemos os fallbacks corretos para o seu teste de 1 real.
-            valorFrete = freteId == 2 ? 25.00 : 18.00; 
-            nomeFrete = freteId == 2 ? "Correios Sedex" : "Correios PAC";
-        } catch (e) {
-            console.error("Erro ao validar valor do frete, usando fallback.");
-        }
-    }
+            //valorFrete = freteId == 2 ? 25.00 : 18.00; 
+           // nomeFrete = freteId == 2 ? "Correios Sedex" : "Correios PAC";
+        //} catch (e) {
+       //     console.error("Erro ao validar valor do frete, usando fallback.");
+     //   }
+   //}
 
     try { 
         const dadosPreferencia = { 
