@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo | EcoAngel</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 20px; background-color: #f8fafc; color: #1e293b; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+        .logo { font-size: 24px; font-weight: bold; color: #0f172a; }
+        .cards-grid { display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
+        .card { background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; flex: 1; min-width: 250px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .card h3 { margin: 0 0 10px 0; color: #64748b; font-size: 14px; text-transform: uppercase; }
+        .card .valor { font-size: 28px; font-weight: bold; color: #0f172a; }
+        .tabela-container { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .tabela-container h2 { margin-top: 0; margin-bottom: 20px; font-size: 18px; color: #334155; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        th { background-color: #f8fafc; color: #64748b; text-transform: uppercase; font-size: 12px; }
+        .status { padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 12px; display: inline-block; }
+        .status.preparo { background-color: #fef9c3; color: #713f12; }
+        .status.despachado { background-color: #dcfce7; color: #14532d; }
+        .status.pendente { background-color: #f1f5f9; color: #475569; }
+        .btn-rastreio { background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        .btn-rastreio:hover { background: #1d4ed8; }
+        input[type="text"] { padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; width: 140px; margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">EcoAngel 📦 Admin</div>
+            <div style="color: #64748b; font-size: 14px;">Controle Real de Fábrica</div>
+        </div>
+
+        <!-- 📊 CARDS DE FATURAMENTO E ESTOQUE -->
+        <div class="cards-grid">
+            <div class="card">
+                <h3>💰 Faturamento Bruto</h3>
+                <div class="valor" id="card-faturamento">R\$ 0,00</div>
+            </div>
+            <div class="card">
+                <h3>📦 Vagas no Lote Atual</h3>
+                <div class="valor" id="card-estoque">00</div>
+            </div>
+            <div class="card">
+                <h3>🛠️ Pedidos em Produção</h3>
+                <div class="valor" id="card-producao">00</div>
+            </div>
+        </div>
+
+        <!-- 🚚 TABELA DA FILA DE PRODUÇÃO -->
+        <div class="tabela-container">
+            <h2>📋 Fila de Produção e Postagem</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Pedido</th>
+                        <th>Cliente / Contato</th>
+                        <th>Endereço de Entrega</th>
+                        <th>Cupom / Total</th>
+                        <th>Status</th>
+                        <th>Ação / Rastreio</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-pedidos-corpo">
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: #94a3b8;">Carregando fila de produção...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 🔄 Busca as informações reais do Supabase ao abrir a página
+        async function carregarDadosAdmin() {
+            try {
+                const response = await fetch('/api/admin/dados-generais');
+                const data = await response.json();
+
+                if (!data.sucesso) return alert("Erro ao carregar dados.");
+
+                // Preenche os cards do topo
+                document.getElementById('card-estoque').innerText = data.estoqueLote;
+                document.getElementById('card-faturamento').innerText = data.faturamentoBruto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+                const pedidosEmPreparo = data.pedidos.filter(p => p.status_producao === 'Em Preparo').length;
+                document.getElementById('card-producao').innerText = pedidosEmPreparo;
+
+                // Preenche a tabela de encomendas
+                const corpoTabela = document.getElementById('tabela-pedidos-corpo');
+                corpoTabela.innerHTML = "";
+
+                if (data.pedidos.length === 0) {
+                    corpoTabela.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">Nenhum pedido encontrado.</td></tr>`;
+                    return;
+                }
+
+                data.pedidos.forEach(pedido => {
+                    const tr = document.createElement('tr');
+                    
+                    // Ajusta a cor do crachá do status
+                    let classeStatus = 'pendente';
+                    if (pedido.status_producao === 'Em Preparo') classeStatus = 'preparo';
+                    if (pedido.status_producao === 'Despachado') classeStatus = 'despachado';
+
+                    // Monta a célula de ação (Botão de Rastreio ou o Código fixado)
+                    let celulaAcao = "";
+                    if (pedido.status_producao === 'Aguardando Pagamento') {
+                        celulaAcao = `<span style="color: #94a3b8; font-style: italic;">Aguardando Pix</span>`;
+                    } else if (pedido.status_producao === 'Em Preparo') {
+                        celulaAcao = `
+                            <input type="text" id="input-${pedido.id_pedido}" placeholder="Código de Rastreio">
+                            <button class="btn-rastreio" onclick="despacharPedido('${pedido.id_pedido}')">Despachar</button>
+                        `;
+                    } else {
+                        celulaAcao = `<strong style="color: #14532d;">${pedido.codigo_rastreio}</strong>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td><strong>${pedido.id_pedido}</strong></td>
+                        <td>${pedido.comprador_nome}<br><small style="color: #64748b;">${pedido.comprador_email}<br>${pedido.comprador_telefone}</small></td>
+                        <td><small>${pedido.rua}, Nº ${pedido.numero}<br>${pedido.complemento}<br>CEP: ${pedido.cep}</small></td>
+                        <td><span style="font-size: 11px; background: #f1f5f9; padding: 2px 4px; border-radius: 4px;">${pedido.cupom_utilizado}</span><br><strong>${Number(pedido.valor_total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></td>
+                        <td><span class="status ${classeStatus}">${pedido.status_producao}</span></td>
+                        <td>${celulaAcao}</td>
+                    `;
+                    corpoTabela.appendChild(tr);
+                });
+
+            } catch (err) {
+                console.error(err);
+                alert("Erro de conexão ao carregar painel.");
+            }
+        }
+
+        // 🚀 Executa o envio do código de rastreio e atualiza o banco real
+        async function despacharPedido(idPedido) {
+            const input = document.getElementById(`input-${idPedido}`);
+            const codigo = input.value.trim();
+
+            if (!codigo) return alert("⚠️ Por favor, digite o código de rastreio dos Correios!");
+
+            try {
+                const response = await fetch('/api/admin/atualizar-rastreio', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ idPedido: idPedido, codigoRastreio: codigo })
+                });
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    alert("🎉 Pedido despachado e atualizado no Supabase!");
+                    carregarDadosAdmin(); // Recarrega a tabela na tela
+                } else {
+                    alert("Erro ao atualizar pedido.");
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        // Executa a carga dos dados assim que a tela abre
+        window.onload = carregarDadosAdmin;
+    </script>
+</body>
+</html>
