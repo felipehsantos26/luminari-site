@@ -100,7 +100,7 @@ app.post('/api/frete/calcular', async (req, res) => {
             ]
         };
 
-        const urlCalculo = `https://melhorenvio.com.br/api/v2/me/shipment/calculate` + `/api/v2/me/` + `shipment/calculate`;
+        const urlCalculo = `https://melhorenvio.com.br/api/v2/me/shipment/calculate`;
 
         const response = await fetch(urlCalculo, {
             method: 'POST',
