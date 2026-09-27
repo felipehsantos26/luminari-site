@@ -143,84 +143,77 @@ app.post('/api/frete/calcular', async (req, res) => {
 });
 
 // Rota 2: Criar Pagamento com TRAVA DE ESTOQUE DINÂMICA DIRETO NO BANCO REAL (SUPABASE)
+// Rota 2: Criar Pagamento salvando os dados IMEDIATAMENTE no banco real (Supabase)
 app.post('/api/vendas/criar-pagamento', async (req, res) => { 
     const { cupom, freteId, fretePreco, clienteInfo } = req.body; 
 
     if (!clienteInfo || !clienteInfo.nome || !clienteInfo.email || !clienteInfo.rua || !clienteInfo.numero) {
-        return res.status(400).json({ error: true, mensagem_real: "Dados de entrega ausentes ou incompletos." });
+        return res.status(400).json({ error: true, message: "Dados de entrega ausentes ou incompletos." });
     }
 
     try {
-        // 🚨 1. LEITURA DE ESTOQUE NA NUVEM: Abre o Supabase e checa o lote (ID 1)
+        // 🚨 1. LEITURA DE ESTOQUE NO BANCO REAL
         const { data: estoqueAtual, error: erroEstoque } = await supabase
             .from('controle_estoque')
             .select('quantidade_disponivel')
             .eq('id', 1)
             .single();
 
-                if (erroEstoque || !estoqueAtual) {
-            console.error("❌ Detalhes do erro no Supabase:", erroEstoque);
-            return res.status(200).json({ error: true, mensagem_real: "Ops! Erro ao consultar o estoque no banco real." });
+        if (erroEstoque || !estoqueAtual || estoqueAtual.quantidade_disponivel <= 0) {
+            return res.status(400).json({ error: true, mensagem_real: "🚨 LOTE ESGOTADO! Infelizmente todas as vagas já foram preenchidas." });
         }
 
+        // 🚨 2. SUBTRAI O ESTOQUE NA NUVEM
+        const novoEstoque = estoqueAtual.quantidade_disponivel - 1;
+        await supabase.from('controle_estoque').update({ quantidade_disponivel: novoEstoque }).eq('id', 1);
 
-        // Se o contador do banco real estiver zerado, barra o comprador aqui!
-        if (estoqueAtual.quantidade_disponivel <= 0) {
-            return res.status(400).json({ 
-                error: true, 
-                mensagem_real: "🚨 LOTE ESGOTADO! Infelizmente todas as vagas de produção para este lote já foram preenchidas." 
-            });
-        }
+        console.log(`📉 Vaga reservada no Banco Real! Estoque na nuvem: ${novoEstoque} unidades.`);
 
-        // 🚨 2. REDUZ O ESTOQUE NO BANCO: Como tem vaga, subtrai 1 unidade na nuvem!
-        const novoEstoqueCalculado = estoqueAtual.quantidade_disponivel - 1;
-        const { error: erroUpdate } = await supabase
-            .from('controle_estoque')
-            .update({ quantidade_disponivel: novoEstoqueCalculado })
-            .eq('id', 1);
-
-        if (erroUpdate) {
-            return res.status(500).json({ error: true, mensagem_real: "Erro ao atualizar estoque na nuvem." });
-        }
-
-        console.log(`📉 Vaga consumida no Banco Real! Estoque atualizado na nuvem para: ${novoEstoqueCalculado} unidades.`);
-
-        // 💰 Regra de Cupom Dinâmica puxando do bloco anterior
+        // Calcular Preço com Cupom
         let precoProduto = PRECO_ORIGINAL; 
         if (cupom) {
             const { data: cInfo } = await supabase.from('cupons_afiliados').select('desconto_percentual').eq('codigo_cupom', cupom.toUpperCase()).single();
-            if (cInfo) {
-                precoProduto = PRECO_ORIGINAL * (1 - Number(cInfo.desconto_percentual));
-            }
+            if (cInfo) precoProduto = PRECO_ORIGINAL * (1 - Number(cInfo.desconto_percentual));
         }
 
-        let valorFrete = 0.01; // Mantido em 1 centavo fixo de teste para economizar seu bolso
-
+        let valorFrete = 0.01; // Frete fixo de teste mantido para economizar seu bolso
         const idPedido = `PEDIDO-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-        // Guarda na nossa memória temporária do servidor até a confirmação do Pix
-        pedidosTemporarios[idPedido] = {
-            nome: clienteInfo.nome,
-            telefone: clienteInfo.telefone,
-            email: clienteInfo.email,
-            cep: clienteInfo.cep,
-            rua: clienteInfo.rua,
-            numero: clienteInfo.numero,
-            complemento: clienteInfo.complemento,
-            cupom: cupom || "NENHUM"
-        };
+        // 💾 3. GRAVAÇÃO IMEDIATA NO SUPABASE (Blindagem contra reinicialização de memória!)
+        const { error: erroGravarPedido } = await supabase
+            .from('pedidos_venda')
+            .insert([
+                {
+                    id_pedido: idPedido,
+                    comprador_nome: clienteInfo.nome,
+                    comprador_telefone: clienteInfo.telefone,
+                    comprador_email: clienteInfo.email, // Salva o e-mail digitado no site!
+                    cep: clienteInfo.cep,
+                    rua: clienteInfo.rua,
+                    numero: clienteInfo.numero,
+                    complemento: clienteInfo.complemento,
+                    cupom_utilizado: cupom || "NENHUM",
+                    valor_total: Number((precoProduto + valorFrete).toFixed(2)),
+                    status_producao: 'Aguardando Pagamento' // Fica aguardando o Pix ser pago!
+                }
+            ]);
 
+        if (erroGravarPedido) {
+            console.error("❌ Erro ao pré-registrar pedido no Supabase:", erroGravarPedido);
+            // Devolve o estoque caso dê erro de banco
+            await supabase.from('controle_estoque').update({ quantidade_disponivel: estoqueAtual.quantidade_disponivel }).eq('id', 1);
+            return res.status(500).json({ error: true, mensagem_real: "Erro ao registrar intenção de compra no banco." });
+        }
+
+        // 💳 4. GERAÇÃO DA PREFERÊNCIA DO MERCADO PAGO
         const dadosPreferencia = { 
             external_reference: idPedido,
             items: [ { title: "Luminária Inteligente SmartGlucolamp", quantity: 1, currency_id: "BRL", unit_price: Number(precoProduto.toFixed(2)) } ], 
             shipments: { mode: "not_specified", cost: Number(valorFrete.toFixed(2)) },
             metadata: { cupom_utilizado: cupom || "NENHUM" }, 
-            back_urls: { 
-                 success: "https://www.instagram.com/felipeh.santos26/",
+            back_urls: { success: "https://www.instagram.com/felipeh.santos26/",
                 failure: "https://www.instagram.com/thais.ki.satux/",
-                pending: "https://www.instagram.com/glico.lumi.angel/"
-
-            }, 
+                pending: "https://www.instagram.com/glico.lumi.angel/"}, 
             auto_return: "approved" 
         }; 
         
@@ -234,18 +227,17 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
         const preference = await response.json(); 
         if (preference.init_point) {
             return res.json({ init_point: preference.init_point }); 
-        }
+        } 
         
-        // Estorno de segurança no banco caso o MP falhe
-        await supabase.from('controle_estoque').update({ quantidade_disponivel: estoqueAtual.quantidade_disponivel }).eq('id', 1);
-        return res.status(500).json({ error: "Erro ao gerar o link." }); 
-
+        return res.status(500).json({ error: "Erro ao gerar link de checkout." }); 
     } catch (error) { 
-        console.error("❌ ERRO GRAVE NO SERVIDOR:", error); 
+        console.error("❌ ERRO GRAVE ROTA 2:", error); 
         return res.status(500).json({ error: true, mensagem_real: error.message }); 
     }
 });
+
 // 🚨 ROTA 3: WEBHOOK BLINDADO COM PERSISTÊNCIA DE PEDIDOS NO BANCO REAL (SUPABASE)
+// 🚨 ROTA 3: WEBHOOK TOTALMENTE INDEPENDENTE DE MEMÓRIA (CONSULTA DIRETO NO BANCO REAL)
 app.post('/api/vendas/webhook', async (req, res) => { 
     const { data, resource, action } = req.body; 
 
@@ -262,48 +254,34 @@ app.post('/api/vendas/webhook', async (req, res) => {
                 const pagamentoInfo = await mpResponse.json(); 
 
                 if (pagamentoInfo.status === 'approved') { 
-                    const metadata = pagamentoInfo.metadata || {}; 
-                    const cupomUsado = metadata.cupom_utilizado; 
-                    const precoPago = pagamentoInfo.transaction_amount; 
                     const idPedidoAmarrado = pagamentoInfo.external_reference;
-                    
-                    // 🗄️ Resgata os dados que o cliente preencheu nativamente no formulário
-                    const dadosEntregaCliente = pedidosTemporarios[idPedidoAmarrado];
 
-                    if (dadosEntregaCliente) {
-                        console.log(`==================================================`);
-                        console.log(`💰 PIX APROVADO! ID PEDIDO: ${idPedidoAmarrado}`);
-                        console.log(`👤 GRAVANDO COMPRA DE: ${dadosEntregaCliente.nome}`);
-                        console.log(`==================================================`);
+                    console.log(`==================================================`);
+                    console.log(`🔗 WEBHOOK SINALIZADO COM PIX APROVADO: ${idPedidoAmarrado}`);
+                    console.log(`==================================================`);
 
-                        // 💾 1. SALVA O PEDIDO PARA SEMPRE NA TABELA 'pedidos_venda' DO SUPABASE!
-                        const { error: erroGravarPedido } = await supabase
+                    // 🔍 1. ABRE O SUPABASE E BUSCA O PEDIDO QUE JÁ ESTAVA GRAVADO LÁ DESDE O CLIQUE DO BOTÃO!
+                    const { data: pedidoGravado, error: erroBuscarPedido } = await supabase
+                        .from('pedidos_venda')
+                        .select('*')
+                        .eq('id_pedido', idPedidoAmarrado)
+                        .single();
+
+                    // Se achar o pedido e ele ainda estiver pendente, roda a confirmação!
+                    if (pedidoGravado && pedidoGravado.status_producao === 'Aguardando Pagamento') {
+                        
+                        // 💾 2. ATUALIZA O STATUS DO PEDIDO PARA "Em Preparo" NO BANCO REAL!
+                        await supabase
                             .from('pedidos_venda')
-                            .insert([
-                                {
-                                    id_pedido: idPedidoAmarrado,
-                                    comprador_nome: dadosEntregaCliente.nome,
-                                    comprador_telefone: dadosEntregaCliente.telefone,
-                                    comprador_email: dadosEntregaCliente.email,
-                                    cep: dadosEntregaCliente.cep,
-                                    rua: dadosEntregaCliente.rua,
-                                    numero: dadosEntregaCliente.numero,
-                                    complemento: dadosEntregaCliente.complemento,
-                                    cupom_utilizado: dadosEntregaCliente.cupom,
-                                    valor_total: Number(precoPago),
-                                    status_producao: 'Em Preparo' // Começa automaticamente na sua fila!
-                                }
-                            ]);
+                            .update({ status_producao: 'Em Preparo' })
+                            .eq('id_pedido', idPedidoAmarrado);
 
-                        if (erroGravarPedido) {
-                            console.error("❌ Erro ao registrar pedido permanente no Supabase:", erroGravarPedido);
-                        } else {
-                            console.log("💾 SUCESSO: Linha de venda adicionada na sua planilha do banco de dados!");
-                        }
+                        console.log("💾 STATUS ATUALIZADO: Pedido alterado para 'Em Preparo' na sua planilha online!");
 
-                        // 📈 2. CALCULA A COMISSÃO BUSCANDO O PERCENTUAL DO INFLUENCIADOR DO BANCO REAL
+                        // 📈 3. CALCULA A COMISSÃO BUSCANDO O PERCENTUAL DO INFLUENCIADOR DO BANCO REAL
                         let valorComissao = 0;
                         let emailInfluenciador = "felipeh.santos26@gmail.com";
+                        const cupomUsado = pedidoGravado.cupom_utilizado;
 
                         if (cupomUsado && cupomUsado !== "NENHUM") {
                             const { data: cupomInfo } = await supabase
@@ -313,23 +291,33 @@ app.post('/api/vendas/webhook', async (req, res) => {
                                 .single();
 
                             if (cupomInfo) {
-                                valorComissao = precoPago * Number(cupomInfo.desconto_percentual);
+                                valorComissao = pagamentoInfo.transaction_amount * Number(cupomInfo.desconto_percentual);
                                 emailInfluenciador = cupomInfo.email_influenciador;
                             }
                         }
 
-                        // 📧 3. DISPARA A TRINDADE DE NOTIFICAÇÕES (Influenciador, Administrador e Comprador)
+                        // Reestrutura o objeto de entrega para enviar idêntico ao template de e-mail antigo
+                        const dadosEntregaFormatoEmail = {
+                            nome: pedidoGravado.comprador_nome,
+                            telefone: pedidoGravado.comprador_telefone,
+                            cep: pedidoGravado.cep,
+                            rua: pedidoGravado.rua,
+                            numero: pedidoGravado.numero,
+                            complemento: pedidoGravado.complemento
+                        };
+
+                        // 📧 4. DISPARA AS TRÊS NOTIFICAÇÕES (Lê o e-mail do site salvo de forma ultra estável!)
                         await enviarEmailsComissao({ 
                             cupom: !cupomUsado || cupomUsado === "NENHUM" ? "NENHUM (Venda Direta pelo Site)" : cupomUsado, 
-                            precoPago: precoPago, 
+                            precoPago: pagamentoInfo.transaction_amount, 
                             comissao: valorComissao, 
                             emailInfluenciador: emailInfluenciador,
-                            entrega: dadosEntregaCliente,
-                            emailComprador: dadosEntregaCliente.email 
+                            entrega: dadosEntregaFormatoEmail,
+                            emailComprador: pedidoGravado.comprador_email // Pegando o e-mail direto do site sem riscos!
                         });
 
-                        // Limpa a memória volátil do servidor para manter tudo limpo
-                        delete pedidosTemporarios[idPedidoAmarrado];
+                    } else {
+                        console.log(`⚠️ Pedido ${idPedidoAmarrado} já foi processado anteriormente ou não existe.`);
                     }
                 } 
             } 
@@ -339,6 +327,7 @@ app.post('/api/vendas/webhook', async (req, res) => {
     } 
     return res.status(200).send('OK');
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => { 
