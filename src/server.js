@@ -18,7 +18,7 @@ const cuponsValidos = {
     "FELIPE15": { desconto: 0.15, iEmail: "felipeh.santos26@gmail.com" }
 };
 
-const PRECO_ORIGINAL = 299.00;
+const PRECO_ORIGINAL = 1.00;
 
 // Rota 1: Validar Cupom
 app.post('/api/vendas/validar-cupom', (req, res) => {
