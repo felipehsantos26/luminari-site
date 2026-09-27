@@ -38,7 +38,7 @@ applyCouponBtn.addEventListener('click', async () => {
     }
 
     try {
-        const response = await fetch('/api/vendas/validar-coupon', {
+        const response = await fetch('/api/vendas/validar-cupom', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ cupom: couponCode })
