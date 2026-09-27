@@ -132,17 +132,20 @@ calculateShippingBtn.addEventListener('click', async () => {
 // 3. Ação de clicar no botão principal "Garantir Minha Luminária"
 buyBtn.addEventListener('click', async () => {
     // 🛡️ TRAVA DE SEGURANÇA PROFISSIONAL: Captura os textos e valida se algum está em branco
+        // 🛡️ TRAVA DE SEGURANÇA PROFISSIONAL: Captura os textos e valida se os campos obrigatórios estão preenchidos
     const nome = clientNameInput.value.trim();
     const telefone = clientPhoneInput.value.trim();
     const cep = cepInput.value.trim();
     const rua = streetInput.value.trim();
     const numero = numberInput.value.trim();
-    const complementoBairro = complementInput.value.trim();
+    const complementoBairro = complementInput.value.trim(); // Continua coletando, mas não obriga mais!
 
-    if (!nome || !telefone || !cep || !rua || !numero || !complementoBairro) {
-        alert("⚠️ ATENÇÃO: Por favor, preencha todos os campos dos Dados de Entrega antes de prosseguir com o pagamento!");
+    // 🌟 COMPLEMENTO REMOVIDO DA VALIDAÇÃO ABAIXO (AGORA É OPCIONAL!)
+    if (!nome || !telefone || !cep || !rua || !numero) {
+        alert("⚠️ ATENÇÃO: Por favor, preencha todos os campos obrigatórios dos Dados de Entrega (Nome, Telefone, CEP, Rua e Número) antes de prosseguir!");
         return;
     }
+
 
     if (selectedShippingCost === 0 && selectedShippingId === "") {
         alert("⚠️ ATENÇÃO: Por favor, clique em 'Calcular Frete' e selecione uma opção de entrega disponível.");
