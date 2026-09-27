@@ -2,7 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const adminRoutes = require('./routes/adminRoutes');
+// 🔌 Antes: const adminRoutes = require('./routes/adminRoutes');
+const adminRoutes = require(path.join(__dirname, 'routes/adminRoutes')); // 🌟 DEIXE ASSIM!
+
 
 // 📧 Puxa o serviço de e-mail transacional
 const { enviarEmailsComissao } = require('./services/emailService');
@@ -16,7 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 // 🌐 Ativa as rotas do painel administrativo
-app.use('/api/admin/', adminRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 // 💰 PREÇO DE TESTE MANTIDO EM R\$ 1,00 PARA A SUA VALIDAÇÃO RÁPIDA DE CUSTO ZERO
