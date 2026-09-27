@@ -67,7 +67,7 @@ app.post('/api/frete/calcular', async (req, res) => {
             ]
         };
 
-        const response = await fetch('https://melhorenvio.com.br', {
+        const response = await fetch('https://melhorenvio.com.br/api/v2/me/shipment/calculate', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${tokenMelhorEnvio}`,
