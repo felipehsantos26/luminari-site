@@ -106,18 +106,22 @@ app.post('/api/frete/calcular', async (req, res) => {
 // Rota 2: Criar Pagamento com Coleta de Dados e Frete Real Embutido (SOMA CORRIGIDA!)
 // Rota 2: Criar Pagamento com Frete Dinâmico Real
 app.post('/api/vendas/criar-pagamento', async (req, res) => { 
-    const { cupom, freteId, fretePreco } = req.body; // 📥 Captura o preço real vindo do site
+    const { cupom, freteId, fretePreco } = req.body; 
 
     let precoProduto = PRECO_ORIGINAL; 
     if (cupom && cuponsValidos[cupom]) { 
         precoProduto = PRECO_ORIGINAL * (1 - cuponsValidos[cupom].desconto); 
     } 
 
-        // Se o cliente mandou o preço real da tela, usa ele! Caso contrário, usa zero.
-    let valorFrete = fretePreco = 0.01;
+    // 🚚 TRUQUE DE TESTE: Frete forçado a 1 centavo cravado para o Pix ficar barato!
+    let valorFrete = 0.01;
 
-    // 🚚 Ajuste na linha 119 para mostrar o nome certo no painel do Mercado Pago
-    let nomeFrete = freteId == 2 ? "Correios Sedex" : "Correios PAC";
+    // 🛡️ CORREÇÃO DE SEGURANÇA: Protege contra valores vazios para o servidor não cair!
+    let nomeFrete = "Correios PAC";
+    if (freteId && freteId == 2) {
+        nomeFrete = "Correios Sedex";
+    }
+
 
 
     try {
