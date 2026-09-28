@@ -52,12 +52,40 @@ async function atualizarRastreioPedido(req, res) {
             .eq('id_pedido', idPedido);
 
         if (error) throw error;
-        return res.json({ sucesso: true, mensagem: "Pedido atualizado com sucesso!" });
+        return res.json({ sucesso: true, mensagem: "Pedido updated com sucesso!" });
     } catch (error) {
         console.error("❌ Erro ao atualizar rastreio:", error);
         return res.status(500).json({ sucesso: false, mensagem: "Erro interno." });
     }
 }
 
-// Exporta as funções limpas
-module.exports = { obterDadosGerais, atualizarRastreioPedido };
+// 💸 FUNÇÃO NOVA: Registrar o Pix enviado e dar baixa no saldo do Afiliado
+async function registrarPagamentoAfiliado(req, res) {
+    const { emailInfluenciador, valorPago } = req.body;
+
+    if (!emailInfluenciador || !valorPago || Number(valorPago) <= 0) {
+        return res.status(400).json({ sucesso: false, mensagem: "Dados de pagamento inválidos ou incompletos." });
+    }
+
+    try {
+        // Insere o registro de pagamento de forma permanente na nova tabela do Supabase
+        const { error } = await supabase
+            .from('pagamentos_afiliados')
+            .insert([
+                {
+                    email_influenciador: emailInfluenciador.trim(),
+                    valor_pago: Number(valorPago)
+                }
+            ]);
+
+        if (error) throw error;
+
+        return res.json({ sucesso: true, mensagem: "🎉 Baixa realizada! Pix registrado com sucesso no Supabase." });
+    } catch (error) {
+        console.error("❌ Erro ao registrar pagamento do afiliado:", error);
+        return res.status(500).json({ sucesso: false, mensagem: "Erro interno ao salvar pagamento." });
+    }
+}
+
+// Exporta as funções originais + a função nova de baixa financeira
+module.exports = { obterDadosGerais, atualizarRastreioPedido, registrarPagamentoAfiliado };
