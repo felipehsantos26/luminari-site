@@ -131,7 +131,7 @@
 
                 if (error) return alert("Acesso negado: " + error.message);
 
-                alert("🔑 Login aprovado! Entrando no seu painel...");
+               // alert("🔑 Login aprovado! Entrando no seu painel...");
                 window.location.href = `/influenciador.html?email=${data.user.email}`;
                 
             } catch (err) {
