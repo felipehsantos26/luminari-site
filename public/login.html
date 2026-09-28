@@ -91,7 +91,7 @@
                 const { data: parceiroAutorizado, error: erroChecagem } = await supabaseCliente
                     .from('cupons_afiliados')
                     .select('email_influenciador')
-                    .eq('email_influenciador', email.toLowerCase().trim())
+                    .eq('email_influenciador', email)
                     .maybeSingle();
 
                 if (!parceiroAutorizado) {
