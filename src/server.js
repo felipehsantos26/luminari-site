@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-// 🔌 Antes: const adminRoutes = require('./routes/adminRoutes');
-const adminRoutes = require(path.join(__dirname, 'routes/adminRoutes')); // 🌟 DEIXE ASSIM!
+const { obterDadosGerais, atualizarRastreioPedido } = require('./routes/adminRoutes');
+
 
 
 // 📧 Puxa o serviço de e-mail transacional
@@ -17,8 +17,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
-// 🌐 Ativa as rotas do painel administrativo
-app.use('/api/admin', adminRoutes);
+// 🌐 Rotas do Painel Administrativo explicitadas para a Vercel
+app.get('/api/admin/dados-generais', obterDadosGerais);
+app.post('/api/admin/atualizar-rastreio', atualizarRastreioPedido);
 
 
 // 💰 PREÇO DE TESTE MANTIDO EM R\$ 1,00 PARA A SUA VALIDAÇÃO RÁPIDA DE CUSTO ZERO
