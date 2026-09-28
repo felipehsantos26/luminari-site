@@ -16,6 +16,10 @@
       "dest": "src/server.js"
     },
     {
+      "src": "/api/influenciador/(.*)",
+      "dest": "src/server.js"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "src/server.js"
     },
