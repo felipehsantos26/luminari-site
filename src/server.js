@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { obterDadosGerais, atualizarRastreioPedido } = require('./routes/adminRoutes');
+const { obterDadosInfluenciador } = require('./routes/influenciadorRoutes');
 
 
 
@@ -20,6 +21,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 // 🌐 Rotas do Painel Administrativo explicitadas para a Vercel
 app.get('/api/admin/dados-generais', obterDadosGerais);
 app.post('/api/admin/atualizar-rastreio', atualizarRastreioPedido);
+// 🌐 Rota do Painel do Influenciador explicada para a Vercel
+app.get('/api/influenciador/dados', obterDadosInfluenciador);
 
 
 // 💰 PREÇO DE TESTE MANTIDO EM R\$ 1,00 PARA A SUA VALIDAÇÃO RÁPIDA DE CUSTO ZERO
