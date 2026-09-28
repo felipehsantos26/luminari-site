@@ -64,7 +64,7 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbWxzaHVmaWRydHZhdWlvcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MzM2MjksImV4cCI6MjEwNjEwOTYyOX0.XYkhg1sf9e8P2dcKByyigCT2GiYM0tQtefeGPp1v9RU";
 
         // Inicializa o motor imediatamente de forma limpa e global
-        const supabaseCliente = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseCliente = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         function alternarAba(tipo) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
