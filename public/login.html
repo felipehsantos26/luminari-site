@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Afiliado | EcoAngel</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f1f5f9; display: flex; justify-content: center; align-items: center; height: 100vh; color: #1e293b; }
+        .auth-card { background: white; padding: 30px; border-radius: 16px; border: 1px solid #e2e8f0; width: 100%; max-width: 400px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .logo { font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 25px; color: #0f172a; }
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; }
+        .tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; font-weight: bold; color: #64748b; font-size: 14px; }
+        .tab.active { color: #10b981; border-bottom: 2px solid #10b981; margin-bottom: -2px; }
+        label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px; color: #334155; }
+        input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box; margin-bottom: 15px; }
+        input:focus { border-color: #10b981; outline: none; }
+        .btn-auth { width: 100%; background: #10b981; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .btn-auth:hover { background: #059669; }
+        .toggle-box { display: none; }
+        .toggle-box.active { display: block; }
+    </style>
+    <!-- 🔌 IMPORTA O SDK OFICIAL DO SUPABASE DIRETO NO FRONTEND -->
+    <script src="https://jsdelivr.net"></script>
+</head>
+<body>
+
+    <div class="auth-card">
+        <div class="logo">EcoAngel 🚀 Parceiros</div>
+        
+        <div class="tabs">
+            <div class="tab active" id="tab-login" onclick="alternarAba('login')">Fazer Login</div>
+            <div class="tab" id="tab-cadastro" onclick="alternarAba('cadastro')">Criar Conta</div>
+        </div>
+
+        <!-- 🔑 BLOCO 1: FORMULÁRIO DE LOGIN -->
+        <div id="box-login" class="toggle-box active">
+            <label>E-mail cadastrado:</label>
+            <input type="email" id="login-email" placeholder="seuemail@exemplo.com">
+            
+            <label>Sua Senha:</label>
+            <input type="password" id="login-senha" placeholder="••••••••">
+            
+            <button class="btn-auth" onclick="executarLogin()">Entrar no Painel</button>
+        </div>
+
+        <!-- 📝 BLOCO 2: FORMULÁRIO DE CADASTRO AUTÔNOMO -->
+        <div id="box-cadastro" class="toggle-box">
+            <label>Seu Nome Completo:</label>
+            <input type="text" id="cad-nome" placeholder="Ex: Thais Santos">
+
+            <label>Seu Melhor E-mail:</label>
+            <input type="email" id="cad-email" placeholder="seuemail@exemplo.com">
+            
+            <label>Crie uma Senha Segura:</label>
+            <input type="password" id="cad-senha" placeholder="Mínimo 6 caracteres">
+            
+            <button class="btn-auth" style="background: #2563eb;" onclick="executarCadastro()">Cadastrar Minha Conta</button>
+        </div>
+    </div>
+
+    <script>
+        // 🗝️ CHAVES PÚBLICAS DE CONEXÃO DIRETA (Seguras para rodar no navegador)
+        const SUPABASE_URL = "https://supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbWxzaHVmaWRydHZhdWlvcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNDA0OTEsImV4cCI6MjA3NDYxNjQ5MX0.g6C7pG_e5bS-2hR4S77C57E88P3Z7H_Vv-o34Gv_k_E"; // Substitua pela sua anon_key real do bloco de notas se necessário!
+
+        const supabaseCliente = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function alternarAba(tipo) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.toggle-box').forEach(b => b.classList.remove('active'));
+            
+            if (tipo === 'login') {
+                document.getElementById('tab-login').classList.add('active');
+                document.getElementById('box-login').classList.add('active');
+            } else {
+                document.getElementById('tab-cadastro').classList.add('active');
+                document.getElementById('box-cadastro').classList.add('active');
+            }
+        }
+
+        // 📝 FUNÇÃO: Cadastra o usuário direto no motor do Supabase Auth
+        async function ejecutarCadastro() {
+            const nome = document.getElementById('cad-nome').value.trim();
+            const email = document.getElementById('cad-email').value.trim();
+            const senha = document.getElementById('cad-senha').value.trim();
+
+            if (!nome || !email || !senha) return alert("Preencha todos os campos!");
+
+            // Envia o comando de criação para a nuvem do Supabase
+            const { data, error } = await supabaseCliente.auth.signUp({
+                email: email,
+                password: senha,
+                options: { data: { full_name: nome } } // Salva o nome nos metadados
+            });
+
+            if (error) return alert("Erro no cadastro: " + error.message);
+
+            alert("🎉 Conta criada com sucesso! Você já pode fazer login na aba ao lado.");
+            alternarAba('login');
+        }
+
+        // 🔑 FUNÇÃO: Faz o login e guarda o Token criptografado no navegador
+        async function executarLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const senha = document.getElementById('login-senha').value.trim();
+
+            if (!email || !senha) return alert("Preencha os campos de login!");
+
+            const { data, error } = await supabaseCliente.auth.signInWithPassword({
+                email: email,
+                password: senha
+            });
+
+            if (error) return alert("Acesso negado: " + error.message);
+
+            // Redireciona o influenciador direto para o painel de gráficos levando o e-mail logado!
+            alert("🔑 Login aprovado! Entrando no seu painel...");
+            window.location.href = `/influenciador.html?email=${data.user.email}`;
+        }
+    </script>
+</body>
+</html>
