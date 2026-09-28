@@ -7,6 +7,7 @@ const { obterDadosInfluenciador } = require('./routes/influenciadorRoutes');
 
 
 
+
 // 📧 Puxa o serviço de e-mail transacional
 const { enviarEmailsComissao } = require('./services/emailService');
 
@@ -23,6 +24,8 @@ app.get('/api/admin/dados-generais', obterDadosGerais);
 app.post('/api/admin/atualizar-rastreio', atualizarRastreioPedido);
 // 🌐 Rota do Painel do Influenciador explicada para a Vercel
 app.get('/api/influenciador/dados', obterDadosInfluenciador);
+// 🌐 Rota do Painel do Influenciador explicitada para a Vercel
+app.get('/api/influenciador/dados-por-email', obterDadosInfluenciador);
 
 
 // 💰 PREÇO DE TESTE MANTIDO EM R\$ 1,00 PARA A SUA VALIDAÇÃO RÁPIDA DE CUSTO ZERO
