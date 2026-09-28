@@ -20,7 +20,7 @@
         .toggle-box.active { display: block; }
     </style>
     
-    <!-- 🔌 IMPORTAÇÃO DIRETA: Carrega o motor na memória antes do script rodar -->
+    <!-- 🔌 IMPORTAÇÃO DIRETA: Carrega o motor na memória de forma tradicional -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -63,7 +63,7 @@
         const SUPABASE_URL = "https://gqmlshufidrtvauiopoy.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbWxzaHVmaWRydHZhdWlvcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MzM2MjksImV4cCI6MjEwNjEwOTYyOX0.XYkhg1sf9e8P2dcKByyigCT2GiYM0tQtefeGPp1v9RU";
 
-        // Cria o cliente imediatamente após a importação tradicional do cabeçalho
+        // Inicializa o motor imediatamente de forma limpa e global
         const supabaseCliente = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         function alternarAba(tipo) {
