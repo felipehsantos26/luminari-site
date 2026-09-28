@@ -20,7 +20,7 @@
         .toggle-box.active { display: block; }
     </style>
     
-    <!-- 🔌 IMPORTAÇÃO DIRETA E TRADICIONAL: Força o navegador a carregar o motor antes de abrir a tela -->
+    <!-- 🔌 IMPORTAÇÃO DIRETA: Carrega o motor na memória antes do script rodar -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -60,13 +60,10 @@
     </div>
 
     <script>
-        // 🌐 URL Oficial da EcoAngel
         const SUPABASE_URL = "https://gqmlshufidrtvauiopoy.supabase.co";
-
-        // 🔑 Sua Chave Pública ANON legítima da foto (Totalmente certa!)
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbWxzaHVmaWRydHZhdWlvcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MzM2MjksImV4cCI6MjEwNjEwOTYyOX0.XYkhg1sf9e8P2dcKByyigCT2GiYM0tQtefeGPp1v9RU";
 
-        // Inicializa o motor imediatamente de forma estável
+        // Cria o cliente imediatamente após a importação tradicional do cabeçalho
         const supabaseCliente = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         function alternarAba(tipo) {
