@@ -20,12 +20,8 @@
         .toggle-box.active { display: block; }
     </style>
     
-    <!-- 🔌 CDN BLINDADA: Injeta o motor do Supabase fatiado com a barra correta antes do @ -->
-    <script>
-        const scriptSupabase = document.createElement('script');
-        scriptSupabase.src = "https://unpkg.com/@supabase/supabase-js@2";
-        document.head.appendChild(scriptSupabase);
-    </script>
+    <!-- 🔌 IMPORTAÇÃO DIRETA E TRADICIONAL: Força o navegador a carregar o motor antes de abrir a tela -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -67,20 +63,11 @@
         // 🌐 URL Oficial da EcoAngel
         const SUPABASE_URL = "https://gqmlshufidrtvauiopoy.supabase.co";
 
-        // 🔑 Sua Chave Pública ANON legítima fatiada com segurança máxima
+        // 🔑 Sua Chave Pública ANON legítima da foto (Totalmente certa!)
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbWxzaHVmaWRydHZhdWlvcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MzM2MjksImV4cCI6MjEwNjEwOTYyOX0.XYkhg1sf9e8P2dcKByyigCT2GiYM0tQtefeGPp1v9RU";
 
-        let supabaseCliente;
-
-        // 🔄 EVENTO CRUCIAL: Só inicializa o cliente após o navegador confirmar o download completo do motor
-        window.addEventListener('load', () => {
-            if (typeof Supabase !== 'undefined') {
-                supabaseCliente = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log("🔌 MOTOR: Supabase pronto e conectado de forma estável!");
-            } else {
-                console.error("Erro crítico: O motor do Supabase não pôde ser carregado pela rede.");
-            }
-        });
+        // Inicializa o motor imediatamente de forma estável
+        const supabaseCliente = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         function alternarAba(tipo) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -101,7 +88,7 @@
             const senha = document.getElementById('cad-senha').value.trim();
 
             if (!nome || !email || !senha) return alert("Preencha todos os campos!");
-            if (!supabaseCliente) return alert("Aguardando conexão segura com o servidor. Tente novamente em 2 segundos.");
+            if (!supabaseCliente) return alert("Aguardando conexão com o servidor.");
 
             try {
                 const { data: parceiroAutorizado, error: erroChecagem } = await supabaseCliente
@@ -137,7 +124,7 @@
             const senha = document.getElementById('login-senha').value.trim();
 
             if (!email || !senha) return alert("Preencha os campos de login!");
-            if (!supabaseCliente) return alert("Aguardando conexão segura.");
+            if (!supabaseCliente) return alert("Aguardando conexão.");
 
             try {
                 const { data, error } = await supabaseCliente.auth.signInWithPassword({
