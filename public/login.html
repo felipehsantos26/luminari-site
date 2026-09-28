@@ -78,25 +78,46 @@
         }
 
         // 📝 FUNÇÃO: Cadastra o usuário direto no motor do Supabase Auth
+                // 📝 FUNÇÃO BLINDADA: Só deixa cadastrar se o e-mail já estiver na planilha de parceiros!
         async function executarCadastro() {
             const nome = document.getElementById('cad-nome').value.trim();
             const email = document.getElementById('cad-email').value.trim();
             const senha = document.getElementById('cad-senha').value.trim();
 
             if (!nome || !email || !senha) return alert("Preencha todos os campos!");
+            if (!supabaseCliente) return alert("Aguardando conexão com o servidor.");
 
-            // Envia o comando de criação para a nuvem do Supabase
-            const { data, error } = await supabaseCliente.auth.signUp({
-                email: email,
-                password: senha,
-                options: { data: { full_name: nome } } // Salva o nome nos metadados
-            });
+            try {
+                // 🔍 PASSO DE SEGURANÇA: Confere na tabela se esse e-mail é de um influenciador convidado
+                const { data: parceiroAutorizado, error: erroChecagem } = await supabaseCliente
+                    .from('cupons_afiliados')
+                    .select('email_influenciador')
+                    .eq('email_influenciador', email.toLowerCase())
+                    .maybeSingle(); // Busca se existe a linha sem dar erro se não achar
 
-            if (error) return alert("Erro no cadastro: " + error.message);
+                // 🚨 SE NÃO ACHAR O E-MAIL NA PLANILHA: Barra o intruso imediatamente!
+                if (!parceiroAutorizado) {
+                    return alert("⚠️ Acesso Negado! Este e-mail não está na lista de influenciadores oficiais da EcoAngel. Se você é um parceiro, fale com o administrador para liberar seu acesso.");
+                }
 
-            alert("🎉 Conta criada com sucesso! Você já pode fazer login na aba ao lado.");
-            alternarAba('login');
+                // 🔓 SE JÁ ESTIVER NA PLANILHA: Libera a criação da senha de forma segura!
+                const { data, error } = await supabaseCliente.auth.signUp({
+                    email: email,
+                    password: senha,
+                    options: { data: { full_name: nome } }
+                });
+
+                if (error) return alert("Erro no cadastro: " + error.message);
+
+                alert("🎉 Conta de parceiro ativada com sucesso! Você já pode fazer login na aba ao lado.");
+                alternarAba('login');
+
+            } catch (err) {
+                console.error(err);
+                alert("Erro ao validar credenciais de segurança.");
+            }
         }
+
 
         // 🔑 FUNÇÃO: Faz o login e guarda o Token criptografado no navegador
         async function executarLogin() {
