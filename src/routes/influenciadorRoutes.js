@@ -1,41 +1,37 @@
 const { supabase } = require('../supabase');
 
-// 🔌 FUNÇÃO: Buscar dados exclusivos de um Influenciador/Cupom específico
+// 🔌 FUNÇÃO: Buscar dados do influenciador cruzando o E-MAIL logado com o cupom dele
 async function obterDadosInfluenciador(req, res) {
-    const { cupom } = req.query; // Pega o cupom vindo da URL (ex: ?cupom=THAIS10)
+    const { email } = req.query; // 🌟 LÊ O EMAIL AUTOMÁTICO DO LOGIN!
 
-    if (!cupom) {
-        return res.status(400).json({ sucesso: false, mensagem: "Cupom não fornecido." });
+    if (!email) {
+        return res.status(400).json({ sucesso: false, mensagem: "E-mail de acesso não fornecido." });
     }
 
     try {
-        // 🔍 1. Busca no banco real se esse cupom existe e qual o percentual dele
+        // 🔍 1. Abre a tabela 'cupons_afiliados' e procura qual cupom pertence a esse e-mail de login!
         const { data: cupomInfo, error: erroCupom } = await supabase
             .from('cupons_afiliados')
             .select('*')
-            .eq('codigo_cupom', cupom.toUpperCase().trim())
+            .eq('email_influenciador', email.trim())
             .single();
 
         if (erroCupom || !cupomInfo) {
-            return res.status(404).json({ sucesso: false, mensagem: "Cupom/Influenciador não encontrado." });
+            return res.status(404).json({ sucesso: false, mensagem: "Sua conta de e-mail ainda não possui um cupom de parceiro vinculado no Supabase." });
         }
 
-        // 📊 2. Busca todas as vendas reais aprovadas que usaram ESSE cupom específico
+        // 📊 2. Busca as indicações que usaram o cupom descoberto
         const { data: vendas, error: erroVendas } = await supabase
             .from('pedidos_venda')
             .select('*')
-            .eq('cupom_utilizado', cupom.toUpperCase().trim())
-            .neq('status_producao', 'Aguardando Pagamento') // Ignora Pix pendentes
+            .eq('cupom_utilizado', cupomInfo.codigo_cupom)
+            .neq('status_producao', 'Aguardando Pagamento')
             .order('pago_em', { ascending: false });
 
         if (erroVendas) throw erroVendas;
 
-        // 🧮 3. Faz os cálculos matemáticos com base nas vendas reais dela
         const totalVendasConvertidas = vendas.length;
-        
         const faturamentoGerado = vendas.reduce((total, v) => total + Number(v.valor_total), 0);
-        
-        // Multiplica o faturamento gerado pela porcentagem de comissão cadastrada no banco
         const comissaoAcumulada = faturamentoGerado * Number(cupomInfo.desconto_percentual);
 
         return res.json({
@@ -54,7 +50,7 @@ async function obterDadosInfluenciador(req, res) {
         });
 
     } catch (error) {
-        console.error("❌ Erro na rota do influenciador:", error);
+        console.error("❌ Erro na rota do influenciador por e-mail:", error);
         return res.status(500).json({ sucesso: false, mensagem: "Erro interno no banco de dados." });
     }
 }
