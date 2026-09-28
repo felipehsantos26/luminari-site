@@ -71,6 +71,24 @@
                 </tbody>
             </table>
         </div>
+                <!-- 💸 NOVO: PAINEL FINANCEIRO PARA DAR BAIXA EM AFILIADOS -->
+        <div class="tabela-container" style="margin-top: 30px; border-left: 4px solid #10b981;">
+            <h2>💸 Dar Baixa em Comissão (Registrar Pix)</h2>
+            <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <div>
+                    <label style="display: block; font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 5px;">E-mail do Afiliado:</label>
+                    <input type="text" id="pagamento-email" placeholder="Ex: teste1@gmail.com" style="width: 250px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 5px;">Valor do Pix enviado (R$):</label>
+                    <input type="number" id="pagamento-valor" placeholder="0.00" step="0.01" style="width: 140px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                </div>
+                <div style="padding-top: 20px;">
+                    <button class="btn-rastreio" style="background: #10b981; padding: 10px 20px; font-weight: bold;" onclick="lançarPixAfiliado()">Registrar Pagamento</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -158,6 +176,46 @@
                     alert("Erro ao atualizar pedido.");
                 }
             } catch (e) { console.error(e); }
+        }
+        // 🚀 Executa o envio do registro de pagamento para a nossa nova rota do backend
+        async function lançarPixAfiliado() {
+            const emailInput = document.getElementById('pagamento-email');
+            const valorInput = document.getElementById('pagamento-valor');
+            
+            const email = emailInput.value.trim();
+            const valor = Number(valorInput.value);
+
+            if (!email || !valor || valor <= 0) {
+                return alert("⚠️ Por favor, informe um e-mail válido e um valor maior que zero!");
+            }
+
+            if (!confirm(`Confirma que você enviou um Pix de R$ ${valor.toFixed(2)} para o e-mail ${email}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/admin/registrar-pagamento', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ emailInfluenciador: email, valorPago: valor })
+                });
+                
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    alert("🎉 Sucesso! Baixa realizada e salva de forma permanente no Supabase.");
+                    emailInput.value = "";
+                    valorInput.value = "";
+                    
+                    // Se o afiliado estiver logado no painel dele, o saldo dele vai cair na mesma hora!
+                    if (typeof carregarDadosAdmin === 'function') carregarDadosAdmin();
+                } else {
+                    alert("Erro: " + (data.mensagem || "Não foi possível registrar o pagamento."));
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Erro de conexão ao registrar pagamento.");
+            }
         }
 
         // Executa a carga dos dados assim que a tela abre

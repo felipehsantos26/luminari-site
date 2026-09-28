@@ -2,7 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { obterDadosGerais, atualizarRastreioPedido } = require('./routes/adminRoutes');
+
+// 📦 Importações do Admin atualizadas e unificadas em uma única linha:
+const { obterDadosGerais, atualizarRastreioPedido, registrarPagamentoAfiliado } = require('./routes/adminRoutes');
+
 const { obterDadosInfluenciador } = require('./routes/influenciadorRoutes');
 
 
@@ -26,6 +29,7 @@ app.post('/api/admin/atualizar-rastreio', atualizarRastreioPedido);
 app.get('/api/influenciador/dados', obterDadosInfluenciador);
 // 🌐 Rota do Painel do Influenciador explicitada para a Vercel
 app.get('/api/influenciador/dados-por-email', obterDadosInfluenciador);
+app.post('/api/admin/registrar-pagamento', registrarPagamentoAfiliado);
 
 
 // 💰 PREÇO DE TESTE MANTIDO EM R\$ 1,00 PARA A SUA VALIDAÇÃO RÁPIDA DE CUSTO ZERO
