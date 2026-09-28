@@ -13,7 +13,7 @@
         .card { background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; flex: 1; min-width: 250px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .card h3 { margin: 0 0 10px 0; color: #64748b; font-size: 14px; text-transform: uppercase; }
         .card .valor { font-size: 28px; font-weight: bold; color: #0f172a; }
-        .tabela-container { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .tabela-container { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 30px; }
         .tabela-container h2 { margin-top: 0; margin-bottom: 20px; font-size: 18px; color: #334155; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
@@ -24,7 +24,9 @@
         .status.pendente { background-color: #f1f5f9; color: #475569; }
         .btn-rastreio { background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
         .btn-rastreio:hover { background: #1d4ed8; }
-        input[type="text"] { padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; width: 140px; margin-right: 5px; }
+        input[type="text"], input[type="number"] { padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; width: 140px; margin-right: 5px; }
+        .badge-retido { color: #b45309; background-color: #fff7ed; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .badge-liberado { color: #16a34a; background-color: #f0fdf4; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -38,7 +40,7 @@
         <div class="cards-grid">
             <div class="card">
                 <h3>💰 Faturamento Bruto</h3>
-                <div class="valor" id="card-faturamento">R\$ 0,00</div>
+                <div class="valor" id="card-faturamento">R$ 0,00</div>
             </div>
             <div class="card">
                 <h3>📦 Vagas no Lote Atual</h3>
@@ -49,7 +51,6 @@
                 <div class="valor" id="card-producao">00</div>
             </div>
         </div>
-
         <!-- 🚚 TABELA DA FILA DE PRODUÇÃO -->
         <div class="tabela-container">
             <h2>📋 Fila de Produção e Postagem</h2>
@@ -71,26 +72,29 @@
                 </tbody>
             </table>
         </div>
-                <!-- 💸 NOVO: PAINEL FINANCEIRO PARA DAR BAIXA EM AFILIADOS -->
-        <div class="tabela-container" style="margin-top: 30px; border-left: 4px solid #10b981;">
-            <h2>💸 Dar Baixa em Comissão (Registrar Pix)</h2>
-            <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                <div>
-                    <label style="display: block; font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 5px;">E-mail do Afiliado:</label>
-                    <input type="text" id="pagamento-email" placeholder="Ex: teste1@gmail.com" style="width: 250px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px;">
-                </div>
-                <div>
-                    <label style="display: block; font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 5px;">Valor do Pix enviado (R$):</label>
-                    <input type="number" id="pagamento-valor" placeholder="0.00" step="0.01" style="width: 140px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px;">
-                </div>
-                <div style="padding-top: 20px;">
-                    <button class="btn-rastreio" style="background: #10b981; padding: 10px 20px; font-weight: bold;" onclick="lançarPixAfiliado()">Registrar Pagamento</button>
-                </div>
-            </div>
+
+        <!-- 💸 NOVO: GERENCIAMENTO DE CARTEIRA DOS AFILIADOS -->
+        <div class="tabela-container" style="border-left: 4px solid #10b981;">
+            <h2>💸 Faturamento e Carteira dos Afiliados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Afiliado / Cupom</th>
+                        <th>Vendas Convertidas</th>
+                        <th>Total Histórico</th>
+                        <th>⏳ Retido (Menos 15 dias)</th>
+                        <th>🔓 Liberado (Apto para Pix)</th>
+                        <th>Ação de Baixa</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-afiliados-corpo">
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: #94a3b8;">Calculando saldos e carteiras...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
     </div>
-
     <script>
         // 🔄 Busca as informações reais do Supabase ao abrir a página
         async function carregarDadosAdmin() {
@@ -107,50 +111,70 @@
                 const pedidosEmPreparo = data.pedidos.filter(p => p.status_producao === 'Em Preparo').length;
                 document.getElementById('card-producao').innerText = pedidosEmPreparo;
 
-                // Preenche a tabela de encomendas
+                // 1. PREENCHE A FILA DE PRODUÇÃO
                 const corpoTabela = document.getElementById('tabela-pedidos-corpo');
                 corpoTabela.innerHTML = "";
 
                 if (data.pedidos.length === 0) {
                     corpoTabela.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">Nenhum pedido encontrado.</td></tr>`;
-                    return;
+                } else {
+                    data.pedidos.forEach(pedido => {
+                        const tr = document.createElement('tr');
+                        let classeStatus = 'pendente';
+                        if (pedido.status_producao === 'Em Preparo') classeStatus = 'preparo';
+                        if (pedido.status_producao === 'Despachado') classeStatus = 'despachado';
+
+                        let celulaAcao = "";
+                        if (pedido.status_producao === 'Aguardando Pagamento') {
+                            celulaAcao = `<span style="color: #94a3b8; font-style: italic;">Aguardando Pix</span>`;
+                        } else if (pedido.status_producao === 'Em Preparo') {
+                            celulaAcao = `
+                                <input type="text" id="input-${pedido.id_pedido}" placeholder="Código de Rastreio">
+                                <button class="btn-rastreio" onclick="despacharPedido('${pedido.id_pedido}')">Despachar</button>
+                            `;
+                        } else {
+                            celulaAcao = `<strong style="color: #14532d;">${pedido.codigo_rastreio}</strong>`;
+                        }
+
+                        tr.innerHTML = `
+                            <td><strong>${pedido.id_pedido}</strong></td>
+                            <td>${pedido.comprador_nome}<br><small style="color: #64748b;">${pedido.comprador_email}<br>${pedido.comprador_telefone}</small></td>
+                            <td><small>${pedido.rua}, Nº ${pedido.numero}<br>${pedido.complemento}<br>CEP: ${pedido.cep}</small></td>
+                            <td><span style="font-size: 11px; background: #f1f5f9; padding: 2px 4px; border-radius: 4px;">${pedido.cupom_utilizado}</span><br><strong>${Number(pedido.valor_total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></td>
+                            <td><span class="status ${classeStatus}">${pedido.status_producao}</span></td>
+                            <td>${celulaAcao}</td>
+                        `;
+                        corpoTabela.appendChild(tr);
+                    });
                 }
 
-                data.pedidos.forEach(pedido => {
-                    const tr = document.createElement('tr');
-                    
-                    // Ajusta a cor do crachá do status
-                    let classeStatus = 'pendente';
-                    if (pedido.status_producao === 'Em Preparo') classeStatus = 'preparo';
-                    if (pedido.status_producao === 'Despachado') classeStatus = 'despachado';
+                // 2. PREENCHE A NOVA CARTEIRA INTELIGENTE DE AFILIADOS
+                const corpoAfiliados = document.getElementById('tabela-afiliados-corpo');
+                corpoAfiliados.innerHTML = "";
 
-                    // Monta a célula de ação (Botão de Rastreio ou o Código fixado)
-                    let celulaAcao = "";
-                    if (pedido.status_producao === 'Aguardando Pagamento') {
-                        celulaAcao = `<span style="color: #94a3b8; font-style: italic;">Aguardando Pix</span>`;
-                    } else if (pedido.status_producao === 'Em Preparo') {
-                        celulaAcao = `
-                            <input type="text" id="input-${pedido.id_pedido}" placeholder="Código de Rastreio">
-                            <button class="btn-rastreio" onclick="despacharPedido('${pedido.id_pedido}')">Despachar</button>
+                if (!data.resumoAfiliados || data.resumoAfiliados.length === 0) {
+                    corpoAfiliados.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">Nenhum afiliado cadastrado.</td></tr>`;
+                } else {
+                    data.resumoAfiliados.forEach(af => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td><strong>${af.email}</strong><br><small style="background: #e2e8f0; padding: 2px 4px; border-radius: 4px; font-size: 11px;">Tag: ${af.cupom}</small></td>
+                            <td>${af.totalVendas} vendas</td>
+                            <td>${af.comissaoBrutaTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                            <td><span class="badge-retido">${af.comissaoRetida.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></td>
+                            <td><span class="badge-liberado">${af.comissaoLiberadaApta.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></td>
+                            <td>
+                                <input type="number" id="valor-baixa-${af.cupom}" placeholder="R$ 0.00" step="0.01" style="width: 90px; padding: 4px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                                <button class="btn-rastreio" style="background: #10b981; padding: 4px 8px;" onclick="lancarBaixaPix('${af.email}', '${af.cupom}')">Dar Baixa</button>
+                            </td>
                         `;
-                    } else {
-                        celulaAcao = `<strong style="color: #14532d;">${pedido.codigo_rastreio}</strong>`;
-                    }
-
-                    tr.innerHTML = `
-                        <td><strong>${pedido.id_pedido}</strong></td>
-                        <td>${pedido.comprador_nome}<br><small style="color: #64748b;">${pedido.comprador_email}<br>${pedido.comprador_telefone}</small></td>
-                        <td><small>${pedido.rua}, Nº ${pedido.numero}<br>${pedido.complemento}<br>CEP: ${pedido.cep}</small></td>
-                        <td><span style="font-size: 11px; background: #f1f5f9; padding: 2px 4px; border-radius: 4px;">${pedido.cupom_utilizado}</span><br><strong>${Number(pedido.valor_total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></td>
-                        <td><span class="status ${classeStatus}">${pedido.status_producao}</span></td>
-                        <td>${celulaAcao}</td>
-                    `;
-                    corpoTabela.appendChild(tr);
-                });
+                        corpoAfiliados.appendChild(tr);
+                    });
+                }
 
             } catch (err) {
                 console.error(err);
-                alert("Erro de conexão ao carregar painel.");
+                alert("Erro de conexão ao carregar painel administrativo.");
             }
         }
 
@@ -171,25 +195,23 @@
 
                 if (data.sucesso) {
                     alert("🎉 Pedido despachado e atualizado no Supabase!");
-                    carregarDadosAdmin(); // Recarrega a tabela na tela
+                    carregarDadosAdmin();
                 } else {
                     alert("Erro ao atualizar pedido.");
                 }
             } catch (e) { console.error(e); }
         }
-        // 🚀 Executa o envio do registro de pagamento para a nossa nova rota do backend
-        async function lançarPixAfiliado() {
-            const emailInput = document.getElementById('pagamento-email');
-            const valorInput = document.getElementById('pagamento-valor');
-            
-            const email = emailInput.value.trim();
-            const valor = Number(valorInput.value);
 
-            if (!email || !valor || valor <= 0) {
-                return alert("⚠️ Por favor, informe um e-mail válido e um valor maior que zero!");
+        // 🚀 Realiza o envio do Pix e desconta dinamicamente na carteira do parceiro
+        async function lancarBaixaPix(email, cupom) {
+            const inputValor = document.getElementById(`valor-baixa-${cupom}`);
+            const valor = Number(inputValor.value);
+
+            if (!valor || valor <= 0) {
+                return alert("⚠️ Por favor, informe um valor de Pix válido e maior que zero!");
             }
 
-            if (!confirm(`Confirma que você enviou um Pix de R$ ${valor.toFixed(2)} para o e-mail ${email}?`)) {
+            if (!confirm(`Você confirma que fez um repasse Pix de R$ ${valor.toFixed(2)} para o afiliado do e-mail ${email}?`)) {
                 return;
             }
 
@@ -203,22 +225,18 @@
                 const data = await response.json();
 
                 if (data.sucesso) {
-                    alert("🎉 Sucesso! Baixa realizada e salva de forma permanente no Supabase.");
-                    emailInput.value = "";
-                    valorInput.value = "";
-                    
-                    // Se o afiliado estiver logado no painel dele, o saldo dele vai cair na mesma hora!
-                    if (typeof carregarDadosAdmin === 'function') carregarDadosAdmin();
+                    alert("🎉 Baixa financeira aplicada com sucesso no Supabase!");
+                    inputValor.value = "";
+                    carregarDadosAdmin(); // Recarrega os saldos na tela na mesma hora
                 } else {
-                    alert("Erro: " + (data.mensagem || "Não foi possível registrar o pagamento."));
+                    alert("Erro ao salvar baixa: " + data.mensagem);
                 }
             } catch (err) {
                 console.error(err);
-                alert("Erro de conexão ao registrar pagamento.");
+                alert("Erro de comunicação ao registrar o pagamento.");
             }
         }
 
-        // Executa a carga dos dados assim que a tela abre
         window.onload = carregarDadosAdmin;
     </script>
 </body>

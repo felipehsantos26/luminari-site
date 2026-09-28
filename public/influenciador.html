@@ -17,7 +17,7 @@
         .card h3 { margin: 0 0 10px 0; color: #64748b; font-size: 13px; text-transform: uppercase; }
         .card .valor { font-size: 26px; font-weight: bold; color: #0f172a; }
         .card .sub { font-size: 12px; color: #10b981; font-weight: bold; margin-top: 5px; }
-        .tabela-container { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: none; }
+        .tabela-container { background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: none; margin-bottom: 25px; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
         th { background-color: #f8fafc; color: #64748b; font-size: 11px; text-transform: uppercase; }
@@ -50,10 +50,9 @@
             </div>
             <div class="card">
                 <h3>💸 Sua Comissão a Receber</h3>
-                <div class="valor" style="color: #10b981;" id="txt-saldo-comissao">R\$ 0,00</div>
+                <div class="valor" style="color: #10b981;" id="txt-saldo-comissao">R$ 0,00</div>
             </div>
         </div>
-
         <!-- 📋 HISTÓRICO DE VENDAS CONVERTIDAS -->
         <div class="tabela-container" id="container-historico">
             <h3 style="margin-top: 0; color: #334155; font-size: 16px;">📋 Seu Histórico de Indicações</h3>
@@ -69,9 +68,9 @@
                 <tbody id="corpo-tabela-vendas"></tbody>
             </table>
         </div>
-    </div>
-            <!-- 💸 NOVO: HISTÓRICO DE PIX RECEBIDOS DO ADMINISTRADOR -->
-        <div class="tabela-container" id="container-pagamentos" style="margin-top: 25px; border-top: 3px solid #10b981;">
+
+        <!-- 💸 NOVO: HISTÓRICO DE PIX RECEBIDOS DO ADMINISTRADOR -->
+        <div class="tabela-container" id="container-pagamentos" style="border-top: 3px solid #10b981;">
             <h3 style="margin-top: 0; color: #10b981; font-size: 16px;">💸 Seus Recebimentos (Extrato de Pix)</h3>
             <table>
                 <thead>
@@ -89,7 +88,7 @@
                 </tbody>
             </table>
         </div>
-
+    </div>
        <script>
         // 🔄 FUNÇÃO PRINCIPAL: Executa assim que a folha da página termina de carregar no navegador
         async function verificarLoginEmail() {
@@ -120,6 +119,7 @@
                 // 🔓 Libera a visibilidade dos cards de comissões e tabelas na tela
                 document.getElementById('grid-metricas').style.display = "flex";
                 document.getElementById('container-historico').style.display = "block";
+                document.getElementById('container-pagamentos').style.display = "block";
 
                 // 📊 Preenche as caixas com as métricas calculadas pelo Supabase
                 document.getElementById('txt-nome-cupom').innerText = data.cupom;
@@ -127,28 +127,28 @@
                 document.getElementById('txt-qtd-vendas').innerText = data.totalVendas;
                 document.getElementById('txt-saldo-comissao').innerText = data.comissaoReceber.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-                // 📋 Preenche as linhas do histórico de indicações da Thais/Felipe
+                // 📋 1. Preenche as linhas do histórico de indicações da Thais/Felipe
                 const tabela = document.getElementById('corpo-tabela-vendas');
                 tabela.innerHTML = "";
 
                 if (data.historico.length === 0) {
                     tabela.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">Nenhuma venda aprovada com seu cupom ainda.</td></tr>`;
-                    return;
+                } else {
+                    data.historico.forEach(venda => {
+                        const tr = document.createElement('tr');
+                        const dataFormatada = new Date(venda.data).toLocaleDateString('pt-BR', { hour: '2-digit', minute:'2-digit' });
+                        
+                        tr.innerHTML = `
+                            <td><strong>${venda.id_pedido}</strong></td>
+                            <td>${dataFormatada}</td>
+                            <td><strong>${Number(venda.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></td>
+                            <td><span style="color: #14532d; background: #dcfce7; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 12px;">Aprovado</span></td>
+                        `;
+                        tabela.appendChild(tr);
+                    });
                 }
 
-                data.historico.forEach(venda => {
-                    const tr = document.createElement('tr');
-                    const dataFormatada = new Date(venda.data).toLocaleDateString('pt-BR', { hour: '2-digit', minute:'2-digit' });
-                    
-                    tr.innerHTML = `
-                        <td><strong>${venda.id_pedido}</strong></td>
-                        <td>${dataFormatada}</td>
-                        <td><strong>${Number(venda.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></td>
-                        <td><span style="color: #14532d; background: #dcfce7; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 12px;">Aprovado</span></td>
-                    `;
-                    tabela.appendChild(tr);
-                });
-                // 💸 RENDERIZAR HISTÓRICO DE PIX RECEBIDOS (NOVO)
+                // 💸 2. RENDERIZAR HISTÓRICO DE PIX RECEBIDOS (EXTRATO REAL)
                 const tabelaPg = document.getElementById('corpo-tabela-pagamentos');
                 tabelaPg.innerHTML = "";
 
@@ -161,25 +161,22 @@
                             <td><strong>#PIX-${pg.id_pagamento}</strong></td>
                             <td>${dataPgFormatada}</td>
                             <td style="color: #10b981;"><strong>${Number(pg.valor_pago).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></td>
-                            <td><span style="color: #14532d; background: #dcfce7; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 12px;">Enviado</span></td>
+                            <td><span style="color: #14532d; background: #dcfce7; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 12px;">Pago</span></td>
                         `;
                         tabelaPg.appendChild(trPg);
                     });
                 } else {
-                    tabelaPg.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">Nenhum pagamento registrado ainda.</td></tr>`;
+                    tabelaPg.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #94a3b8;">Nenhum repasse Pix registrado ainda pelo administrador.</td></tr>`;
                 }
 
             } catch (err) {
                 console.error(err);
                 alert("Erro ao conectar com o servidor de afiliados.");
-
-                
             }
         }
 
         // Dispara a checagem inteligente no exato milissegundo em que a página abre!
         window.onload = verificarLoginEmail;
     </script>
-
 </body>
 </html>
