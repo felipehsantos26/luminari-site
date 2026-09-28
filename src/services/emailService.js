@@ -17,7 +17,7 @@ async function enviarEmailsComissao(infoVenda) {
         // 📧 1. ENVIAR E-MAIL PARA O INFLUENCIADOR (Dinâmico para o e-mail do parceiro!)
         if (cupom && cupom !== "NENHUM (Venda Directa pelo Site)") {
             await resend.emails.send({
-                from: 'thais.ki.satux@gmal.com',
+                from: 'thais@ecoangel.com.br',
                 to: emailInfluenciador, // 🌟 AGORA DINÂMICO: Vai direto para o e-mail do dono do cupom!
                 subject: '🎉 Nova comissão gerada! | EcoAngel',
                 html: `
@@ -39,7 +39,7 @@ async function enviarEmailsComissao(infoVenda) {
 
         // 📧 2. ENVIAR E-MAIL PARA VOCÊ (O ADMINISTRADOR - Mantido fixo para sua fábrica!)
         await resend.emails.send({
-            from: 'thais.ki.satux@gmail.com',
+            from: 'thais@ecoangel.com.br',
             to: 'felipeh.santos26@gmail.com', // 🔒 Mantido fixo para você gerenciar a produção!
             subject: '📦 Nova Luminária vendida! | EcoAngel',
             html: `
@@ -72,7 +72,7 @@ async function enviarEmailsComissao(infoVenda) {
 
         // 📧 3. 🚀 CONFIRMAÇÃO AUTOMÁTICA PARA O COMPRADOR (Dinâmico para quem comprou!)
         await resend.emails.send({
-            from: 'thais.ki.satux@gmail.com',
+            from: 'thais@ecoangel.com.br',
             to: emailComprador, // 🌟 AGORA DINÂMICO: Vai direto para o e-mail real do cliente que comprou!
             subject: '📦 Seu pedido da EcoAngel foi aprovado!',
             html: `
