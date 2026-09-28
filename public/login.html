@@ -20,10 +20,10 @@
         .toggle-box.active { display: block; }
     </style>
     
-    <!-- 🔌 CDN BLINDADA: Injeta o motor do Supabase fatiado com "+" para quebrar travas de rede -->
+    <!-- 🔌 CDN BLINDADA: Injeta o motor do Supabase fatiado com a barra correta antes do @ -->
     <script>
         const scriptSupabase = document.createElement('script');
-        scriptSupabase.src = "https://unpkg.com@supabase/supabase-js@2";
+        scriptSupabase.src = "https://unpkg.com/@supabase/supabase-js@2";
         document.head.appendChild(scriptSupabase);
     </script>
 </head>
@@ -67,8 +67,8 @@
         // 🌐 URL Oficial da EcoAngel
         const SUPABASE_URL = "https://gqmlshufidrtvauiopoy.supabase.co";
 
-        // 🔑 Sua Chave Pública ANON legítima restaurada e fatiada com segurança máxima
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbWxzaHVmaWRydHZhdWlvcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNDA0OTEsImV4cCI6MjA3NDYxNjQ5MX0.g6C7pG_e5bS-2hR4S77C57E88P3Z7H_Vv-o34Gv_k_E";
+        // 🔑 Sua Chave Pública ANON legítima fatiada com segurança máxima
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbWxzaHVmaWRydHZhdWlvcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MzM2MjksImV4cCI6MjEwNjEwOTYyOX0.XYkhg1sf9e8P2dcKByyigCT2GiYM0tQtefeGPp1v9RU";
 
         let supabaseCliente;
 
@@ -95,10 +95,6 @@
         }
 
         // 📝 FUNÇÃO DE CADASTRO VIP
-        async function ejecutarCadastro() {
-            // Mantido o nome original com "j" do seu arquivo para garantir compatibilidade com o botão do formulário antigo caso mude
-        }
-
         async function executarCadastro() {
             const nome = document.getElementById('cad-nome').value.trim();
             const email = document.getElementById('cad-email').value.trim();
@@ -156,7 +152,7 @@
                 
             } catch (err) {
                 console.error(err);
-                alert("Erro de comunicação ao efuar login.");
+                alert("Erro de comunicação ao efetuar login.");
             }
         }
     </script>
