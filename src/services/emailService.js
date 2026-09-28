@@ -14,34 +14,34 @@ async function enviarEmailsComissao(infoVenda) {
     const comissaoFormatada = comissao.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
     try {
-        // 📧 1. ENVIAR E-MAIL PARA O INFLUENCIADOR (Apenas se houver cupom ativo)
-        if (cupom && cupom !== "NENHUM (Venda Direta pelo Site)") {
+        // 📧 1. ENVIAR E-MAIL PARA O INFLUENCIADOR (Dinâmico para o e-mail do parceiro!)
+        if (cupom && cupom !== "NENHUM (Venda Directa pelo Site)") {
             await resend.emails.send({
                 from: 'onboarding@resend.dev',
-                to: 'felipeh.santos26@gmail.com', // Modo teste (enviando para você)
-                subject: '🎉 Nova comissão gerada! | SmartGlucolamp',
+                to: emailInfluenciador, // 🌟 AGORA DINÂMICO: Vai direto para o e-mail do dono do cupom!
+                subject: '🎉 Nova comissão gerada! | EcoAngel',
                 html: `
                     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
                         <h2 style="color: #16a34a;">Parabéns! Uma nova venda foi realizada com o seu cupom.</h2>
-                        <p>Olá, parceiro(a)! Alguém acabou de comprar uma <strong>Luminária Inteligente SmartGlucolamp</strong> utilizando o seu código: <strong>${cupom}</strong>.</p>
+                        <p>Olá, parceiro(a)! Alguém acabou de comprar uma <strong>Luminária Inteligente EcoAngel</strong> utilizando o seu código: <strong>${cupom}</strong>.</p>
                         <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; margin: 20px 0;">
                             <p style="margin: 5px 0;"><strong>Valor total da venda:</strong> ${valorFormatado}</p>
-                            <p style="margin: 5px 0; color: #16a34a; font-size: 1.2rem;"><strong>Sua comissão (15%):</strong> ${comissaoFormatada}</p>
+                            <p style="margin: 5px 0; color: #16a34a; font-size: 1.2rem;"><strong>Sua comissão:</strong> ${comissaoFormatada}</p>
                         </div>
                         <p style="color: #64748b; font-size: 0.9rem;">⚠️ <em>Lembrete de segurança: A comissão ficará retida por 15 dias contra cancelamentos.</em></p>
                         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
-                        <p style="font-size: 0.85rem; color: #94a3b8; text-align: center;">SmartGlucolamp &copy; 2026</p>
+                        <p style="font-size: 0.85rem; color: #94a3b8; text-align: center;">EcoAngel &copy; 2026</p>
                     </div>
                 `
             });
-            console.log(`✉️ E-mail enviado para o influenciador.`);
+            console.log(`✉️ E-mail enviado para o influenciador real (${emailInfluenciador}).`);
         }
 
-        // 📧 2. ENVIAR E-MAIL PARA VOCÊ (O ADMINISTRADOR)
+        // 📧 2. ENVIAR E-MAIL PARA VOCÊ (O ADMINISTRADOR - Mantido fixo para sua fábrica!)
         await resend.emails.send({
             from: 'onboarding@resend.dev',
-            to: 'felipeh.santos26@gmail.com',
-            subject: '📦 Nova Luminária vendida! | SmartGlucolamp',
+            to: 'felipeh.santos26@gmail.com', // 🔒 Mantido fixo para você gerenciar a produção!
+            subject: '📦 Nova Luminária vendida! | EcoAngel',
             html: `
                 <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
                     <h2 style="color: #2563eb;">Sucesso! Nova venda aprovada no site.</h2>
@@ -64,29 +64,28 @@ async function enviarEmailsComissao(infoVenda) {
                         <p style="margin: 6px 0;"><strong>CEP de Destino:</strong> ${entrega?.cep || 'Não preenchido'}</p>
                     </div>
                     <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
-                    <p style="font-size: 0.85rem; color: #94a3b8; text-align: center;">Painel de Controle Interno SmartGlucolamp</p>
+                    <p style="font-size: 0.85rem; color: #94a3b8; text-align: center;">Painel de Controle Interno EcoAngel</p>
                 </div>
             `
         });
         console.log(`✉️ E-mail enviado para o Administrador.`);
 
-        // 📧 3. 🚀 O TERCEIRO E-MAIL: CONFIRMAÇÃO AUTOMÁTICA PARA O COMPRADOR (ESTILO MERCADO LIVRE!)
+        // 📧 3. 🚀 CONFIRMAÇÃO AUTOMÁTICA PARA O COMPRADOR (Dinâmico para quem comprou!)
         await resend.emails.send({
             from: 'onboarding@resend.dev',
-            // 🛠️ Mantido fixo para você receber e testar o layout de graça na conta teste do Resend
-            to: 'felipeh.santos26@gmail.com', 
-            subject: '📦 Seu pedido da SmartGlucolamp foi aprovado!',
+            to: emailComprador, // 🌟 AGORA DINÂMICO: Vai direto para o e-mail real do cliente que comprou!
+            subject: '📦 Seu pedido da EcoAngel foi aprovado!',
             html: `
                 <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
                     <div style="text-align: center; margin-bottom: 20px;">
-                        <span style="font-size: 24px; font-weight: bold; color: #232323;">SmartGlucolamp</span>
+                        <span style="font-size: 24px; font-weight: bold; color: #232323;">EcoAngel</span>
                     </div>
                     <h2 style="color: #16a34a; text-align: center;">Olá, ${entrega?.nome || 'Cliente'}! Seu pagamento foi confirmado.</h2>
                     <p style="text-align: center; color: #475569;">Ficamos muito felizes com a sua compra! O seu pedido já foi recebido e entrou na nossa linha de montagem e testes.</p>
                     
                     <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 25px 0;">
                         <h4 style="margin: 0 0 10px 0; color: #334155;">📋 Resumo do Pedido:</h4>
-                        <p style="margin: 5px 0; font-size: 14px;"><strong>Produto:</strong> 1x Luminária Inteligente SmartGlucolamp</p>
+                        <p style="margin: 5px 0; font-size: 14px;"><strong>Produto:</strong> 1x Luminária Inteligente EcoAngel</p>
                         <p style="margin: 5px 0; font-size: 14px;"><strong>Valor Total Pago:</strong> ${valorFormatado}</p>
                         <p style="margin: 5px 0; font-size: 14px;"><strong>Status do Pagamento:</strong> Aprovado via Pix</p>
                     </div>
@@ -95,14 +94,13 @@ async function enviarEmailsComissao(infoVenda) {
                         <p style="margin: 0; font-size: 14px; color: #713f12;">🚚 <strong>Próximo passo:</strong> Assim que a sua luminária inteligente for postada na agência dos Correios, nós enviaremos um novo e-mail contendo o seu <strong>número de rastreamento</strong> para você acompanhar a entrega em tempo real.</p>
                     </div>
 
-                    <p style="font-size: 14px; color: #475569; text-align: center;">Se você tiver qualquer dúvida ou precisar de suporte com o pareamento do seu sensor, basta responder diretamente a este e-mail ou entrar em contato com o nosso time técnico.</p>
-                    
+                    <p style="font-size: 14px; color: #475569; text-align: center;">Se você tiver qualquer dúvida ou precisar de suporte com o pareamento do seu produto, basta responder diretamente a este e-mail ou entrar em contato com o nosso time de atendimento.</p>
                     <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
-                    <p style="font-size: 0.8rem; color: #94a3b8; text-align: center;">SmartGlucolamp - Tecnologia cuidando de quem você ama.<br />Araraquara - SP</p>
+                    <p style="font-size: 0.8rem; color: #94a3b8; text-align: center;">EcoAngel - Tecnologia cuidando de quem você ama.<br />Araraquara - SP</p>
                 </div>
             `
         });
-        console.log(`✉️ E-mail profissional de confirmação enviado para o Comprador!`);
+        console.log(`✉️ E-mail profissional de confirmação enviado para o Comprador real (${emailComprador})!`);
 
     } catch (error) {
         console.error("❌ Ocorreu um erro ao enviar as notificações por e-mail:", error);
