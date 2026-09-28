@@ -68,8 +68,7 @@
         const SUPABASE_URL = "https://gqmlshufidrtvauiopoy.supabase.co";
 
         // 🔑 Sua Chave Pública ANON legítima fatiada com "+"
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbWxzaHVmaWRydHZhdWlvcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA1MzM2MjksImV4cCI6MjEwNjEwOTYyOX0.XYkhg1sf9e8P2dcKByyigCT2GiYM0tQtefeGPp1v9RU"
-
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbWxshufidrtvauiopoy\u002c\u0020\u0022comissaoPercentual\u0022\u003a\u0020cupomInfo.desconto_percentual\u0020*\u0020100\u002c\u0020\u0022totalVendas\u0022\u003a\u0020totalVendasConvertidas\u002c\u0020\u0022faturamentoGerado\u0022\u003a\u0020faturamentoGerado\u002c\u0020\u0022comissaoReceber\u0022\u003a\u0020comissaoAcumulada\u002c\u0020\u0022historico\u0022\u003a\u0020vendas.map(v\u0020\u003d\u003e\u0020({\u0020\u0022id_pedido\u0022\u003a\u0020v.id_pedido\u002c\u0020\u0022valor\u0022\u003a\u0020v.valor_total\u002c\u0020\u0022data\u0022\u003a\u0020v.pago_em\u002c\u0020\u0022status\u0022\u003a\u0020v.status_producao\u0020}))\u0020});\u0020}\u0020catch\u0020(error)\u0020{\u0020console.error(\u0022\u274c\u0020Erro\u0020na\u0020rota\u0020do\u0020influenciador\u0020por\u0020e-mail\u003a\u0022\u002c\u0020error);\u0020return\u0020res.status(500).json({\u0020sucesso\u003a\u0020false\u002c\u0020mensagem\u003a\u0020\u0022Erro\u0020interno\u0020no\u0020banco\u0020de\u0020dados.\u0022\u0020});\u0020}\u0020}\u0020module.exports\u0020\u003d\u0020{\u0020obterDadosInfluenciador\u0020};\u0022\u002c\u0020\u0022email_influenciador\u0022\u003a\u0020\u0022felipeh.santos26@gmail.com\u0022\u0020}\u005d\u0029\u003b"
         let supabaseCliente;
 
         window.addEventListener('load', () => {
