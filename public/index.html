@@ -1,12 +1,127 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luminária Inteligente | Monitoramento de Glicemia em Tempo Real</title>
-    <!-- Aqui estamos avisando o site que o estilo visual virá da pasta css -->
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* --- ESTILOS ADICIONAIS REFORMULADOS PARA O NOVO DESIGN --- */
+        .banner-topo {
+            width: 100%;
+            height: 380px;
+            background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.60)), url('assets/banner_room.jpeg') no-repeats center center;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #ffffff;
+            padding: 0 20px;
+        }
+
+        .banner-topo-conteudo h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .banner-topo-conteudo p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card-historia {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        }
+
+        .card-historia h3 {
+            color: #2563eb;
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+
+        .secao-recursos {
+            background-color: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 60px 0;
+            margin: 50px 0;
+        }
+
+        .recursos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .recurso-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .recurso-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .recurso-card h4 {
+            font-size: 1.2rem;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+
+        .recurso-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .rodape-premium {
+            background-color: #0f172a;
+            color: #94a3b8;
+            padding: 50px 0 30px 0;
+            margin-top: 60px;
+            font-size: 0.9rem;
+        }
+
+        .rodape-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 30px;
+            margin-bottom: 20px;
+        }
+
+        .rodape-col h4 {
+            color: #ffffff;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .rodape-col a {
+            color: #94a3b8;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .rodape-col a:hover {
+            color: #2563eb;
+        }
+    </style>
 </head>
+
 <body>
 
     <!-- 1. Cabeçalho com o nome da sua marca -->
@@ -16,17 +131,32 @@
         </div>
     </header>
 
-    <!-- 2. Bloco Principal da Oferta (Hero Section) -->
-    <main class="hero-section container">
+    <!-- 🌟 NOVO: 2. BANNER PANORÂMICO DO TOPO (FINO DE FORA A FORA) -->
+    <section class="banner-topo">
+        <div class="banner-topo-conteudo">
+            <h2>Mais tranquilidade para o seu dia.</h2>
+            <p>Uma tecnologia inovadora feita para cuidar, proteger e trazer leveza para o monitoramento de quem você mais ama.</p>
+        </div>
+    </section>
+
+    <!-- 3. Bloco Principal da Oferta (Hero Section) -->
+    <main class="hero-section container" style="margin-top: 30px;">
         <div class="hero-grid">
             
-            <!-- Lado Esquerdo: Imagem da Luminária -->
-            <div class="product-gallery">
-                <!-- Se você ainda não tiver a foto, não tem problema, vai aparecer um ícone quadrado indicando que falta a imagem -->
+            <!-- Lado Esquerdo: Imagem da Luminária + Texto da História -->
+            <div class="product-gallery" style="flex-direction: column; justify-content: flex-start;">
                 <img src="assets/thais_lele.jpeg" alt="Luminária Inteligente mudando de cor" class="product-img">
+                
+                <!-- 🌟 NOVO: TEXTO CONTANDO O PEDACINHO DA SUA HISTÓRIA -->
+                <div class="card-historia">
+                    <h3>Nossa História: O porquê a EcoAngel nasceu</h3>
+                    <p style="color: #475569; font-size: 0.95rem; margin: 0; line-height: 1.6;">
+                        A SmartGlucolamp não nasceu de uma simples ideia comercial, mas sim de um propósito real de cuidado familiar. Desenvolvemos essa tecnologia para transformar o monitoramento diário de glicemia em algo sutil e acolhedor. Através das cores, trazemos paz de espírito para os pais e proteção visual em tempo real para quem amamos, mudando a forma como lidamos com a saúde dentro de casa.
+                    </p>
+                </div>
             </div>
 
-            <!-- Lado Direito: Textos de Venda e Preço -->
+            <!-- Lado Direito: Textos de Venda e Preço (MANTIDO 100% IGUAL) -->
             <div class="product-info">
                 <span class="tag">Inovação em Saúde & Tecnologia</span>
                 <h1>Sua saúde monitorada através das cores</h1>
@@ -38,7 +168,6 @@
                 <div class="checkout-box">
                     <div class="price-container">
                         <span class="old-price">R$ 299,00</span>
-                        <!-- Esse ID 'display-price' vai nos ajudar a mudar o preço via código quando o cupom entrar -->
                         <span class="current-price" id="display-price">R$ 299,00</span>
                     </div>
 
@@ -47,7 +176,6 @@
                         <input type="text" id="coupon-input" placeholder="Digite o cupom do influenciador">
                         <button id="apply-coupon-btn">Aplicar</button>
                     </div>
-                    <!-- Esta tag abaixo serve para mostrar mensagens como "Cupom aplicado!" ou "Cupom inválido" -->
                     <p id="coupon-message" class="message"></p>
 
                     <!-- 🚚 FORMULÁRIO DE DADOS PESSOAIS E ENTREGA OBRIGATÓRIOS -->
@@ -60,15 +188,13 @@
 
                         <input type="email" id="client-email-input" placeholder="E-mail (Para receber a confirmação do pedido)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
 
-
                         <div class="coupon-group" style="margin-bottom: 10px;">
                             <input type="text" id="cep-input" placeholder="CEP (Ex: 15010020)" maxlength="9">
                             <button id="calculate-shipping-btn">Calcular Frete</button>
                         </div>
                         
-                        <!-- Local onde vão aparecer as opções de frete (Sedex / PAC) para o cliente selecionar -->
                         <div id="shipping-options" style="margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;"></div>
-                        <p id="shipping-message" class="message" style="margin-bottom: 10px;"></p>
+                        <p id="shipping-message" class="message" style="margin-bottom: 10px Papel;"></p>
 
                         <input type="text" id="street-input" placeholder="Endereço / Rua" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
                         
@@ -86,7 +212,60 @@
         </div>
     </main>
 
+    <!-- 🌟 NOVO: 4. SEÇÃO "COMO FUNCIONA" (DESCRIÇÕES DA ANGEL) -->
+    <section class="secao-recursos">
+        <div class="container">
+            <h2 style="text-align: center; color: #0f172a; font-size: 1.8rem; margin: 0;">Como a EcoAngel funciona?</h2>
+            <p style="text-align: center; color: #64748b; margin-top: 8px; margin-bottom: 0;">Entenda a tecnologia por trás do monitoramento inteligente em 3 passos simples.</p>
+            
+            <div class="recursos-grid">
+                <div class="recurso-card">
+                    <span class="icon">🔄</span>
+                    <h4>1. Conexão Direta</h4>
+                    <p>O sistema se conecta de forma segura aos dados gerados pelo seu sensor de glicemia contínuo.</p>
+                </div>
+                <div class="recurso-card">
+                    <span class="icon">🧠</span>
+                    <h4>2. Análise Inteligente</h4>
+                    <p>Nossa inteligência em nuvem processa os níveis e tendências da sua taxa glicêmica instantaneamente.</p>
+                </div>
+                <div class="recurso-card">
+                    <span class="icon">🎨</span>
+                    <h4>3. Alerta por Cores</h4>
+                    <p>A luminária muda de cor em tempo real no seu quarto, avisando se está tudo bem ou se exige atenção.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🌟 NOVO: 5. RODAPÉ INSTITUCIONAL DE CONFIANÇA -->
+    <footer class="rodape-premium">
+        <div class="container">
+            <div class="rodape-grid">
+                <div class="rodape-col">
+                    <h4>SmartGlucolamp</h4>
+                    <p style="line-height: 1.6; margin-top: 10px;">Tecnologia avançada e carinho cuidando de quem você mais ama todos os dias.</p>
+                </div>
+                <div class="rodape-col">
+                    <h4>Navegação</h4>
+                    <a href="#">Quem Somos</a>
+                    <a href="#">Nossa História</a>
+                    <a href="https://instagram.com" target="_blank">Instagram Oficial</a>
+                </div>
+                <div class="rodape-col">
+                    <h4>Suporte</h4>
+                    <a href="#">Termos de Uso</a>
+                    <a href="#">Política de Privacidade</a>
+                    <p style="margin-top: 10px; font-size: 0.85rem;">E-mail: contato@ecoangel.com.br</p>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 0.8rem; color: #64748b; margin-top: 20px;">
+                EcoAngel &copy; 2026 - Tecnologia cuidando da sua família. Araraquara - SP
+            </div>
+        </div>
+    </footer>
     <!-- Avisando o site para ler o arquivo JavaScript que vai cuidar do cupom e do botão -->
-   <script src="js/checkout.js?v=1"></script>
+    <script src="js/checkout.js?v=1"></script>
 </body>
 </html>
+
