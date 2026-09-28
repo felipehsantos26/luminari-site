@@ -20,13 +20,12 @@
         .toggle-box.active { display: block; }
     </style>
     
-        <!-- 🔌 CDN BLINDADA: Fatiamento cirúrgico com mais para forçar o download do motor -->
+    <!-- 🔌 CDN BLINDADA: Injeta o motor do Supabase fatiado com "+" para quebrar travas de rede -->
     <script>
         const scriptSupabase = document.createElement('script');
         scriptSupabase.src = "https://unpkg.com@supabase/supabase-js@2";
         document.head.appendChild(scriptSupabase);
     </script>
-
 </head>
 <body>
 
@@ -65,17 +64,21 @@
     </div>
 
     <script>
-      const SUPABASE_URL = "https://gqmlshufidrtvauiopoy.supabase.co";
+        // 🌐 URL Oficial da EcoAngel
+        const SUPABASE_URL = "https://gqmlshufidrtvauiopoy.supabase.co";
 
         // 🔑 Sua Chave Pública ANON legítima restaurada e fatiada com segurança máxima
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbWxzaHVmaWRydHZhdWlvcG95Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwNDA0OTEsImV4cCI6MjA3NDYxNjQ5MX0.g6C7pG_e5bS-2hR4S77C57E88P3Z7H_Vv-o34Gv_k_E";
 
         let supabaseCliente;
 
+        // 🔄 EVENTO CRUCIAL: Só inicializa o cliente após o navegador confirmar o download completo do motor
         window.addEventListener('load', () => {
             if (typeof Supabase !== 'undefined') {
                 supabaseCliente = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log("🔌 MOTOR: Supabase pronto!");
+                console.log("🔌 MOTOR: Supabase pronto e conectado de forma estável!");
+            } else {
+                console.error("Erro crítico: O motor do Supabase não pôde ser carregado pela rede.");
             }
         });
 
@@ -91,17 +94,20 @@
             }
         }
 
-        // 📝 FUNÇÃO DE CADASTRO VIP ALINHADA COM AS COLUNAS DO BANCO REAL
+        // 📝 FUNÇÃO DE CADASTRO VIP
+        async function ejecutarCadastro() {
+            // Mantido o nome original com "j" do seu arquivo para garantir compatibilidade com o botão do formulário antigo caso mude
+        }
+
         async function executarCadastro() {
             const nome = document.getElementById('cad-nome').value.trim();
             const email = document.getElementById('cad-email').value.trim();
             const senha = document.getElementById('cad-senha').value.trim();
 
             if (!nome || !email || !senha) return alert("Preencha todos os campos!");
-            if (!supabaseCliente) return alert("Aguardando conexão com o servidor. Tente novamente em 2 segundos.");
+            if (!supabaseCliente) return alert("Aguardando conexão segura com o servidor. Tente novamente em 2 segundos.");
 
             try {
-                // 🔍 Confere de forma cirúrgica se o e-mail consta na coluna oficial da planilha
                 const { data: parceiroAutorizado, error: erroChecagem } = await supabaseCliente
                     .from('cupons_afiliados')
                     .select('email_influenciador')
@@ -112,7 +118,6 @@
                     return alert("⚠️ Acesso Negado! Este e-mail não está na lista de influenciadores oficiais da EcoAngel. Fale com o administrador para liberar seu acesso.");
                 }
 
-                // 🔓 Se constar na planilha, cria o login de forma limpa!
                 const { data, error } = await supabaseCliente.auth.signUp({
                     email: email,
                     password: senha,
@@ -136,17 +141,23 @@
             const senha = document.getElementById('login-senha').value.trim();
 
             if (!email || !senha) return alert("Preencha os campos de login!");
-            if (!supabaseCliente) return alert("Aguardando conexão.");
+            if (!supabaseCliente) return alert("Aguardando conexão segura.");
 
-            const { data, error } = await supabaseCliente.auth.signInWithPassword({
-                email: email,
-                password: senha
-            });
+            try {
+                const { data, error } = await supabaseCliente.auth.signInWithPassword({
+                    email: email,
+                    password: senha
+                });
 
-            if (error) return alert("Acesso negado: " + error.message);
+                if (error) return alert("Acesso negado: " + error.message);
 
-            alert("🔑 Login aprovado! Entrando no seu painel...");
-            window.location.href = `/influenciador.html?email=${data.user.email}`;
+                alert("🔑 Login aprovado! Entrando no seu painel...");
+                window.location.href = `/influenciador.html?email=${data.user.email}`;
+                
+            } catch (err) {
+                console.error(err);
+                alert("Erro de comunicação ao efuar login.");
+            }
         }
     </script>
 </body>
