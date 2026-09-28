@@ -149,20 +149,30 @@
                 }
 
                 // 2. PREENCHE A NOVA CARTEIRA INTELIGENTE DE AFILIADOS
+               // 2. PREENCHE A CARTEIRA INTELIGENTE DE AFILIADOS (AJUSTADO)
                 const corpoAfiliados = document.getElementById('tabela-afiliados-corpo');
                 corpoAfiliados.innerHTML = "";
 
                 if (!data.resumoAfiliados || data.resumoAfiliados.length === 0) {
                     corpoAfiliados.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8;">Nenhum afiliado cadastrado.</td></tr>`;
                 } else {
+                    // Atualiza o cabeçalho da tabela caso queira mudar os títulos das colunas diretamente no HTML, 
+                    // ou apenas monte as células abaixo combinando com o que você já tem:
                     data.resumoAfiliados.forEach(af => {
                         const tr = document.createElement('tr');
+                        
+                        // MATEMÁTICA NA TELA: Total Histórico Ganho menos o que você já deu baixa via Pix
+                        const saldoRestanteNaCarteira = af.comissaoBrutaTotal - af.totalPago;
+
                         tr.innerHTML = `
                             <td><strong>${af.email}</strong><br><small style="background: #e2e8f0; padding: 2px 4px; border-radius: 4px; font-size: 11px;">Tag: ${af.cupom}</small></td>
                             <td>${af.totalVendas} vendas</td>
-                            <td>${af.comissaoBrutaTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                            <td>${af.comissaoBrutaTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}<br><small style="color: #64748b;">(Histórico Total)</small></td>
                             <td><span class="badge-retido">${af.comissaoRetida.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></td>
-                            <td><span class="badge-liberado">${af.comissaoLiberadaApta.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></td>
+                            <td>
+                                <span class="badge-liberado" style="display: block; margin-bottom: 4px;">Apto Pix: ${af.comissaoLiberadaApta.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                                <strong style="color: #2563eb; font-size: 13px;">Restante: ${saldoRestanteNaCarteira.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong>
+                            </td>
                             <td>
                                 <input type="number" id="valor-baixa-${af.cupom}" placeholder="R$ 0.00" step="0.01" style="width: 90px; padding: 4px; border: 1px solid #cbd5e1; border-radius: 6px;">
                                 <button class="btn-rastreio" style="background: #10b981; padding: 4px 8px;" onclick="lancarBaixaPix('${af.email}', '${af.cupom}')">Dar Baixa</button>
@@ -171,7 +181,6 @@
                         corpoAfiliados.appendChild(tr);
                     });
                 }
-
             } catch (err) {
                 console.error(err);
                 alert("Erro de conexão ao carregar painel administrativo.");
