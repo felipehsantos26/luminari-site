@@ -71,30 +71,44 @@
         </div>
     </div>
 
-    <script>
-        async function acessarPainelInfluenciador() {
-            const cupom = document.getElementById('input-cupom-login').value.trim();
-            if (!cupom) return alert("Por favor, digite o seu código de cupom!");
+       <script>
+        // 🔄 FUNÇÃO PRINCIPAL: Executa assim que a folha da página termina de carregar no navegador
+        async function verificarLoginEmail() {
+            // 🔎 Captura os parâmetros escondidos na URL do navegador
+            const parametrosUrl = new URLSearchParams(window.location.search);
+            const emailLogado = parametrosUrl.get('email');
+
+            // 🛑 SE NÃO TIVER E-MAIL LOGADO: Significa que a pessoa tentou entrar direto sem fazer login
+            if (!emailLogado) {
+                alert("⚠️ Acesso negado! Por favor, faça login com seu e-mail e senha primeiro.");
+                window.location.href = "/login.html"; // Chuta de volta para a tela de segurança!
+                return;
+            }
+
+            // 🕵️‍♂️ Oculta a caixa de digitação antiga de cupons, o processo agora é 100% automático!
+            document.getElementById('box-login').style.style.display = "none";
 
             try {
-                const response = await fetch(`/api/influenciador/dados?cupom=${cupom}`);
+                // 📡 ROTA NOVA NO SERVIDOR: Vamos pedir para o servidor caçar as vendas com base no E-MAIL logado!
+                const response = await fetch(`/api/influenciador/dados-por-email?email=${emailLogado}`);
                 const data = await response.json();
 
                 if (!data.sucesso) {
-                    return alert("⚠️ " + (data.mensagem || "Cupom inválido ou sem vendas registradas ainda."));
+                    alert("⚠️ " + (data.mensagem || "Erro ao carregar os dados de afiliado."));
+                    return;
                 }
 
-                // Exibe os blocos do dashboard na tela
+                // 🔓 Libera a visibilidade dos cards de comissões e tabelas na tela
                 document.getElementById('grid-metricas').style.display = "flex";
                 document.getElementById('container-historico').style.display = "block";
 
-                // Preenche as métricas reais calculadas pelo banco
+                // 📊 Preenche as caixas com as métricas calculadas pelo Supabase
                 document.getElementById('txt-nome-cupom').innerText = data.cupom;
                 document.getElementById('txt-taxa-comissao').innerText = `Sua Comissão: ${data.comissaoPercentual}%`;
                 document.getElementById('txt-qtd-vendas').innerText = data.totalVendas;
                 document.getElementById('txt-saldo-comissao').innerText = data.comissaoReceber.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-                // Preenche a tabela de histórico dela
+                // 📋 Preenche as linhas do histórico de indicações da Thais/Felipe
                 const tabela = document.getElementById('corpo-tabela-vendas');
                 tabela.innerHTML = "";
 
@@ -118,9 +132,13 @@
 
             } catch (err) {
                 console.error(err);
-                alert("Erro ao conectar com o portal de parceiros.");
+                alert("Erro ao conectar com o servidor de afiliados.");
             }
         }
+
+        // Dispara a checagem inteligente no exato milissegundo em que a página abre!
+        window.onload = verificarLoginEmail;
     </script>
+
 </body>
 </html>
