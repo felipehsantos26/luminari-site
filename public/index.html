@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luminária Inteligente | Monitoramento de Glicemia em Tempo Real</title>
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- 🎨 O SEGREDO ESTÁ AQUI: Abre a tag de estilo corretamente -->
+    <style>
         /* --- ESTILOS ADICIONAIS REFORMULADOS PARA O NOVO DESIGN --- */
         .banner-topo {
             width: 100%;
@@ -146,7 +156,7 @@
         }
         .carrossel-slide-3d {
             position: absolute;
-            width: 500px; /* Largura perfeita para desktops */
+            width: 500px;
             height: 300px;
             border-radius: 16px;
             overflow: hidden;
@@ -177,13 +187,13 @@
         .carrossel-slide-3d.prev {
             opacity: 0.5;
             z-index: 3;
-            transform: scale(0.8) translateX(-260px); /* Card anterior visível à esquerda */
+            transform: scale(0.8) translateX(-260px);
             pointer-events: auto;
         }
         .carrossel-slide-3d.next {
             opacity: 0.5;
             z-index: 3;
-            transform: scale(0.8) translateX(260px); /* Próximo card visível à direita */
+            transform: scale(0.8) translateX(260px);
             pointer-events: auto;
         }
         .btn-carrossel-3d {
@@ -211,23 +221,26 @@
         /* 📱 REGRAS EXCLUSIVAS PARA CELULARES (CARDS LADO A LADO VISÍVEIS) */
         @media (max-width: 768px) {
             .carrossel-slide-3d {
-                width: 280px; /* Reduz a largura do card central no celular */
+                width: 280px;
                 height: 180px;
             }
             .carrossel-palco {
-                height: 280px; /* Encolhe a altura do bloco no mobile */
+                height: 280px;
             }
             .carrossel-slide-3d.prev {
                 opacity: 0.4;
-                transform: scale(0.75) translateX(-150px); /* Aproxima o card esquerdo para aparecer na tela */
+                transform: scale(0.75) translateX(-150px);
             }
             .carrossel-slide-3d.next {
                 opacity: 0.4;
-                transform: scale(0.75) translateX(150px); /* Aproxima o card direito para aparecer na tela */
+                transform: scale(0.75) translateX(150px);
             }
             .btn-prev-3d { left: 5px; }
             .btn-next-3d { right: 5px; }
         }
+    </style> <!-- ⚙️ Fecha a tag de estilo corretamente -->
+</head>
+
 <body>
 
     <!-- 🌟 BANNER PANORÂMICO DO TOPO (FINO DE FORA A FORA) -->
