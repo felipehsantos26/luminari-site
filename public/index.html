@@ -1,21 +1,12 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luminária Inteligente | Monitoramento de Glicemia em Tempo Real</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <style>
         /* --- ESTILOS ADICIONAIS REFORMULADOS PARA O NOVO DESIGN --- */
-                     .banner-topo {
+        .banner-topo {
             width: 100%;
-            height: auto; /* 📐 Muda para automático para a altura acompanhar a foto */
-            aspect-ratio: 848 / 148; /* 📊 Trava na proporção perfeita da sua faixa útil da imagem */
+            height: auto;
+            aspect-ratio: 1920 / 335; /* Proporção ideal da faixa útil da imagem */
             background: url('/assets/banner_room.jpeg') no-repeat center center;
-            background-size: contain; /* 🎯 O segredo: força a foto a aparecer INTEIRA sem nenhum corte */
-            background-color: #ffffff; /* 🏳️ Fundo branco caso sobre algum espacinho nas pontas */
+            background-size: contain;
+            background-color: #ffffff;
         }
-
-
 
         .banner-topo-conteudo h2 {
             font-size: 2.2rem;
@@ -31,20 +22,31 @@
             margin: 0 auto;
         }
 
-        .card-historia {
+        /* Seção Elegante Exclusiva para a História Real */
+        .secao-historia-completa {
             background-color: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 50px 0;
+            margin: 40px 0;
+        }
+
+        .card-historia {
+            background-color: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 16px;
-            padding: 25px;
-            margin-top: 20px;
+            padding: 35px;
+            max-width: 850px;
+            margin: 0 auto;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
         }
 
         .card-historia h3 {
             color: #2563eb;
             margin-top: 0;
-            margin-bottom: 12px;
-            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
         }
 
         .secao-recursos {
@@ -117,8 +119,8 @@
         .rodape-col a:hover {
             color: #2563eb;
         }
-   
-                /* --- NOVO DESIGN: CARROSSEL DE CARDS 3D PREMIUM --- */
+
+        /* --- CARROSSEL DE CARDS 3D PREMIUM COM EFEITOS AJUSTADOS --- */
         .secao-carrossel {
             padding: 50px 0;
             background-color: #f8fafc;
@@ -129,7 +131,7 @@
             position: relative;
             max-width: 950px;
             margin: 0 auto;
-            height: 400px;
+            height: 420px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -144,8 +146,8 @@
         }
         .carrossel-slide-3d {
             position: absolute;
-            width: 500px; /* Largura ideal do card central */
-            height: 300px; /* Altura ideal do card central */
+            width: 500px; /* Largura perfeita para desktops */
+            height: 300px;
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.12);
@@ -166,7 +168,6 @@
             height: 100%;
             border: none;
         }
-        /* ✨ POSIÇÕES MÁGICAS DO CARROSSEL 3D */
         .carrossel-slide-3d.active {
             opacity: 1;
             z-index: 5;
@@ -174,18 +175,17 @@
             pointer-events: auto;
         }
         .carrossel-slide-3d.prev {
-            opacity: 0.6;
+            opacity: 0.5;
             z-index: 3;
-            transform: scale(0.8) translateX(-280px); /* Move o card anterior para a esquerda */
+            transform: scale(0.8) translateX(-260px); /* Card anterior visível à esquerda */
             pointer-events: auto;
         }
         .carrossel-slide-3d.next {
-            opacity: 0.6;
+            opacity: 0.5;
             z-index: 3;
-            transform: scale(0.8) translateX(280px); /* Move o próximo card para a direita */
+            transform: scale(0.8) translateX(260px); /* Próximo card visível à direita */
             pointer-events: auto;
         }
-        /* Botões de Navegação Flutuantes */
         .btn-carrossel-3d {
             position: absolute;
             top: 50%;
@@ -205,42 +205,53 @@
             z-index: 10;
         }
         .btn-carrossel-3d:hover { background: #2563eb; transform: translateY(-50%) scale(1.1); }
-        .btn-prev-3d { left: -10px; }
-        .btn-next-3d { right: -10px; }
+        .btn-prev-3d { left: 0px; }
+        .btn-next-3d { right: 0px; }
 
-
-    </style>
-</head>
-
+        /* 📱 REGRAS EXCLUSIVAS PARA CELULARES (CARDS LADO A LADO VISÍVEIS) */
+        @media (max-width: 768px) {
+            .carrossel-slide-3d {
+                width: 280px; /* Reduz a largura do card central no celular */
+                height: 180px;
+            }
+            .carrossel-palco {
+                height: 280px; /* Encolhe a altura do bloco no mobile */
+            }
+            .carrossel-slide-3d.prev {
+                opacity: 0.4;
+                transform: scale(0.75) translateX(-150px); /* Aproxima o card esquerdo para aparecer na tela */
+            }
+            .carrossel-slide-3d.next {
+                opacity: 0.4;
+                transform: scale(0.75) translateX(150px); /* Aproxima o card direito para aparecer na tela */
+            }
+            .btn-prev-3d { left: 5px; }
+            .btn-next-3d { right: 5px; }
+        }
 <body>
 
-   
-
-    <!-- 🌟 NOVO: 2. BANNER PANORÂMICO DO TOPO (FINO DE FORA A FORA) -->
-      <!-- 🌟 BANNER PANORÂMICO DO TOPO (FINO DE FORA A FORA) -->
+    <!-- 🌟 BANNER PANORÂMICO DO TOPO (FINO DE FORA A FORA) -->
     <section class="banner-topo">
     </section>
-
 
     <!-- 3. Bloco Principal da Oferta (Hero Section) -->
     <main class="hero-section container" style="margin-top: 30px;">
         <div class="hero-grid">
             
-            <!-- Lado Esquerdo: Imagem da Luminária + Texto da História -->
+            <!-- Lado Esquerdo: Imagem da Luminária Limpa (Sem o texto da história empurrando para baixo) -->
             <div class="product-gallery" style="flex-direction: column; justify-content: flex-start;">
                 <img src="assets/thais_lele.jpeg" alt="Luminária Inteligente mudando de cor" class="product-img">
-                
- 
+            </div>
 
-            <!-- Lado Direito: Textos de Venda e Preço (MANTIDO 100% IGUAL) -->
+            <!-- Lado Direito: Título, Descrição e Caixas de Compra PERFEITAMENTE ALINHADAS ao lado da foto -->
             <div class="product-info">
                 <span class="tag">Da nossa casa, para a sua casa.</span>
                 <h1>Através das cores a Angel torna a vida mais colorida!</h1>
                 <p class="description">
-                    Uma luminaria inteligente que através do wifi busca os dados que o  sensor disponibiliza para os cuidadores. Atualmtente disponivel para sibionics e librefreestyle 2 através do celular.
+                    Uma luminaria inteligente que através do wifi busca os dados que o sensor disponibiliza para os cuidadores. Atualmtente disponivel para sibionics e librefreestyle 2 através do celular.
                 </p>
 
-                <!-- Bloco de Preço, Cupom e Botão de Compra -->
+                <!-- Bloco de Preço, Cupom e Botão de Compra (MANTIDO 100% INTACTO) -->
                 <div class="checkout-box">
                     <div class="price-container">
                         <span class="old-price">R$ 299,00</span>
@@ -287,7 +298,85 @@
 
         </div>
     </main>
-           <!-- 🌟 NOVO: SEÇÃO DE MÍDIA PREMIUM (CARROSSEL DE CARDS 3D) -->
+    <!-- 📖 4. NOVA SEÇÃO EXCLUSIVA E CENTRADA PARA A SUA HISTÓRIA REAL -->
+    <section class="secao-historia-completa">
+        <div class="container">
+            <div class="card-historia">
+                <h3>Nossa História: O porquê a EcoAngel nasceu</h3>
+                <p style="color: #475569; font-size: 0.98rem; margin: 0; line-height: 1.8; text-align: justify; white-space: pre-line;">
+                    Em maio de 2024, eu quase perdi minha filha para a cetoacidose diabética. A informação ainda é escassa, e isso infelizmente fez toda a diferença até chegarmos ao diagnóstico.
+
+                    De uma hora para outra, nossa família precisou aprender a conviver com uma doença que exige atenção todos os dias, o tempo todo.
+
+                    Somos uma família simples, com recursos limitados e, como tantos outros pais, nem sempre tivemos condições de oferecer tudo aquilo que gostaríamos para o tratamento da nossa filha.
+
+                    Mas uma coisa nunca nos faltou: vontade de buscar o melhor para ela.
+
+                    Começamos a pesquisar, aprender, procurar alternativas e fazer o que estava ao nosso alcance para tornar a vida dela mais segura e também mais leve.
+
+                    Foi dessa reality que comecei a gravar vídeos para mostrar as dificuldades de uma família que convive com o diabetes tipo 1.
+
+                    Depois, junto com outra mãe, criamos um projeto social em nossa cidade, que já apoiou dezenas de famílias. Também conseguimos a aprovação de leis que antes sequer existiam.
+
+                    E foi justamente vivendo essa realidade tão de perto que uma nova ideia nasceu dentro da nossa própria casa.
+
+                    Era um dia comum.
+
+                    Eu estava costurando, Felipe trabalhava no computador e nós dois estávamos finalizando os últimos detalhes de mais um evento da Missão Doce.
+
+                    Enquanto trabalhávamos, uma situação que já fazia parte da nossa rotina voltou a chamar nossa atenção: para saber como estava a glicemia da nossa filha, precisávamos pegar o celular.
+
+                    E veio a pergunta:
+
+                    “E se existisse uma forma de enxergar essa informação sem precisar pegar o celular toda hora?”
+
+                    Começamos a pesquisar para descobrir se alguém já tinha pensado em algo parecido.
+
+                    E descobrimos que sim.
+
+                    Existiam soluções semelhantes em outros países, mas não encontramos uma opção disponível no Brasil que pudéssemos simplesmente comprar e colocar na nossa casa.
+
+                    Foi então que pensamos:
+
+                    “E se a gente produzisse isso aqui?”
+
+                    A partir daí, quem colocou a mão na massa foi o Felipe.
+
+                    Ele começou a pensar em como aquela ideia poderia funcionar. No começo, a gente imaginava quase uma “mini Alexa da glicemia”: um dispositivo dentro de casa que recebesse a informação e nos ajudasse a acompanhar o que estava acontecendo.
+
+                    He programou tudo.
+
+                    Fomos testando, errando, ajustando e aprendendo no caminho, até aquela ideia começar a funcionar de verdade.
+
+                    E foi assim que nasceu a Angel.
+
+                    A primeira criação da ECOANGEL.
+
+                    Uma luminária que se conecta à conta do cuidador e representa o status da glicemia por meio de cores, tornando essa informação visível dentro de casa sem precisar consultar o celular a todo momento.
+
+                    A Angel não mede a glicemia e não substitui o sensor ou o aplicativo. Ela recebe as informações da conta do cuidador e as transforma em uma informação visual.
+
+                    Mas a Angel é apenas o começo.
+
+                    O nome ECOANGEL nasceu porque não queremos criar apenas uma luminária.
+
+                    Temos outras ideias, outros projetos e outras soluções que nasceram das necessidades que encontramos vivendo essa realidade de perto.
+
+                    Nossa intenção é transformar experiências reais em tecnologia que possa facilitar a vida de outras famílias.
+
+                    Porque a ECOANGEL nasceu assim:
+                    de uma família simples, que nem sempre teve todos os recursos que gostaria, mas que nunca deixou de buscar o melhor para sua filha.
+
+                    Uma família que encontrou uma necessidade dentro da própria casa e decidiu não apenas reclamar dela.
+                    Decidiu criar.
+
+                    E agora queremos levar essas ideias para milhares de outras famílias brasileiras.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 🌟 5. SEÇÃO DE MÍDIA PREMIUM (CARROSSEL DE CARDS 3D RESPONSIVOS) -->
     <section class="secao-carrossel">
         <div class="container">
             <h2 style="color: #0f172a; font-size: 1.8rem; margin-bottom: 8px;">Conheça a Angel de perto</h2>
@@ -295,24 +384,24 @@
             
             <div class="carrossel-palco">
                 <!-- Botões de navegação lateral tridimensionais -->
-                <button class="btn-carrossel-3d btn-prev-3d" onclick="moverCard(-1)">&#10094;</button>
-                <button class="btn-carrossel-3d btn-next-3d" onclick="moverCard(1)">&#10095;</button>
+                <button class="btn-carrossel-3d btn-prev-3d" onclick="moverCard(-1)">❮</button>
+                <button class="btn-carrossel-3d btn-next-3d" onclick="moverCard(1)">❯</button>
 
                 <!-- Palco dos Cards 3D -->
                 <div class="carrossel-container-3d">
-                    <!-- Card 1 (Foto 1) -->
+                    <!-- Card 1 -->
                     <div class="carrossel-slide-3d prev">
                         <img src="/assets/carrossel_foto1.jpeg" alt="SmartGlucolamp no quarto">
                     </div>
-                    <!-- Card 2 (Foto 2 - Começa no centro) -->
+                    <!-- Card 2 -->
                     <div class="carrossel-slide-3d active">
                         <img src="/assets/carrossel_foto2.jpeg" alt="SmartGlucolamp mudando de cor">
                     </div>
-                    <!-- Card 3 (Foto 3) -->
+                    <!-- Card 3 -->
                     <div class="carrossel-slide-3d next">
                         <img src="/assets/carrossel_foto3.jpeg" alt="Detalhes do acabamento da Angel">
                     </div>
-                    <!-- Card 4 (Vídeo do YouTube) -->
+                    <!-- Card 4 (Vídeo) -->
                     <div class="carrossel-slide-3d">
                         <iframe src="https://youtube.com" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
@@ -321,9 +410,7 @@
         </div>
     </section>
 
-
-
-    <!-- 🌟 NOVO: 4. SEÇÃO "COMO FUNCIONA" (DESCRIÇÕES DA ANGEL) -->
+    <!-- 🌟 6. SEÇÃO "COMO FUNCIONA" -->
     <section class="secao-recursos">
         <div class="container">
             <h2 style="text-align: center; color: #0f172a; font-size: 1.8rem; margin: 0;">Como a EcoAngel funciona?</h2>
@@ -349,83 +436,7 @@
         </div>
     </section>
 
-                   <!-- 🌟 NOVO: TEXTO CONTANDO O PEDACINHO DA SUA HISTÓRIA -->
-                <div class="card-historia">
-                    <h3>Nossa História: O porquê a EcoAngel nasceu</h3>
-                    <p style="color: #475569; font-size: 0.95rem; margin: 0; line-height: 1.6;">
-                        Em maio de 2024, eu quase perdi minha filha para a cetoacidose diabética. A informação ainda é escassa, e isso infelizmente fez toda a diferença até chegarmos ao diagnóstico.
-
-De uma hora para outra, nossa família precisou aprender a conviver com uma doença que exige atenção todos os dias, o tempo todo.
-
-Somos uma família simples, com recursos limitados e, como tantos outros pais, nem sempre tivemos condições de oferecer tudo aquilo que gostaríamos para o tratamento da nossa filha.
-
-Mas uma coisa nunca nos faltou: vontade de buscar o melhor para ela.
-
-Começamos a pesquisar, aprender, procurar alternativas e fazer o que estava ao nosso alcance para tornar a vida dela mais segura e também mais leve.
-
-Foi dessa realidade que comecei a gravar vídeos para mostrar as dificuldades de uma família que convive com o diabetes tipo 1.
-
-Depois, junto com outra mãe, criamos um projeto social em nossa cidade, que já apoiou dezenas de famílias. Também conseguimos a aprovação de leis que antes sequer existiam.
-
-E foi justamente vivendo essa realidade tão de perto que uma nova ideia nasceu dentro da nossa própria casa.
-
-Era um dia comum.
-
-Eu estava costurando, Felipe trabalhava no computador e nós dois estávamos finalizando os últimos detalhes de mais um evento da Missão Doce.
-
-Enquanto trabalhávamos, uma situação que já fazia parte da nossa rotina voltou a chamar nossa atenção: para saber como estava a glicemia da nossa filha, precisávamos pegar o celular.
-
-E veio a pergunta:
-
-“E se existisse uma forma de enxergar essa informação sem precisar pegar o celular toda hora?”
-
-Começamos a pesquisar para descobrir se alguém já tinha pensado em algo parecido.
-
-E descobrimos que sim.
-
-Existiam soluções semelhantes em outros países, mas não encontramos uma opção disponível no Brasil que pudéssemos simplesmente comprar e colocar na nossa casa.
-
-Foi então que pensamos:
-
-“E se a gente produzisse isso aqui?”
-
-A partir daí, quem colocou a mão na massa foi o Felipe.
-
-Ele começou a pensar em como aquela ideia poderia funcionar. No começo, a gente imaginava quase uma “mini Alexa da glicemia”: um dispositivo dentro de casa que recebesse a informação e nos ajudasse a acompanhar o que estava acontecendo.
-
-Ele programou tudo.
-
-Fomos testando, errando, ajustando e aprendendo no caminho, até aquela ideia começar a funcionar de verdade.
-
-E foi assim que nasceu a Angel.
-
-A primeira criação da ECOANGEL.
-
-Uma luminária que se conecta à conta do cuidador e representa o status da glicemia por meio de cores, tornando essa informação visível dentro de casa sem precisar consultar o celular a todo momento.
-
-A Angel não mede a glicemia e não substitui o sensor ou o aplicativo. Ela recebe as informações da conta do cuidador e as transforma em uma informação visual.
-
-Mas a Angel é apenas o começo.
-
-O nome ECOANGEL nasceu porque não queremos criar apenas uma luminária.
-
-Temos outras ideias, outros projetos e outras soluções que nasceram das necessidades que encontramos vivendo essa realidade de perto.
-
-Nossa intenção é transformar experiências reais em tecnologia que possa facilitar a vida de outras famílias.
-
-Porque a ECOANGEL nasceu assim:
-
-de uma família simples, que nem sempre teve todos os recursos que gostaria, mas que nunca deixou de buscar o melhor para sua filha.
-
-Uma família que encontrou uma necessidade dentro da própria casa e decidiu não apenas reclamar dela.
-
-Decidiu criar.
-
-E agora queremos levar essas ideias para milhares de outras famílias brasileira                  </p>
-                </div>
-            </div>
-
-    <!-- 🌟 NOVO: 5. RODAPÉ INSTITUCIONAL DE CONFIANÇA -->
+    <!-- 🌟 7. RODAPÉ INSTITUCIONAL DE CONFIANÇA -->
     <footer class="rodape-premium">
         <div class="container">
             <div class="rodape-grid">
@@ -437,7 +448,7 @@ E agora queremos levar essas ideias para milhares de outras famílias brasileira
                     <h4>Navegação</h4>
                     <a href="#">Quem Somos</a>
                     <a href="#">Nossa História</a>
-                    <a href="https://instagram.com/thais.ki.satux" target="_blank">Instagram Oficial</a>
+                    <a href="https://instagram.com" target="_blank">Instagram Oficial</a>
                 </div>
                 <div class="rodape-col">
                     <h4>Suporte</h4>
@@ -451,8 +462,7 @@ E agora queremos levar essas ideias para milhares de outras famílias brasileira
             </div>
         </div>
     </footer>
-
-        <!-- 🧠 ENGINE INTELEGENTE DO CARROSSEL DE CARDS 3D -->
+    <!-- 🧠 ENGINE INTELIGENTE DO CARROSSEL DE CARDS 3D -->
     <script>
         let indiceCardAtual = 1; // Começa no segundo card (índice 1), que é a foto central ativa
 
@@ -499,8 +509,7 @@ E agora queremos levar essas ideias para milhares de outras famílias brasileira
         });
     </script>
 
-    <!-- Avisando o site para ler o arquivo JavaScript que vai cuidar do cupom e do botão -->
+    <!-- Avisando o site para ler o arquivo JavaScript que vai cuidar do cupom e do botão (MANTIDO 100% IGUAL) -->
     <script src="js/checkout.js?v=1"></script>
 </body>
 </html>
-
