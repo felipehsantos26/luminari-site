@@ -269,7 +269,7 @@
                 <span class="tag">Da nossa casa, para a sua casa.</span>
                 <h1>Através das cores a Angel torna a vida mais colorida!</h1>
                 <p class="description">
-                    Uma dispositivo inteligente que através do wifi busca os dados que o gcm disponibiliza para os cuidadores. Atualmtente disponivel para sibionics e librefreestyle 2(nao funciona com o leitor)
+                    Um dispositivo inteligente que através do wifi busca os dados que o gcm disponibiliza para os cuidadores. Atualmtente disponivel para sibionics e librefreestyle 2 (nao funciona com o leitor)
                 </p>
 
                 <!-- Bloco de Preço, Cupom e Botão de Compra (MANTIDO 100% INTACTO) -->
@@ -330,30 +330,81 @@
     </main>
 
       <!-- 🌟 6. SEÇÃO "COMO FUNCIONA" -->
+       <!-- 🌟 SEÇÃO REFORMULADA: COMO FUNCIONA E ESCALA DE CORES -->
     <section class="secao-recursos">
         <div class="container">
             <h2 style="text-align: center; color: #0f172a; font-size: 1.8rem; margin: 0;">Como a EcoAngel funciona?</h2>
-            <p style="text-align: center; color: #64748b; margin-top: 8px; margin-bottom: 0;">Entenda a tecnologia por trás do monitoramento inteligente em 3 passos simples.</p>
+            <p style="text-align: center; color: #64748b; margin-top: 8px; margin-bottom: 40px;">Entenda a tecnologia e a inteligência por trás do monitoramento simplificado em sua casa.</p>
             
-            <div class="recursos-grid">
+            <div class="recursos-grid" style="margin-bottom: 5px;">
+                <div class="recurso-card">
+                    <span class="icon">🌐</span>
+                    <h4>1. Conexão e Wi-Fi</h4>
+                    <p>Ao ligar o dispositivo, você o conecta de forma simples à rede Wi-Fi da sua casa e configura o e-mail do cuidador cadastrado no sistema do seu sensor.</p>
+                </div>
                 <div class="recurso-card">
                     <span class="icon">🔄</span>
-                    <h4>1. Conexão Direta</h4>
-                    <p>O sistema se conecta de forma segura aos dados gerados pelo seu sensor de glicemia contínuo.</p>
+                    <h4>2. Busca de Dados Constante</h4>
+                    <p>A Angel busca as informações na nuvem de 2 em 2 minutos de forma totalmente automatizada, interpretando as taxas enviadas pelo sistema oficial de monitoramento.</p>
                 </div>
                 <div class="recurso-card">
                     <span class="icon">🧠</span>
-                    <h4>2. Análise Inteligente</h4>
-                    <p>Nossa inteligência em nuvem processa os níveis e tendências da sua taxa glicêmica instantaneamente.</p>
+                    <h4>3. Monitoramento Inteligente</h4>
+                    <p>Caso o sinal com o servidor seja interrompido ou os dados recebidos permaneçam exatamente iguais por mais de 10 minutos, a Angel detecta a ausência de sinal e altera sua luz automaticamente para a cor branca.</p>
                 </div>
-                <div class="recurso-card">
-                    <span class="icon">🎨</span>
-                    <h4>3. Alerta por Cores</h4>
-                    <p>A luminária muda de cor em tempo real no seu quarto, avisando se está tudo bem ou se exige atenção.</p>
-                </div>
+            </div>
+
+            <!-- 📊 TABELA EM HTML DA ESCALA DE CORES DA ANGEL -->
+            <div style="max-width: 600px; margin: 40px auto 0 auto; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
+                <h4 style="margin-top: 0; margin-bottom: 15px; color: #0f172a; font-size: 1.1rem; text-align: center;">🎨 Guia Prático de Sinalização por Cores</h4>
+                <p style="font-size: 13px; color: #64748b; text-align: center; margin-top: 0; margin-bottom: 20px;">Veja como a luz da Angel se comporta dinamicamente de acordo com o range numérico lido:</p>
+                
+                <table style="width: 100%; border-collapse: collapse; font-size: 14px; background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;">
+                    <thead>
+                        <tr style="background: #f1f5f9; color: #475569; text-align: left; font-size: 12px;">
+                            <th style="padding: 10px 15px;">Sinalização Luminosa</th>
+                            <th style="padding: 10px 15px;">Range de Glicemia (mg/dL)</th>
+                        </tr>
+                    </thead>
+                    <tbody style="color: #334155;">
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 15px;"><span style="display: inline-block; width: 14px; height: 14px; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 50%; vertical-align: middle; margin-right: 10px;"></span>Luz Branca</td>
+                            <td style="padding: 10px 15px;">Sem Sinal / Dados Ausentes</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 15px;"><span style="display: inline-block; width: 14px; height: 14px; background: #ff0000; border-radius: 50%; vertical-align: middle; margin-right: 10px;"></span>Vermelho Vivo</td>
+                            <td style="padding: 10px 15px;">Até 70</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 15px;"><span style="display: inline-block; width: 14px; height: 14px; background: #fa7f00; border-radius: 50%; vertical-align: middle; margin-right: 10px;"></span>Laranja Vivo</td>
+                            <td style="padding: 10px 15px;">71 a 85</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 15px;"><span style="display: inline-block; width: 14px; height: 14px; background: #00ff00; border-radius: 50%; vertical-align: middle; margin-right: 10px;"></span>Verde Vivo</td>
+                            <td style="padding: 10px 15px;">86 a 130</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 15px;"><span style="display: inline-block; width: 14px; height: 14px; background: #00ffff; border-radius: 50%; vertical-align: middle; margin-right: 10px;"></span>Ciano</td>
+                            <td style="padding: 10px 15px;">131 a 170</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 15px;"><span style="display: inline-block; width: 14px; height: 14px; background: #0000ff; border-radius: 50%; vertical-align: middle; margin-right: 10px;"></span>Azul</td>
+                            <td style="padding: 10px 15px;">171 a 210</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 10px 15px;"><span style="display: inline-block; width: 14px; height: 14px; background: #8000ff; border-radius: 50%; vertical-align: middle; margin-right: 10px;"></span>Roxo</td>
+                            <td style="padding: 10px 15px;">211 a 260</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 15px;"><span style="display: inline-block; width: 14px; height: 14px; background: #ff00ff; border-radius: 50%; vertical-align: middle; margin-right: 10px;"></span>Magenta</td>
+                            <td style="padding: 10px 15px;">Acima de 260</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
+
 
  <!-- 🌟 5. SEÇÃO DE MÍDIA PREMIUM (CARROSSEL DE CARDS 3D RESPONSIVOS) -->
     <section class="secao-carrossel">
@@ -480,7 +531,7 @@
                     <h4>Navegação</h4>
                     <a href="#">Quem Somos</a>
                     <a href="#">Nossa História</a>
-                    <a href="https://instagram.com" target="_blank">Instagram Oficial</a>
+                    <a href="https://instagram.com/ecoangel.arq" target="_blank">Instagram Oficial</a>
                 </div>
                 <div class="rodape-col">
                     <h4>Suporte</h4>
