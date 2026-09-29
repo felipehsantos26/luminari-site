@@ -6,19 +6,15 @@
     <link rel="stylesheet" href="css/styles.css">
     <style>
         /* --- ESTILOS ADICIONAIS REFORMULADOS PARA O NOVO DESIGN --- */
-               .banner-topo {
+                     .banner-topo {
             width: 100%;
-            height: 220px;
-            /* 🎨 Removido o linear-gradient para exibir a sua imagem crua do Photoshop */
+            height: auto; /* 📐 Muda para automático para a altura acompanhar a foto */
+            aspect-ratio: 848 / 148; /* 📊 Trava na proporção perfeita da sua faixa útil da imagem */
             background: url('/assets/banner_room.jpeg') no-repeat center center;
-            background-size: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: #ffffff;
-            padding: 0 20px;
+            background-size: contain; /* 🎯 O segredo: força a foto a aparecer INTEIRA sem nenhum corte */
+            background-color: #ffffff; /* 🏳️ Fundo branco caso sobre algum espacinho nas pontas */
         }
+
 
 
         .banner-topo-conteudo h2 {
@@ -238,17 +234,84 @@
                 <div class="card-historia">
                     <h3>Nossa História: O porquê a EcoAngel nasceu</h3>
                     <p style="color: #475569; font-size: 0.95rem; margin: 0; line-height: 1.6;">
-                        A SmartGlucolamp não nasceu de uma simples ideia comercial, mas sim de um propósito real de cuidado familiar. Desenvolvemos essa tecnologia para transformar o monitoramento diário de glicemia em algo sutil e acolhedor. Através das cores, trazemos paz de espírito para os pais e proteção visual em tempo real para quem amamos, mudando a forma como lidamos com a saúde dentro de casa.
-                    </p>
+                        Em maio de 2024, eu quase perdi minha filha para a cetoacidose diabética. A informação ainda é escassa, e isso infelizmente fez toda a diferença até chegarmos ao diagnóstico.
+
+De uma hora para outra, nossa família precisou aprender a conviver com uma doença que exige atenção todos os dias, o tempo todo.
+
+Somos uma família simples, com recursos limitados e, como tantos outros pais, nem sempre tivemos condições de oferecer tudo aquilo que gostaríamos para o tratamento da nossa filha.
+
+Mas uma coisa nunca nos faltou: vontade de buscar o melhor para ela.
+
+Começamos a pesquisar, aprender, procurar alternativas e fazer o que estava ao nosso alcance para tornar a vida dela mais segura e também mais leve.
+
+Foi dessa realidade que comecei a gravar vídeos para mostrar as dificuldades de uma família que convive com o diabetes tipo 1.
+
+Depois, junto com outra mãe, criamos um projeto social em nossa cidade, que já apoiou dezenas de famílias. Também conseguimos a aprovação de leis que antes sequer existiam.
+
+E foi justamente vivendo essa realidade tão de perto que uma nova ideia nasceu dentro da nossa própria casa.
+
+Era um dia comum.
+
+Eu estava costurando, Felipe trabalhava no computador e nós dois estávamos finalizando os últimos detalhes de mais um evento da Missão Doce.
+
+Enquanto trabalhávamos, uma situação que já fazia parte da nossa rotina voltou a chamar nossa atenção: para saber como estava a glicemia da nossa filha, precisávamos pegar o celular.
+
+E veio a pergunta:
+
+“E se existisse uma forma de enxergar essa informação sem precisar pegar o celular toda hora?”
+
+Começamos a pesquisar para descobrir se alguém já tinha pensado em algo parecido.
+
+E descobrimos que sim.
+
+Existiam soluções semelhantes em outros países, mas não encontramos uma opção disponível no Brasil que pudéssemos simplesmente comprar e colocar na nossa casa.
+
+Foi então que pensamos:
+
+“E se a gente produzisse isso aqui?”
+
+A partir daí, quem colocou a mão na massa foi o Felipe.
+
+Ele começou a pensar em como aquela ideia poderia funcionar. No começo, a gente imaginava quase uma “mini Alexa da glicemia”: um dispositivo dentro de casa que recebesse a informação e nos ajudasse a acompanhar o que estava acontecendo.
+
+Ele programou tudo.
+
+Fomos testando, errando, ajustando e aprendendo no caminho, até aquela ideia começar a funcionar de verdade.
+
+E foi assim que nasceu a Angel.
+
+A primeira criação da ECOANGEL.
+
+Uma luminária que se conecta à conta do cuidador e representa o status da glicemia por meio de cores, tornando essa informação visível dentro de casa sem precisar consultar o celular a todo momento.
+
+A Angel não mede a glicemia e não substitui o sensor ou o aplicativo. Ela recebe as informações da conta do cuidador e as transforma em uma informação visual.
+
+Mas a Angel é apenas o começo.
+
+O nome ECOANGEL nasceu porque não queremos criar apenas uma luminária.
+
+Temos outras ideias, outros projetos e outras soluções que nasceram das necessidades que encontramos vivendo essa realidade de perto.
+
+Nossa intenção é transformar experiências reais em tecnologia que possa facilitar a vida de outras famílias.
+
+Porque a ECOANGEL nasceu assim:
+
+de uma família simples, que nem sempre teve todos os recursos que gostaria, mas que nunca deixou de buscar o melhor para sua filha.
+
+Uma família que encontrou uma necessidade dentro da própria casa e decidiu não apenas reclamar dela.
+
+Decidiu criar.
+
+E agora queremos levar essas ideias para milhares de outras famílias brasileira                  </p>
                 </div>
             </div>
 
             <!-- Lado Direito: Textos de Venda e Preço (MANTIDO 100% IGUAL) -->
             <div class="product-info">
-                <span class="tag">Inovação em Saúde & Tecnologia</span>
-                <h1>Sua saúde monitorada através das cores</h1>
+                <span class="tag">Da nossa casa, para a sua casa.</span>
+                <h1>Através das cores a Angel torna a vida mais colorida!</h1>
                 <p class="description">
-                    Uma luminária inteligente que se conecta ao seu sensor de glicemia e muda de cor em tempo real. Mais tranquilidade para o seu dia a dia e proteção visual para quem você ama.
+                    Uma luminaria inteligente que através do wifi busca os dados que o  sensor disponibiliza para os cuidadores. Atualmtente disponivel para sibionics e librefreestyle 2 através do celular.
                 </p>
 
                 <!-- Bloco de Preço, Cupom e Botão de Compra -->
