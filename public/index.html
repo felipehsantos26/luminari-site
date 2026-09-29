@@ -119,78 +119,97 @@
         .rodape-col a:hover {
             color: #2563eb;
         }
-                /* --- ESTILOS DO NOVO CARROSSEL DE MÍDIA PREMIUM --- */
+   
+                /* --- NOVO DESIGN: CARROSSEL DE CARDS 3D PREMIUM --- */
         .secao-carrossel {
-            padding: 40px 0;
+            padding: 50px 0;
             background-color: #f8fafc;
             text-align: center;
-        }
-        .carrossel-container {
-            position: relative;
-            max-width: 650px;
-            margin: 0 auto;
             overflow: hidden;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            background: #000;
         }
-        .carrossel-slides {
+        .carrossel-palco {
+            position: relative;
+            max-width: 950px;
+            margin: 0 auto;
+            height: 400px;
             display: flex;
-            transition: transform 0.4s ease-in-out;
-            width: 100%;
-            height: 380px;
+            align-items: center;
+            justify-content: center;
         }
-        .carrossel-slide {
-            min-width: 100%;
+        .carrossel-container-3d {
+            position: relative;
+            width: 100%;
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .carrossel-slide img {
+        .carrossel-slide-3d {
+            position: absolute;
+            width: 500px; /* Largura ideal do card central */
+            height: 300px; /* Altura ideal do card central */
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            background: #000;
+            transition: all 0.4s ease-in-out;
+            opacity: 0;
+            z-index: 0;
+            transform: scale(0.6) translateX(0);
+            pointer-events: none;
+        }
+        .carrossel-slide-3d img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .carrossel-slide iframe {
+        .carrossel-slide-3d iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
-        .btn-carrossel {
+        /* ✨ POSIÇÕES MÁGICAS DO CARROSSEL 3D */
+        .carrossel-slide-3d.active {
+            opacity: 1;
+            z-index: 5;
+            transform: scale(1) translateX(0);
+            pointer-events: auto;
+        }
+        .carrossel-slide-3d.prev {
+            opacity: 0.6;
+            z-index: 3;
+            transform: scale(0.8) translateX(-280px); /* Move o card anterior para a esquerda */
+            pointer-events: auto;
+        }
+        .carrossel-slide-3d.next {
+            opacity: 0.6;
+            z-index: 3;
+            transform: scale(0.8) translateX(280px); /* Move o próximo card para a direita */
+            pointer-events: auto;
+        }
+        /* Botões de Navegação Flutuantes */
+        .btn-carrossel-3d {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(15, 23, 42, 0.7);
+            background: rgba(15, 23, 42, 0.85);
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1.2rem;
-            font-weight: bold;
-            transition: background 0.2s;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.2s;
             z-index: 10;
         }
-        .btn-carrossel:hover { background: rgba(37, 99, 235, 0.9); }
-        .btn-prev { left: 15px; }
-        .btn-next { right: 15px; }
-        .carrossel-indicadores {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 15px;
-        }
-        .indicador {
-            width: 10px;
-            height: 10px;
-            background: #cbd5e1;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .indicador.active { background: #2563eb; width: 24px; border-radius: 10px; }
+        .btn-carrossel-3d:hover { background: #2563eb; transform: translateY(-50%) scale(1.1); }
+        .btn-prev-3d { left: -10px; }
+        .btn-next-3d { right: -10px; }
+
 
     </style>
 </head>
@@ -279,47 +298,40 @@
 
         </div>
     </main>
-        <!-- 🌟 NOVO: SEÇÃO DE MÍDIA PREMIUM (CARROSSEL FOTOS + VÍDEO) -->
+           <!-- 🌟 NOVO: SEÇÃO DE MÍDIA PREMIUM (CARROSSEL DE CARDS 3D) -->
     <section class="secao-carrossel">
         <div class="container">
             <h2 style="color: #0f172a; font-size: 1.8rem; margin-bottom: 8px;">Conheça a Angel de perto</h2>
             <p style="color: #64748b; margin-bottom: 25px; margin-top: 0;">Navegue pelas fotos e veja o vídeo demonstrativo do produto.</p>
             
-            <div class="carrossel-container">
-                <!-- Botões de navegação lateral -->
-                <button class="btn-carrossel btn-prev" onclick="mudarSlide(-1)">&#10094;</button>
-                <button class="btn-carrossel btn-next" onclick="mudarSlide(1)">&#10095;</button>
+            <div class="carrossel-palco">
+                <!-- Botões de navegação lateral tridimensionais -->
+                <button class="btn-carrossel-3d btn-prev-3d" onclick="moverCard(-1)">&#10094;</button>
+                <button class="btn-carrossel-3d btn-next-3d" onclick="moverCard(1)">&#10095;</button>
 
-                <!-- Slides de Mídia -->
-                <div class="carrossel-slides" id="slides-mídia">
-                    <!-- Foto 1 -->
-                    <div class="carrossel-slide">
+                <!-- Palco dos Cards 3D -->
+                <div class="carrossel-container-3d">
+                    <!-- Card 1 (Foto 1) -->
+                    <div class="carrossel-slide-3d prev">
                         <img src="/assets/carrossel_foto1.jpeg" alt="SmartGlucolamp no quarto">
                     </div>
-                    <!-- Foto 2 -->
-                    <div class="carrossel-slide">
+                    <!-- Card 2 (Foto 2 - Começa no centro) -->
+                    <div class="carrossel-slide-3d active">
                         <img src="/assets/carrossel_foto2.jpeg" alt="SmartGlucolamp mudando de cor">
                     </div>
-                    <!-- Foto 3 -->
-                    <div class="carrossel-slide">
+                    <!-- Card 3 (Foto 3) -->
+                    <div class="carrossel-slide-3d next">
                         <img src="/assets/carrossel_foto3.jpeg" alt="Detalhes do acabamento da Angel">
                     </div>
-                    <!-- Vídeo Demonstrativo (Substitua as letras DEPOIS de embed/ pelo ID do seu vídeo do YouTube) -->
-                    <div class="carrossel-slide">
+                    <!-- Card 4 (Vídeo do YouTube) -->
+                    <div class="carrossel-slide-3d">
                         <iframe src="https://youtube.com" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
-                </div>
-
-                <!-- Indicadores de bolinha na parte inferior -->
-                <div class="carrossel-indicadores">
-                    <div class="indicador active" onclick="irParaSlide(0)"></div>
-                    <div class="indicador" onclick="irParaSlide(1)"></div>
-                    <div class="indicador" onclick="irParaSlide(2)"></div>
-                    <div class="indicador" onclick="irParaSlide(3)"></div>
                 </div>
             </div>
         </div>
     </section>
+
 
 
     <!-- 🌟 NOVO: 4. SEÇÃO "COMO FUNCIONA" (DESCRIÇÕES DA ANGEL) -->
@@ -374,6 +386,54 @@
             </div>
         </div>
     </footer>
+
+        <!-- 🧠 ENGINE INTELEGENTE DO CARROSSEL DE CARDS 3D -->
+    <script>
+        let indiceCardAtual = 1; // Começa no segundo card (índice 1), que é a foto central ativa
+
+        function atualizarCards3D() {
+            const slides = document.querySelectorAll('.carrossel-slide-3d');
+            const totalSlides = slides.length;
+
+            slides.forEach((slide, i) => {
+                // Remove todas as classes de posicionamento antigas antes de recalcular
+                slide.classList.remove('active', 'prev', 'next');
+
+                // Lógica circular para encontrar quem é o card central, o anterior e o próximo
+                if (i === indiceCardAtual) {
+                    slide.classList.add('active');
+                } else if (i === (indiceCardAtual - 1 + totalSlides) % totalSlides) {
+                    slide.classList.add('prev');
+                } else if (i === (indiceCardAtual + 1) % totalSlides) {
+                    slide.classList.add('next');
+                }
+
+                // 🛑 COMANDO INTELIGENTE: Se o slide atual não for o vídeo (índice 3) e o vídeo estiver tocando, força o pause dele
+                if (i === 3 && indiceCardAtual !== 3) {
+                    const iframe = slide.querySelector('iframe');
+                    if (iframe && iframe.contentWindow) {
+                        iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                }
+            });
+        }
+
+        // Função ativada pelos botões de setas laterais
+        function moverCard(direcao) {
+            const slides = document.querySelectorAll('.carrossel-slide-3d');
+            const totalSlides = slides.length;
+
+            // Altera o índice de forma circular (se passar do último volta pro primeiro e vice-versa)
+            indiceCardAtual = (indiceCardAtual + direcao + totalSlides) % totalSlides;
+            atualizarCards3D();
+        }
+
+        // Inicializa o posicionamento tridimensional assim que a página termina de carregar
+        document.addEventListener("DOMContentLoaded", () => {
+            atualizarCards3D();
+        });
+    </script>
+
     <!-- Avisando o site para ler o arquivo JavaScript que vai cuidar do cupom e do botão -->
     <script src="js/checkout.js?v=1"></script>
 </body>
