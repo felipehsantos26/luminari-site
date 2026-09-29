@@ -8,7 +8,7 @@
         /* --- ESTILOS ADICIONAIS REFORMULADOS PARA O NOVO DESIGN --- */
         .banner-topo {
             width: 100%;
-            height: 380px;
+            height: 200px;
             background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.60)), url('/assets/banner_room.jpeg') no-repeat center center;
             background-size: cover;
             display: flex;
@@ -119,17 +119,85 @@
         .rodape-col a:hover {
             color: #2563eb;
         }
+                /* --- ESTILOS DO NOVO CARROSSEL DE MÍDIA PREMIUM --- */
+        .secao-carrossel {
+            padding: 40px 0;
+            background-color: #f8fafc;
+            text-align: center;
+        }
+        .carrossel-container {
+            position: relative;
+            max-width: 650px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            background: #000;
+        }
+        .carrossel-slides {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+            width: 100%;
+            height: 380px;
+        }
+        .carrossel-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carrossel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carrossel-slide iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .btn-carrossel {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 23, 42, 0.7);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        .btn-carrossel:hover { background: rgba(37, 99, 235, 0.9); }
+        .btn-prev { left: 15px; }
+        .btn-next { right: 15px; }
+        .carrossel-indicadores {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .indicador {
+            width: 10px;
+            height: 10px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .indicador.active { background: #2563eb; width: 24px; border-radius: 10px; }
+
     </style>
 </head>
 
 <body>
 
-    <!-- 1. Cabeçalho com o nome da sua marca -->
-    <header class="navbar">
-        <div class="container">
-            <span class="logo">SmartGlucolamp</span>
-        </div>
-    </header>
+   
 
     <!-- 🌟 NOVO: 2. BANNER PANORÂMICO DO TOPO (FINO DE FORA A FORA) -->
     <section class="banner-topo">
@@ -211,6 +279,48 @@
 
         </div>
     </main>
+        <!-- 🌟 NOVO: SEÇÃO DE MÍDIA PREMIUM (CARROSSEL FOTOS + VÍDEO) -->
+    <section class="secao-carrossel">
+        <div class="container">
+            <h2 style="color: #0f172a; font-size: 1.8rem; margin-bottom: 8px;">Conheça a Angel de perto</h2>
+            <p style="color: #64748b; margin-bottom: 25px; margin-top: 0;">Navegue pelas fotos e veja o vídeo demonstrativo do produto.</p>
+            
+            <div class="carrossel-container">
+                <!-- Botões de navegação lateral -->
+                <button class="btn-carrossel btn-prev" onclick="mudarSlide(-1)">&#10094;</button>
+                <button class="btn-carrossel btn-next" onclick="mudarSlide(1)">&#10095;</button>
+
+                <!-- Slides de Mídia -->
+                <div class="carrossel-slides" id="slides-mídia">
+                    <!-- Foto 1 -->
+                    <div class="carrossel-slide">
+                        <img src="/assets/carrossel_foto1.jpeg" alt="SmartGlucolamp no quarto">
+                    </div>
+                    <!-- Foto 2 -->
+                    <div class="carrossel-slide">
+                        <img src="/assets/carrossel_foto2.jpeg" alt="SmartGlucolamp mudando de cor">
+                    </div>
+                    <!-- Foto 3 -->
+                    <div class="carrossel-slide">
+                        <img src="/assets/carrossel_foto3.jpeg" alt="Detalhes do acabamento da Angel">
+                    </div>
+                    <!-- Vídeo Demonstrativo (Substitua as letras DEPOIS de embed/ pelo ID do seu vídeo do YouTube) -->
+                    <div class="carrossel-slide">
+                        <iframe src="https://youtube.com" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Indicadores de bolinha na parte inferior -->
+                <div class="carrossel-indicadores">
+                    <div class="indicador active" onclick="irParaSlide(0)"></div>
+                    <div class="indicador" onclick="irParaSlide(1)"></div>
+                    <div class="indicador" onclick="irParaSlide(2)"></div>
+                    <div class="indicador" onclick="irParaSlide(3)"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <!-- 🌟 NOVO: 4. SEÇÃO "COMO FUNCIONA" (DESCRIÇÕES DA ANGEL) -->
     <section class="secao-recursos">
@@ -250,7 +360,7 @@
                     <h4>Navegação</h4>
                     <a href="#">Quem Somos</a>
                     <a href="#">Nossa História</a>
-                    <a href="https://instagram.com" target="_blank">Instagram Oficial</a>
+                    <a href="https://instagram.com/thais.ki.satux" target="_blank">Instagram Oficial</a>
                 </div>
                 <div class="rodape-col">
                     <h4>Suporte</h4>
