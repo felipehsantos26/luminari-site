@@ -8,21 +8,30 @@
     
     <!-- 🎨 O SEGREDO ESTÁ AQUI: Abre a tag de estilo corretamente -->
     <style>
-    /* --- BANNER DO TOPO AJUSTADO (ESTILO FAIXA ELEGANTE E FINA) --- */
-.banner-topo {
-    width: 100%;
-    height: auto;
-    /* 🎯 AJUSTE DE ALTURA: Removemos a proporção gigante antiga e travamos em uma altura super fina */
-    max-height: 50px; 
-    background-color: #ffffff; /* Fundo branco limpo igual à referência */
-    border-bottom: 1px solid #e2e8f0; /* Uma linha sutil divisória */
-    margin: 0;
-    padding: 8px 0; /* Espaçamento interno bem pequeno para o texto respirar */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        /* --- ESTILOS ADICIONAIS REFORMULADOS PARA O NOVO DESIGN --- */
+             .banner-topo {
+            width: 100%;
+            height: auto;
+            max-height: 240px; /* 🎯 LIMITADOR: Garante que em telas grandes o banner não vire um gigante */
+            aspect-ratio: 1920 / 335;
+            background: url('/assets/banner_room.jpeg') no-repeat center center;
+            background-size: contain;
+            background-color: #ffffff;
+        }
 
+        .banner-topo-conteudo h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .banner-topo-conteudo p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
 /* --- NOVO BANNER ROTATIVO (MÉTODO NUVEMSHOP) --- */
 .slideshow-container {
@@ -365,62 +374,61 @@
 
                 <!-- Bloco de Preço, Cupom e Botão de Compra (MANTIDO 100% INTACTO) -->
                                <!-- Bloco de Preço, Cupom e Botão de Compra -->
-        <div class="checkout-box" id="formulario-compra" style="scroll-margin-top: 20px;">
+                <div class="checkout-box" id="formulario-compra" style="scroll-margin-top: 20px;">
 
-    <!-- 🚚 FORMULÁRIO DE DADOS PESSOAIS E ENTREGA OBRIGATÓRIOS -->
-    <div class="delivery-form" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
-        <h3 style="font-size: 16px; margin-bottom: 12px; color: #333;">Dados de Entrega</h3>
-        
-        <input type="text" id="client-name-input" placeholder="Nome Completo" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-        
-        <input type="text" id="client-phone-input" placeholder="Telefone com DDD (Ex: 16999999999)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                    <div class="price-container">
+                        <span class="old-price">R$ 299,00</span>
+                        <span class="current-price" id="display-price">R$ 299,00</span>
+                    </div>
 
-        <input type="email" id="client-email-input" placeholder="E-mail (Para receber a confirmação do pedido)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                    <!-- Setor Isolado do Cupom de Desconto -->
+                    <div class="coupon-group">
+                        <input type="text" id="coupon-input" placeholder="Digite o cupom do influenciador">
+                        <button id="apply-coupon-btn">Aplicar</button>
+                    </div>
+                    <p id="coupon-message" class="message"></p>
 
-        <div class="coupon-group" style="margin-bottom: 10px;">
-            <input type="text" id="cep-input" placeholder="CEP (Ex: 15010020)" maxlength="9">
-            <button id="calculate-shipping-btn">Calcular Frete</button>
+                    <!-- 🚚 FORMULÁRIO DE DADOS PESSOAIS E ENTREGA OBRIGATÓRIOS -->
+                    <div class="delivery-form" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+                        <h3 style="font-size: 16px; margin-bottom: 12px; color: #333;">Dados de Entrega</h3>
+                        
+                        <input type="text" id="client-name-input" placeholder="Nome Completo" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                        
+                        <input type="text" id="client-phone-input" placeholder="Telefone com DDD (Ex: 16999999999)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+
+                        <input type="email" id="client-email-input" placeholder="E-mail (Para receber a confirmação do pedido)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+
+                        <div class="coupon-group" style="margin-bottom: 10px;">
+                            <input type="text" id="cep-input" placeholder="CEP (Ex: 15010020)" maxlength="9">
+                            <button id="calculate-shipping-btn">Calcular Frete</button>
+                        </div>
+                        
+                        <div id="shipping-options" style="margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;"></div>
+                        <p id="shipping-message" class="message" style="margin-bottom: 10px Papel;"></p>
+
+                        <input type="text" id="street-input" placeholder="Endereço / Rua" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" id="number-input" placeholder="Número" style="width: 35%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                            <input type="text" id="complement-input" placeholder="Complemento / Bairro" style="width: 65%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                        </div>
+                    </div>
+
+                    <!-- Botão de Compra Principal -->
+                    <button id="buy-btn" class="btn-primary" style="margin-top: 10px;">Garantir Minha Luminária</button>
+               
+                                   <!-- 🛡️ TEXTO DE PRIVACIDADE E SEGURANÇA INTEGRADO -->
+                    <div style="margin-top: 15px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; text-align: left;">
+                        <span style="display: block; font-size: 12px; font-weight: bold; color: #1e293b; margin-bottom: 4px;">🛡️ Privacidade e segurança</span>
+                        <p style="font-size: 11px; color: #64748b; margin: 0; line-height: 1.5;">
+                            A Angel utiliza somente as informações necessárias para sua configuração e funcionamento. Saiba como seus dados são tratados nos nossos <a href="/politicas.html" target="_blank" style="color: #2563eb; text-decoration: underline; font-weight: bold;">Termos de Uso e Política de Privacidade</a>.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
-        
-        <div id="shipping-options" style="margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;"></div>
-        <p id="shipping-message" class="message" style="margin-bottom: 10px;"></p>
-
-        <input type="text" id="street-input" placeholder="Endereço / Rua" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-        
-        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <input type="text" id="number-input" placeholder="Número" style="width: 35%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-            <input type="text" id="complement-input" placeholder="Complemento / Bairro" style="width: 65%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-        </div>
-    </div> <!-- 🛠️ CORREÇÃO: Fechamento correto da div delivery-form movido para cá! -->
-
-    <!-- Setor Isolado do Cupom de Desconto (Agora fora do formulário de entrega) -->
-    <div class="coupon-group" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
-        <span style="display: block; font-size: 13px; font-weight: bold; color: #475569; margin-bottom: 8px;">Possui cupom de desconto?</span>
-        <div style="display: flex; gap: 10px;">
-            <input type="text" id="coupon-input" placeholder="Digite o cupom do influenciador" style="flex: 1;">
-            <button id="apply-coupon-btn">Aplicar</button>
-        </div>
-        <p id="coupon-message" class="message" style="margin-top: 5px;"></p>
-    </div>
-
-    <!-- Bloco de Preço Isolado (Fora do formulário de entrega) -->
-    <div class="price-container" style="margin-top: 15px; margin-bottom: 10px; padding-top: 15px; border-top: 1px solid #eee;">
-        <span class="old-price" style="text-decoration: line-through; color: #94a3b8; font-size: 0.9rem; margin-right: 10px;">R$ 299,00</span>
-        <span class="current-price" id="display-price" style="font-size: 1.6rem; font-weight: 800; color: #0f172a;">R$ 299,00</span>
-    </div>
-
-    <!-- Botão de Compra Principal -->
-    <button id="buy-btn" class="btn-primary" style="margin-top: 10px; width: 100%;">Garantir Minha Luminária</button>
-
-    <!-- 🛡️ TEXTO DE PRIVACIDADE E SEGURANÇA INTEGRADO -->
-    <div style="margin-top: 15px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; text-align: left;">
-        <span style="display: block; font-size: 12px; font-weight: bold; color: #1e293b; margin-bottom: 4px;">🛡️ Privacidade e segurança</span>
-        <p style="font-size: 11px; color: #64748b; margin: 0; line-height: 1.5;">
-            A Angel utiliza somente as informações necessárias para sua configuração e funcionamento. Saiba como seus dados são tratados nos nossos <a href="/politicas.html" target="_blank" style="color: #2563eb; text-decoration: underline; font-weight: bold;">Termos de Uso e Política de Privacidade</a>.
-        </p>
-    </div>
-
-</div>
     </main>
 
       <!-- 🌟 6. SEÇÃO "COMO FUNCIONA" -->
