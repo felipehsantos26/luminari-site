@@ -8,21 +8,7 @@
     
     <!-- 🎨 O SEGREDO ESTÁ AQUI: Abre a tag de estilo corretamente -->
     <style>
-    /* --- BANNER DO TOPO AJUSTADO (ESTILO FAIXA ELEGANTE E FINA) --- */
-.banner-topo {
-    width: 100%;
-    height: auto;
-    /* 🎯 AJUSTE DE ALTURA: Removemos a proporção gigante antiga e travamos em uma altura super fina */
-    max-height: 50px; 
-    background-color: #ffffff; /* Fundo branco limpo igual à referência */
-    border-bottom: 1px solid #e2e8f0; /* Uma linha sutil divisória */
-    margin: 0;
-    padding: 8px 0; /* Espaçamento interno bem pequeno para o texto respirar */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
+ 
 
 /* --- NOVO BANNER ROTATIVO (MÉTODO NUVEMSHOP) --- */
 .slideshow-container {
@@ -367,10 +353,7 @@
                                <!-- Bloco de Preço, Cupom e Botão de Compra -->
                 <div class="checkout-box" id="formulario-compra" style="scroll-margin-top: 20px;">
 
-                    <div class="price-container">
-                        <span class="old-price">R$ 299,00</span>
-                        <span class="current-price" id="display-price">R$ 299,00</span>
-                    </div>
+          
 
                     <!-- Setor Isolado do Cupom de Desconto -->
                     <div class="coupon-group">
@@ -403,6 +386,12 @@
                             <input type="text" id="number-input" placeholder="Número" style="width: 35%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
                             <input type="text" id="complement-input" placeholder="Complemento / Bairro" style="width: 65%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
                         </div>
+
+                         <div class="price-container">
+                        <span class="old-price">R$ 299,00</span>
+                        <span class="current-price" id="display-price">R$ 299,00</span>
+                    </div>
+
                     </div>
 
                     <!-- Botão de Compra Principal -->
