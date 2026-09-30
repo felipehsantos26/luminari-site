@@ -33,6 +33,47 @@
             margin: 0 auto;
         }
 
+        /* --- BANNER ROTATIVO (SLIDESHOW) DE FORA A FORA --- */
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1920 / 600; /* Proporção ideal para banners horizontais */
+    overflow: hidden;
+    background-color: #f8fafc;
+}
+
+.slideshow-container .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out; /* Transição suave de 1 segundo entre as fotos */
+    z-index: 1;
+}
+
+.slideshow-container .slide.ativo {
+    opacity: 1;
+    z-index: 2;
+}
+
+.slideshow-container .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Faz a foto cobrir tudo sem distorcer no PC ou Celular */
+    display: block;
+}
+
+/* Ajuste para telas menores (celular) se quiser que o banner fique um pouco mais alto e visível */
+@media (max-width: 768px) {
+    .slideshow-container {
+        aspect-ratio: 4 / 3; /* Proporção mais quadrada para destacar a foto no celular */
+    }
+}
+
+
         /* Seção Elegante Exclusiva para a História Real */
         .secao-historia-completa {
             background-color: #ffffff;
@@ -256,6 +297,19 @@
     <!-- 🌟 BANNER PANORÂMICO DO TOPO (FINO DE FORA A FORA) -->
     <section class="banner-topo">
     </section>
+
+    <!-- 📸 BANNER ROTATIVO DE MARKETING (MUTA DE 5 EM 5 SEGUNDOS) -->
+<section class="slideshow-container">
+    <!-- Foto 1 -->
+    <div class="slide ativo">
+        <img src="/assets/marketing_foto1.jpeg" alt="Campanha EcoAngel 1">
+    </div>
+    <!-- Foto 2 -->
+    <div class="slide">
+        <img src="/assets/marketing_foto2.jpeg" alt="Campanha EcoAngel 2">
+    </div>
+</section>
+
 
      <!-- 3. Bloco Principal da Oferta (Hero Section) -->
     <main class="hero-section container" style="margin-top: 0px; padding-top: 10px;">
@@ -579,6 +633,28 @@
     </footer>
     <!-- 🧠 ENGINE INTELIGENTE DO CARROSSEL DE CARDS 3D -->
     <script>
+
+// 🔄 LÓGICA DO BANNER ROTATIVO (5 SEGUNDOS)
+let slideIndex = 0;
+
+function alternarSlides() {
+    const slides = document.querySelectorAll('.slideshow-container .slide');
+    if (slides.length === 0) return;
+
+    // Remove a classe ativo do slide atual
+    slides[slideIndex].classList.remove('ativo');
+
+    // Vai para o próximo slide de forma circular
+    slideIndex = (slideIndex + 1) % slides.length;
+
+    // Adiciona a classe ativo no novo slide
+    slides[slideIndex].classList.add('ativo');
+}
+
+// Configura para rodar a função a cada 5000 milissegundos (5 segundos)
+setInterval(alternarSlides, 5000);
+
+
         let indiceCardAtual = 1; // Começa no segundo card (índice 1), que é a foto central ativa
 
         function atualizarCards3D() {
