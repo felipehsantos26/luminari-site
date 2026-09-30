@@ -240,6 +240,14 @@
             .btn-prev-3d { left: 5px; }
             .btn-next-3d { right: 5px; }
         }
+                /* 📱 Inverte a ordem na tela do celular: Checkout primeiro, Vídeo depois! */
+        @media (max-width: 768px) {
+            .hero-grid {
+                display: flex !important;
+                flex-direction: column-reverse !important; /* 🔀 O segredo: joga a primeira coluna (vídeo) para baixo! */
+            }
+        }
+
     </style> <!-- ⚙️ Fecha a tag de estilo corretamente -->
 </head>
 
