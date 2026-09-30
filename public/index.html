@@ -249,13 +249,13 @@
     <section class="banner-topo">
     </section>
 
-    <!-- 3. Bloco Principal da Oferta (Hero Section) -->
+     <!-- 3. Bloco Principal da Oferta (Hero Section) -->
     <main class="hero-section container" style="margin-top: 0px; padding-top: 10px;">
-        <div class="hero-grid">
+        <div class="hero-grid" style="align-items: start;">
             
-            <!-- Lado Esquerdo: Imagem da Luminária Limpa (Sem o texto da história empurrando para baixo) -->
-            <div class="product-gallery" style="flex-direction: column; justify-content: flex-start;">
-          <iframe
+            <!-- Lado Esquerdo: Reprodutor de Vídeo Totalmente Centralizado e com Espaçamento -->
+            <div class="product-gallery" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; margin: 25px auto; padding: 0 10px; box-sizing: border-box;">
+                <iframe
                     width="315"
                     height="560"
                     src="https://www.youtube.com/embed/V-L8BphbRJU?autoplay=1&mute=1&loop=1&playlist=V-L8BphbRJU"
@@ -263,14 +263,15 @@
                     frameborder="0"
                     allow="autoplay; encrypted-media; picture-in-picture"
                     allowfullscreen
-                    style="border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); max-width: 100%;">
+                    style="border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); max-width: 100%; display: block; margin: 0 auto;">
                 </iframe>
- </div>
+            </div>
 
-            <!-- Lado Direito: Título, Descrição e Caixas de Compra PERFEITAMENTE ALINHADAS ao lado da foto -->
-            <div class="product-info">
+            <!-- Lado Direito: Título, Descrição e Caixas de Compra -->
+            <div class="product-info" style="margin-top: 20px;">
                 <span class="tag">Da nossa casa, para a sua casa.</span>
                 <h1>Através das cores a Angel torna a vida mais colorida!</h1>
+
                 <p class="description">
                     Um dispositivo inteligente que através do wifi busca os dados que o gcm disponibiliza para os cuidadores. Atualmente disponivel para sibionics e librefreestyle 2 (nao funciona com o leitor)
                 </p>
