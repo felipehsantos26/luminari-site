@@ -186,18 +186,15 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
 
         console.log(`📉 Vaga reservada no Banco Real! Estoque na nuvem: ${novoEstoque} unidades.`);
 
-              // Calcular Preço com Cupom
+        // Calcular Preço com Cupom
         let precoProduto = PRECO_ORIGINAL; 
         if (cupom) {
             const { data: cInfo } = await supabase.from('cupons_afiliados').select('desconto_percentual').eq('codigo_cupom', cupom.toUpperCase()).single();
             if (cInfo) precoProduto = PRECO_ORIGINAL * (1 - Number(cInfo.desconto_percentual));
         }
 
-        // 🔓 LIBERADO: Captura o valor real calculado pelo Melhor Envio e enviado pelo cliente
-        let valorFrete = Number(req.body.valorFrete || 0); 
-        
+        let valorFrete = Number(req.body.fretePreco || 0); // Frete fixo de teste mantido para economizar seu bolso
         const idPedido = `PEDIDO-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-
 
         // 💾 3. GRAVAÇÃO IMEDIATA NO SUPABASE (Blindagem contra reinicialização de memória!)
         const { error: erroGravarPedido } = await supabase
