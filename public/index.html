@@ -33,12 +33,13 @@
             margin: 0 auto;
         }
 
-        /* --- BANNER ROTATIVO (SLIDESHOW) DE FORA A FORA --- */
+  /* --- BANNER ROTATIVO (SLIDESHOW) DE FORA A FORA REFORMULADO --- */
 .slideshow-container {
     position: relative;
     width: 100%;
     height: auto;
-    aspect-ratio: 1920 / 600; /* Proporção ideal para banners horizontais */
+    /* 🎯 AJUSTE PC: Mudamos para 1920/550 para achatar e ficar idêntico ao da referência no computador */
+    aspect-ratio: 1920 / 550; 
     overflow: hidden;
     background-color: #f8fafc;
 }
@@ -50,7 +51,7 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 1s ease-in-out; /* Transição suave de 1 segundo entre as fotos */
+    transition: opacity 1s ease-in-out;
     z-index: 1;
 }
 
@@ -62,9 +63,18 @@
 .slideshow-container .slide img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Faz a foto cobrir tudo sem distorcer no PC ou Celular */
+    object-fit: cover; /* Mantém a imagem cobrindo tudo sem distorcer */
     display: block;
 }
+
+/* Regras exclusivas para celulares */
+@media (max-width: 768px) {
+    .slideshow-container {
+        /* 🎯 AJUSTE CELULAR: Mudamos de 4/3 para 16/9 para tirar o formato quadrado e deixar a foto panorâmica */
+        aspect-ratio: 16 / 9; 
+    }
+}
+
 
 /* Ajuste para telas menores (celular) se quiser que o banner fique um pouco mais alto e visível */
 @media (max-width: 768px) {
