@@ -33,14 +33,10 @@
             margin: 0 auto;
         }
 
-/* --- BANNER ROTATIVO (SLIDESHOW) COMPATÍVEL COM A REFERÊNCIA --- */
+/* --- NOVO BANNER ROTATIVO (MÉTODO NUVEMSHOP) --- */
 .slideshow-container {
     position: relative;
     width: 100%;
-    max-width: 100%; /* Garante que pegue de fora a fora */
-    height: auto;
-    /* 🎯 PROPORÇÃO DA REFERÊNCIA: 1580 por 700 para computadores */
-    aspect-ratio: 1580 / 700; 
     overflow: hidden;
     background-color: #ffffff;
     margin: 0;
@@ -66,15 +62,34 @@
 .slideshow-container .slide img {
     width: 100%;
     height: 100%;
-    object-fit: fill; /* 🎯 ALTERAÇÃO: Força a imagem a preencher a proporção exata sem cortar as bordas */
+    /* 🎯 SEGREDO VISUAL: Usa cover para a imagem se adaptar perfeitamente sem amassar ou distorcer */
+    object-fit: cover; 
     display: block;
 }
 
-/* Regras exclusivas para celulares */
-@media (max-width: 768px) {
-    .slideshow-container {
-        /* Mantém a mesma proporção proporcional no celular para não ficar quadrado */
+/* 💻 REGRAS PARA O COMPUTADOR */
+@media (min-width: 769px) {
+    .slideshow-pc {
+        /* Proporção 1580x700 que você encontrou no inspecionar */
         aspect-ratio: 1580 / 700; 
+        display: block;
+    }
+    .slideshow-mobile {
+        /* Esconde o banner de celular no computador */
+        display: none !important; 
+    }
+}
+
+/* 📱 REGRAS PARA O CELULAR */
+@media (max-width: 768px) {
+    .slideshow-pc {
+        /* Esconde o banner de computador no celular */
+        display: none !important; 
+    }
+    .slideshow-mobile {
+        /* Proporção 1:1 (quadrada) ideal para o mobile da referência */
+        aspect-ratio: 1 / 1; 
+        display: block;
     }
 }
 
@@ -302,17 +317,32 @@
     <section class="banner-topo">
     </section>
 
-    <!-- 📸 BANNER ROTATIVO DE MARKETING (MUTA DE 5 EM 5 SEGUNDOS) -->
-<section class="slideshow-container">
-    <!-- Foto 1 -->
+  <!-- 📸 NOVO BANNER ROTATIVO INTELIGENTE (DIVIDIDO POR TELAS) -->
+
+<!-- Versão Exclusiva para COMPUTADOR (Sumirá no celular) -->
+<section class="slideshow-container slideshow-pc">
+    <!-- Foto 1 - PC -->
     <div class="slide ativo">
-        <img src="/assets/marketing_foto1.jpeg" alt="Campanha EcoAngel 1">
+        <img src="/assets/marketing_pc_foto1.jpeg" alt="Campanha EcoAngel PC 1">
     </div>
-    <!-- Foto 2 -->
+    <!-- Foto 2 - PC -->
     <div class="slide">
-        <img src="/assets/marketing_foto2.jpeg" alt="Campanha EcoAngel 2">
+        <img src="/assets/marketing_pc_foto2.jpeg" alt="Campanha EcoAngel PC 2">
     </div>
 </section>
+
+<!-- Versão Exclusiva para CELULAR (Sumirá no computador) -->
+<section class="slideshow-container slideshow-mobile">
+    <!-- Foto 1 - Celular -->
+    <div class="slide ativo">
+        <img src="/assets/marketing_mobile_foto1.jpeg" alt="Campanha EcoAngel Mobile 1">
+    </div>
+    <!-- Foto 2 - Celular -->
+    <div class="slide">
+        <img src="/assets/marketing_mobile_foto2.jpeg" alt="Campanha EcoAngel Mobile 2">
+    </div>
+</section>
+
 
 
      <!-- 3. Bloco Principal da Oferta (Hero Section) -->
