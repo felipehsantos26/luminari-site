@@ -33,7 +33,7 @@ app.post('/api/admin/registrar-pagamento', registrarPagamentoAfiliado);
 
 
 // 💰 PREÇO DE TESTE MANTIDO EM R\$ 1,00 PARA A SUA VALIDAÇÃO RÁPIDA DE CUSTO ZERO
-const PRECO_ORIGINAL = 1.00; 
+const PRECO_ORIGINAL = 299.00; 
 
 // 📦 CONFIGURAÇÕES FÍSICAS DA CAIXA DA LUMINÁRIA (MEDIDAS REAIS DO CUBO!)
 const DIMENSOES_PRODUTO = {
@@ -186,15 +186,18 @@ app.post('/api/vendas/criar-pagamento', async (req, res) => {
 
         console.log(`📉 Vaga reservada no Banco Real! Estoque na nuvem: ${novoEstoque} unidades.`);
 
-        // Calcular Preço com Cupom
+              // Calcular Preço com Cupom
         let precoProduto = PRECO_ORIGINAL; 
         if (cupom) {
             const { data: cInfo } = await supabase.from('cupons_afiliados').select('desconto_percentual').eq('codigo_cupom', cupom.toUpperCase()).single();
             if (cInfo) precoProduto = PRECO_ORIGINAL * (1 - Number(cInfo.desconto_percentual));
         }
 
-        let valorFrete = 0.01; // Frete fixo de teste mantido para economizar seu bolso
+        // 🔓 LIBERADO: Captura o valor real calculado pelo Melhor Envio e enviado pelo cliente
+        let valorFrete = Number(req.body.valorFrete || 0); 
+        
         const idPedido = `PEDIDO-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
 
         // 💾 3. GRAVAÇÃO IMEDIATA NO SUPABASE (Blindagem contra reinicialização de memória!)
         const { error: erroGravarPedido } = await supabase
