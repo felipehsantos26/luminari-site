@@ -8,30 +8,21 @@
     
     <!-- 🎨 O SEGREDO ESTÁ AQUI: Abre a tag de estilo corretamente -->
     <style>
-        /* --- ESTILOS ADICIONAIS REFORMULADOS PARA O NOVO DESIGN --- */
-             .banner-topo {
-            width: 100%;
-            height: auto;
-            max-height: 240px; /* 🎯 LIMITADOR: Garante que em telas grandes o banner não vire um gigante */
-            aspect-ratio: 1920 / 335;
-            background: url('/assets/banner_room.jpeg') no-repeat center center;
-            background-size: contain;
-            background-color: #ffffff;
-        }
+    /* --- BANNER DO TOPO AJUSTADO (ESTILO FAIXA ELEGANTE E FINA) --- */
+.banner-topo {
+    width: 100%;
+    height: auto;
+    /* 🎯 AJUSTE DE ALTURA: Removemos a proporção gigante antiga e travamos em uma altura super fina */
+    max-height: 50px; 
+    background-color: #ffffff; /* Fundo branco limpo igual à referência */
+    border-bottom: 1px solid #e2e8f0; /* Uma linha sutil divisória */
+    margin: 0;
+    padding: 8px 0; /* Espaçamento interno bem pequeno para o texto respirar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .banner-topo-conteudo h2 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-            letter-spacing: -0.5px;
-        }
-
-        .banner-topo-conteudo p {
-            font-size: 1.2rem;
-            color: #cbd5e1;
-            max-width: 600px;
-            margin: 0 auto;
-        }
 
 /* --- NOVO BANNER ROTATIVO (MÉTODO NUVEMSHOP) --- */
 .slideshow-container {
