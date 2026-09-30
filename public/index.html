@@ -668,25 +668,38 @@
     <!-- 🧠 ENGINE INTELIGENTE DO CARROSSEL DE CARDS 3D -->
     <script>
 
-// 🔄 LÓGICA DO BANNER ROTATIVO (5 SEGUNDOS)
-let slideIndex = 0;
+// 🔄 LÓGICA DO BANNER ROTATIVO BLINDADA (EVITA SLIDE FANTASMA)
+let slideIndexPC = 0;
+let slideIndexMobile = 0;
 
-function alternarSlides() {
-    const slides = document.querySelectorAll('.slideshow-container .slide');
-    if (slides.length === 0) return;
+function alternarSlidesGlobais() {
+    // 💻 Força a contagem exata apenas dentro do bloco de PC
+    const slidesPC = document.querySelectorAll('.slideshow-pc > .slide');
+    if (slidesPC.length > 0) {
+        slidesPC[slideIndexPC].classList.remove('ativo');
+        // Garante o ciclo exato entre a foto 0 e 1
+        slideIndexPC = (slideIndexPC + 1) % slidesPC.length; 
+        slidesPC[slideIndexPC].classList.add('ativo');
+    }
 
-    // Remove a classe ativo do slide atual
-    slides[slideIndex].classList.remove('ativo');
-
-    // Vai para o próximo slide de forma circular
-    slideIndex = (slideIndex + 1) % slides.length;
-
-    // Adiciona a classe ativo no novo slide
-    slides[slideIndex].classList.add('ativo');
+    // 📱 Força a contagem exata apenas dentro do bloco de Celular
+    const slidesMobile = document.querySelectorAll('.slideshow-mobile > .slide');
+    if (slidesMobile.length > 0) {
+        slidesMobile[slideIndexMobile].classList.remove('ativo');
+        // Garante o ciclo exato entre a foto 0 e 1
+        slideIndexMobile = (slideIndexMobile + 1) % slidesMobile.length; 
+        slidesMobile[slideIndexMobile].classList.add('ativo');
+    }
 }
 
-// Configura para rodar a função a cada 5000 milissegundos (5 segundos)
-setInterval(alternarSlides, 5000);
+// Limpa qualquer temporizador antigo que possa estar rodando duplicado na memória
+if (window.intervaloBanner) {
+    clearInterval(window.intervaloBanner);
+}
+
+// Inicializa a engrenagem limpa
+window.intervaloBanner = setInterval(alternarSlidesGlobais, 5000);
+
 
 
         let indiceCardAtual = 1; // Começa no segundo card (índice 1), que é a foto central ativa
