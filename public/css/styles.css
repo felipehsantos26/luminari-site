@@ -1,5 +1,6 @@
-1. CONFIGURAÇÕES GERAIS E CORES (Reset de Fábrica)
-------------------------------------------------------------- */
+/* =============================================================
+   1. CONFIGURAÇÕES GERAIS E CORES (Reset de Fábrica)
+============================================================= */
 * {
     margin: 0;
     padding: 0;
@@ -8,7 +9,7 @@
 }
 
 body {
-    background-color: #f8fafc;
+    background-color: #f0fdf4; /* 🟢 Fundo levemente esverdeado (Menta) para quebrar o "branco sem sal" */
     color: #1e293b;
     line-height: 1.6;
 }
@@ -20,26 +21,26 @@ body {
     padding: 0 20px;
 }
 
-/* -------------------------------------------------------------
+/* =============================================================
    2. CABEÇALHO (Navbar)
-------------------------------------------------------------- */
+============================================================= */
 .navbar {
     background-color: #ffffff;
     padding: 20px 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.01), 0 2px 4px -1px rgba(0,0,0,0.01);
     border-bottom: 1px solid #e2e8f0;
 }
 
 .logo {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #2563eb; /* Azul tecnológico */
+    color: #0284c7; /* 🔵 Azul Sereno / Clínico */
     letter-spacing: -0.5px;
 }
 
-/* -------------------------------------------------------------
+/* =============================================================
    3. BLOCO PRINCIPAL (Hero Section) - Responsivo (Mobile-First)
-------------------------------------------------------------- */
+============================================================= */
 .hero-section {
     padding: 40px 0;
 }
@@ -51,7 +52,7 @@ body {
     gap: 30px;
 }
 
-/* Forçando a foto da Thaís a ficar perfeita e não quebrar a tela */
+/* Forçando a galeria a ficar perfeita e não quebrar a tela */
 .product-gallery {
     width: 100%;
     display: flex;
@@ -76,8 +77,8 @@ body {
 
 .tag {
     align-self: flex-start;
-    background-color: #dbeafe;
-    color: #1e40af;
+    background-color: #e0f2fe; /* 🔵 Azul Clarinho Médico */
+    color: #0369a1;            /* 🔵 Texto Azul Fechado */
     font-size: 0.85rem;
     font-weight: 600;
     padding: 4px 12px;
@@ -97,16 +98,15 @@ h1 {
     font-size: 1.05rem;
     margin-bottom: 25px;
 }
-
-/* -------------------------------------------------------------
+/* =============================================================
    4. CAIXA DE CHECKOUT (Preço, Cupom e Botão)
-------------------------------------------------------------- */
+============================================================= */
 .checkout-box {
     background-color: #ffffff;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #cbd5e1;
     border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.01), 0 2px 4px -1px rgba(0,0,0,0.01);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
 }
 
 .price-container {
@@ -144,7 +144,7 @@ h1 {
 }
 
 .coupon-group input:focus {
-    border-color: #2563eb;
+    border-color: #10b981; /* 🟢 Foco Verde Menta */
 }
 
 .coupon-group button {
@@ -168,13 +168,13 @@ h1 {
     font-weight: 500;
     margin-bottom: 15px;
 }
-.message.success { color: #16a34a; } /* Verde para sucesso */
+.message.success { color: #059669; } /* 🟢 Verde Médico para sucesso */
 .message.error { color: #dc2626; }   /* Vermelho para erro */
 
-/* Botão de Compra Chamativo */
+/* Botão de Compra Chamativo e Seguro */
 .btn-primary {
     width: 100%;
-    background-color: #2563eb;
+    background-color: #10b981; /* 🟢 Verde Saúde Vibrante */
     color: #ffffff;
     border: none;
     padding: 16px;
@@ -182,19 +182,19 @@ h1 {
     font-size: 1.1rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
     transition: all 0.2s;
 }
 
 .btn-primary:hover {
-    background-color: #1d4ed8;
+    background-color: #059669; /* 🟢 Tom Verde mais escuro ao passar o mouse */
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
 }
 
-/* -------------------------------------------------------------
+/* =============================================================
    5. MUDANÇA PARA COMPUTADORES (Telas Maiores que 768px)
-------------------------------------------------------------- */
+============================================================= */
 @media (min-width: 768px) {
     .hero-section {
         padding: 80px 0;
