@@ -215,3 +215,86 @@ h1 {
         font-size: 2.8rem;
     }
 }
+/* =============================================================
+   6. SEÇÃO COMO FUNCIONA & ESCALA DE CORES PREMIUM
+============================================================ */
+/* Fundo blocado premium para quebrar a monotonia */
+.secao-recursos {
+    background-color: #f0f9ff !important; /* 🔵 Azul Clínico Ultra Suave */
+    border-top: 1px solid #e0f2fe;
+    border-bottom: 1px solid #e0f2fe;
+    padding: 60px 0 !important;
+}
+
+/* Grid de passos organizado */
+.recursos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+/* Cards dos passos com efeito flutuante (Gás Visual) */
+.recurso-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.02), 0 2px 4px -1px rgba(15, 23, 42, 0.02);
+    transition: all 0.3s ease;
+}
+
+/* Efeito interativo ao passar o mouse */
+.recurso-card:hover {
+    transform: translateY(-5px);
+    border-color: #10b981; /* 🟢 Borda muda para o Verde EcoAngel */
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+}
+
+/* Transformando os emojis em ícones de app moderno */
+.recurso-card .icon {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: #e0f2fe; /* 🔵 Círculo Azul Clarinho */
+    border-radius: 50%;
+}
+
+.recurso-card h4 {
+    font-size: 1.25rem;
+    color: #0f172a;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.recurso-card p {
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Customização fina para a Tabela de Cores Ambulatorial */
+.secao-recursos table {
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.03) !important;
+    border: none !important;
+}
+
+.secao-recursos th {
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.secao-recursos tr {
+    transition: background-color 0.2s;
+}
+
+/* Efeito sutil ao passar o mouse nas linhas da tabela */
+.secao-recursos tbody tr:hover {
+    background-color: #f8fafc;
+}
