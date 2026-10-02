@@ -87,11 +87,22 @@ body {
 }
 
 h1 {
-    font-size: 2rem;
-    line-height: 1.2;
-    color: #0f172a;
-    margin-bottom: 15px;
+    font-size: 2.2rem;
+    line-height: 1.25;
+    color: #0f172a; /* Azul escuro marcante */
+    font-weight: 800; /* Peso extra para dar imponência */
+    letter-spacing: -0.03em; /* Efeito de design de revista/premium */
+    margin-bottom: 18px;
 }
+
+/* 💻 Ajuste automático para computadores (telas grandes) */
+@media (min-width: 768px) {
+    h1 {
+        font-size: 3.2rem !important; /* Aumenta no PC para ocupar bem o espaço ao lado do vídeo */
+        line-height: 1.2;
+    }
+}
+
 
 .description {
     color: #64748b;
