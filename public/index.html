@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoAngel </title>
     <link rel="stylesheet" href="css/styles.css">
-    
-    <!-- 🎨 O SEGREDO ESTÁ AQUI: Abre a tag de estilo corretamente -->
+   
     <style>
       
-/* --- NOVO BANNER ROTATIVO (MÉTODO NUVEMSHOP) --- */
 .slideshow-container {
     position: relative;
     width: 100%;
@@ -38,38 +36,38 @@
 .slideshow-container .slide img {
     width: 100%;
     height: 100%;
-    /* 🎯 SEGREDO VISUAL: Usa cover para a imagem se adaptar perfeitamente sem amassar ou distorcer */
+ 
     object-fit: cover; 
     display: block;
 }
 
-/* 💻 REGRAS PARA O COMPUTADOR */
+
 @media (min-width: 769px) {
     .slideshow-pc {
-        /* Proporção 1580x700 que você encontrou no inspecionar */
+     
         aspect-ratio: 1580 / 700; 
         display: block;
     }
     .slideshow-mobile {
-        /* Esconde o banner de celular no computador */
+      
         display: none !important; 
     }
 }
 
-/* 📱 REGRAS PARA O CELULAR */
+
 @media (max-width: 768px) {
     .slideshow-pc {
-        /* Esconde o banner de computador no celular */
+      
         display: none !important; 
     }
     .slideshow-mobile {
-        /* Proporção 1:1 (quadrada) ideal para o mobile da referência */
+      
         aspect-ratio: 1 / 1; 
         display: block;
     }
 }
 
-        /* Seção Elegante Exclusiva para a História Real */
+        
         .secao-historia-completa {
             background-color: #ffffff;
             border-top: 1px solid #e2e8f0;
@@ -100,8 +98,8 @@
             background-color: #ffffff;
             border-top: 1px solid #e2e8f0;
             border-bottom: 1px solid #e2e8f0;
-            padding: 25px 0 45px 0; /* 💎 Reduzido o espaço do topo para 25px e mantido embaixo */
-            margin-top: 0px;        /* 🎯 ZERADO: Remove a lacuna de separação com o bloco de cima */
+            padding: 25px 0 45px 0; 
+            margin-top: 0px;       
             margin-bottom: 15px;
         }
 
@@ -168,7 +166,7 @@
             color: #2563eb;
         }
 
-        /* --- CARROSSEL DE CARDS 3D PREMIUM COM EFEITOS AJUSTADOS --- */
+        
         .secao-carrossel {
             padding: 30px 0;
             background-color: #f8fafc;
@@ -256,7 +254,7 @@
         .btn-prev-3d { left: 0px; }
         .btn-next-3d { right: 0px; }
 
-        /* 📱 REGRAS EXCLUSIVAS PARA CELULARES (CARDS LADO A LADO VISÍVEIS) */
+       
         @media (max-width: 768px) {
             .carrossel-slide-3d {
                 width: 280px;
@@ -276,44 +274,44 @@
             .btn-prev-3d { left: 5px; }
             .btn-next-3d { right: 5px; }
         }
-                /* 📱 Inverte a ordem na tela do celular: Checkout primeiro, Vídeo depois! */
+               
         @media (max-width: 768px) {
             .hero-grid {
                 display: flex !important;
-                flex-direction: column-reverse !important; /* 🔀 O segredo: joga a primeira coluna (vídeo) para baixo! */
+                flex-direction: column-reverse !important;
             }
         }
 
-    </style> <!-- ⚙️ Fecha a tag de estilo corretamente -->
+    </style> 
 </head>
 
 <body>
 
-    <!-- 🌟 BANNER PANORÂMICO DO TOPO (FINO DE FORA A FORA) -->
+   
     <section class="banner-topo">
     </section>
 
-  <!-- 📸 NOVO BANNER ROTATIVO INTELIGENTE (DIVIDIDO POR TELAS) -->
+ 
 
-<!-- Versão Exclusiva para COMPUTADOR (Sumirá no celular) -->
+
 <section class="slideshow-container slideshow-pc">
-    <!-- Foto 1 - PC -->
+    
     <div class="slide ativo">
         <img src="/assets/marketing_pc_foto1.jpeg" alt="Campanha EcoAngel PC 1">
     </div>
-    <!-- Foto 2 - PC -->
+    
     <div class="slide">
         <img src="/assets/marketing_pc_foto2.jpeg" alt="Campanha EcoAngel PC 2">
     </div>
 </section>
 
-<!-- Versão Exclusiva para CELULAR (Sumirá no computador) -->
+
 <section class="slideshow-container slideshow-mobile">
-    <!-- Foto 1 - Celular -->
+    
     <div class="slide ativo">
         <img src="/assets/marketing_mobile_foto1.jpeg" alt="Campanha EcoAngel Mobile 1">
     </div>
-    <!-- Foto 2 - Celular -->
+   
     <div class="slide">
         <img src="/assets/marketing_mobile_foto2.jpeg" alt="Campanha EcoAngel Mobile 2">
     </div>
@@ -321,11 +319,11 @@
 
 
 
-     <!-- 3. Bloco Principal da Oferta (Hero Section) -->
+   
     <main class="hero-section container" style="margin-top: 0px; padding-top: 10px;">
         <div class="hero-grid" style="align-items: start;">
             
-            <!-- Lado Esquerdo: Reprodutor de Vídeo Totalmente Centralizado e com Espaçamento -->
+           
             <div class="product-gallery" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; margin: 25px auto; padding: 0 10px; box-sizing: border-box;">
                 <iframe
                     width="315"
@@ -339,7 +337,7 @@
                 </iframe>
             </div>
 
-            <!-- Lado Direito: Título, Descrição e Caixas de Compra -->
+           
             <div class="product-info" style="margin-top: 20px;">
                 <span class="tag">Da nossa casa, para a sua casa.</span>
                 <h1>Através das cores a Angel torna a vida mais colorida!</h1>
@@ -348,20 +346,20 @@
                     Um dispositivo inteligente que através do wifi busca os dados que o gcm disponibiliza para os cuidadores. Atualmente disponivel para sibionics e librefreestyle 2 (nao funciona com o leitor)
                 </p>
 
-                <!-- Bloco de Preço, Cupom e Botão de Compra (MANTIDO 100% INTACTO) -->
-                               <!-- Bloco de Preço, Cupom e Botão de Compra -->
+               
+                             
                 <div class="checkout-box" id="formulario-compra" style="scroll-margin-top: 20px;">
 
                    
 
-                    <!-- Setor Isolado do Cupom de Desconto -->
+                   
                     <div class="coupon-group">
                         <input type="text" id="coupon-input" placeholder="Digite o cupom do influenciador">
                         <button id="apply-coupon-btn">Aplicar</button>
                     </div>
                     <p id="coupon-message" class="message"></p>
 
-                    <!-- 🚚 FORMULÁRIO DE DADOS PESSOAIS E ENTREGA OBRIGATÓRIOS -->
+                   
                     <div class="delivery-form" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
                         <h3 style="font-size: 16px; margin-bottom: 12px; color: #333;">Dados de Entrega</h3>
                         
@@ -395,10 +393,10 @@
 
 
 
-                    <!-- Botão de Compra Principal -->
+                   
                     <button id="buy-btn" class="btn-primary" style="margin-top: 10px;">Garantir Minha Luminária</button>
                
-                                   <!-- 🛡️ TEXTO DE PRIVACIDADE E SEGURANÇA INTEGRADO -->
+                                 
                     <div style="margin-top: 15px; background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; text-align: left;">
                         <span style="display: block; font-size: 12px; font-weight: bold; color: #1e293b; margin-bottom: 4px;">🛡️ Privacidade e segurança</span>
                         <p style="font-size: 11px; color: #64748b; margin: 0; line-height: 1.5;">
@@ -412,8 +410,7 @@
         </div>
     </main>
 
-      <!-- 🌟 6. SEÇÃO "COMO FUNCIONA" -->
-       <!-- 🌟 SEÇÃO REFORMULADA: COMO FUNCIONA E ESCALA DE CORES -->
+     
     <section class="secao-recursos">
         <div class="container">
             <h2 style="text-align: center; color: #0f172a; font-size: 1.8rem; margin: 0;">Como a EcoAngel funciona?</h2>
@@ -437,7 +434,7 @@
                 </div>
             </div>
 
-            <!-- 📊 TABELA EM HTML DA ESCALA DE CORES DA ANGEL -->
+           
             <div style="max-width: 600px; margin: 40px auto 0 auto; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
                 <h4 style="margin-top: 0; margin-bottom: 15px; color: #0f172a; font-size: 1.1rem; text-align: center;">🎨 Guia Prático de Sinalização por Cores</h4>
                 <p style="font-size: 13px; color: #64748b; text-align: center; margin-top: 0; margin-bottom: 20px;">Veja como a luz da Angel se comporta dinamicamente de acordo com o range numérico lido:</p>
@@ -489,28 +486,28 @@
     </section>
 
 
- <!-- 🌟 5. SEÇÃO DE MÍDIA PREMIUM (CARROSSEL DE CARDS 3D RESPONSIVOS) -->
+ 
     <section class="secao-carrossel">
         <div class="container">
             <h2 style="color: #0f172a; font-size: 1.8rem; margin-bottom: 8px;">Conheça a Angel de perto</h2>
             <p style="color: #64748b; margin-bottom: 25px; margin-top: 0;">Navegue pelas fotos e veja o vídeo demonstrativo do produto.</p>
             
             <div class="carrossel-palco">
-                <!-- Botões de navegação lateral tridimensionais -->
+               
                 <button class="btn-carrossel-3d btn-prev-3d" onclick="moverCard(-1)">❮</button>
                 <button class="btn-carrossel-3d btn-next-3d" onclick="moverCard(1)">❯</button>
 
-                <!-- Palco dos Cards 3D -->
+               
                 <div class="carrossel-container-3d">
-                    <!-- Card 1 -->
+                   
                     <div class="carrossel-slide-3d prev">
                         <img src="/assets/carrossel_foto1.jpeg" alt="SmartGlucolamp no quarto">
                     </div>
-                    <!-- Card 2 -->
+                  
                     <div class="carrossel-slide-3d active">
                         <img src="/assets/carrossel_foto2.jpeg" alt="SmartGlucolamp mudando de cor">
                     </div>
-                    <!-- Card 3 -->
+                   
                     <div class="carrossel-slide-3d next">
                         <img src="/assets/carrossel_foto3.jpeg" alt="Detalhes do acabamento da Angel">
                     </div>
@@ -520,7 +517,7 @@
         </div>
     </section>
 
-    <!-- 📖 4. NOVA SEÇÃO EXCLUSIVA E CENTRADA PARA A SUA HISTÓRIA REAL -->
+   
     
          <section class="secao-historia-completa" id="nossa-historia">
         <div class="container">
@@ -598,13 +595,13 @@
             </div>
         </div>
     </section>
-    <!-- 👨‍👩‍👧‍👦 NOVO: SEÇÃO DE FECHAMENTO COM FOTO DA FAMÍLIA E BOTÃO ÂNCORA -->
+   
     <section style="background-color: #ffffff; padding: 40px 20px; text-align: center; border-top: 1px solid #e2e8f0;">
         <div class="container" style="max-width: 600px; margin: 0 auto;">
-            <!-- Espaço reservado para a foto da sua família -->
+           
             <img src="/assets/familia_ecoangel.jpeg" alt="Família desenvolvedora da Angel" style="width: 100%; max-width: 480px; height: auto; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 25px;">
             
-            <!-- Botão de Chamada para Ação Rápida -->
+           
             <div>
                 <a href="#formulario-compra" style="display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 15px 35px; border-radius: 8px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); transition: all 0.2s;" onmouseover="this.style.background='#1d4ed8'; this.style.transform='scale(1.02)'" onmouseout="this.style.background='#2563eb'; this.style.transform='scale(1)'">
                     Garantir Meu Dispositivo
@@ -617,7 +614,7 @@
 
   
 
-    <!-- 🌟 7. RODAPÉ INSTITUCIONAL DE CONFIANÇA -->
+   
     <footer class="rodape-premium">
         <div class="container">
             <div class="rodape-grid">
@@ -627,14 +624,14 @@
                 </div>
                                 <div class="rodape-col">
                     <h4>Navegação</h4>
-                    <!-- ⚓ Aponta para a âncora de ID que criamos acima -->
+                   
                     <a href="#nossa-historia">Quem Somos</a>
                     <a href="#nossa-historia">Nossa História</a>
                     <a href="https://instagram.com/ecoangel.arq" target="_blank">Instagram Oficial</a>
                 </div>
                 <div class="rodape-col">
                     <h4>Suporte</h4>
-                    <!-- 📄 Abre a página de políticas atualizada em uma nova aba segura -->
+                   
                     <a href="/politicas.html" target="_blank">Termos de Uso</a>
                     <a href="/politicas.html" target="_blank">Política de Privacidade</a>
                     <p style="margin-top: 10px; font-size: 0.85rem;">E-mail: ecoangel.arq@gmail.com</p>
@@ -646,15 +643,15 @@
             </div>
         </div>
     </footer>
-    <!-- 🧠 ENGINE INTELIGENTE DO CARROSSEL DE CARDS 3D -->
+    
     <script>
 
-// 🔄 LÓGICA DO BANNER ROTATIVO BLINDADA (EVITA SLIDE FANTASMA)
+
 let slideIndexPC = 0;
 let slideIndexMobile = 0;
 
 function alternarSlidesGlobais() {
-    // 💻 Força a contagem exata apenas dentro do bloco de PC
+    
     const slidesPC = document.querySelectorAll('.slideshow-pc > .slide');
     if (slidesPC.length > 0) {
         slidesPC[slideIndexPC].classList.remove('ativo');
@@ -663,7 +660,7 @@ function alternarSlidesGlobais() {
         slidesPC[slideIndexPC].classList.add('ativo');
     }
 
-    // 📱 Força a contagem exata apenas dentro do bloco de Celular
+   
     const slidesMobile = document.querySelectorAll('.slideshow-mobile > .slide');
     if (slidesMobile.length > 0) {
         slidesMobile[slideIndexMobile].classList.remove('ativo');
@@ -673,27 +670,27 @@ function alternarSlidesGlobais() {
     }
 }
 
-// Limpa qualquer temporizador antigo que possa estar rodando duplicado na memória
+
 if (window.intervaloBanner) {
     clearInterval(window.intervaloBanner);
 }
 
-// Inicializa a engrenagem limpa
+
 window.intervaloBanner = setInterval(alternarSlidesGlobais, 5000);
 
 
 
-        let indiceCardAtual = 1; // Começa no segundo card (índice 1), que é a foto central ativa
+        let indiceCardAtual = 1; 
 
         function atualizarCards3D() {
             const slides = document.querySelectorAll('.carrossel-slide-3d');
             const totalSlides = slides.length;
 
             slides.forEach((slide, i) => {
-                // Remove todas as classes de posicionamento antigas antes de recalcular
+               
                 slide.classList.remove('active', 'prev', 'next');
 
-                // Lógica circular para encontrar quem é o card central, o anterior e o próximo
+               
                 if (i === indiceCardAtual) {
                     slide.classList.add('active');
                 } else if (i === (indiceCardAtual - 1 + totalSlides) % totalSlides) {
@@ -702,7 +699,7 @@ window.intervaloBanner = setInterval(alternarSlidesGlobais, 5000);
                     slide.classList.add('next');
                 }
 
-                // 🛑 COMANDO INTELIGENTE: Se o slide atual não for o vídeo (índice 3) e o vídeo estiver tocando, força o pause dele
+                
                 if (i === 3 && indiceCardAtual !== 3) {
                     const iframe = slide.querySelector('iframe');
                     if (iframe && iframe.contentWindow) {
@@ -712,23 +709,23 @@ window.intervaloBanner = setInterval(alternarSlidesGlobais, 5000);
             });
         }
 
-        // Função ativada pelos botões de setas laterais
+       
         function moverCard(direcao) {
             const slides = document.querySelectorAll('.carrossel-slide-3d');
             const totalSlides = slides.length;
 
-            // Altera o índice de forma circular (se passar do último volta pro primeiro e vice-versa)
+          
             indiceCardAtual = (indiceCardAtual + direcao + totalSlides) % totalSlides;
             atualizarCards3D();
         }
 
-        // Inicializa o posicionamento tridimensional assim que a página termina de carregar
+       
         document.addEventListener("DOMContentLoaded", () => {
             atualizarCards3D();
         });
     </script>
 
-    <!-- Avisando o site para ler o arquivo JavaScript que vai cuidar do cupom e do botão (MANTIDO 100% IGUAL) -->
+   
     <script src="js/checkout.js?v=1"></script>
 </body>
 </html>
