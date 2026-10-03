@@ -1,6 +1,4 @@
-/* =============================================================
-   1. CONFIGURAÇÕES GERAIS E CORES (Reset de Fábrica)
-============================================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -9,7 +7,7 @@
 }
 
 body {
-    background-color: #f0fdf4; /* 🟢 Fundo levemente esverdeado (Menta) para quebrar o "branco sem sal" */
+    background-color: #f0fdf4;
     color: #1e293b;
     line-height: 1.6;
 }
@@ -21,9 +19,7 @@ body {
     padding: 0 20px;
 }
 
-/* =============================================================
-   2. CABEÇALHO (Navbar)
-============================================================= */
+
 .navbar {
     background-color: #ffffff;
     padding: 20px 0;
@@ -34,25 +30,23 @@ body {
 .logo {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #0284c7; /* 🔵 Azul Sereno / Clínico */
+    color: #0284c7; 
     letter-spacing: -0.5px;
 }
 
-/* =============================================================
-   3. BLOCO PRINCIPAL (Hero Section) - Responsivo (Mobile-First)
-============================================================= */
+
 .hero-section {
     padding: 40px 0;
 }
 
-/* Por padrão (no celular), as coisas ficam uma embaixo da outra */
+
 .hero-grid {
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
 
-/* Forçando a galeria a ficar perfeita e não quebrar a tela */
+
 .product-gallery {
     width: 100%;
     display: flex;
@@ -68,7 +62,7 @@ body {
     object-fit: cover;
 }
 
-/* Textos da Oferta */
+
 .product-info {
     display: flex;
     flex-direction: column;
@@ -77,8 +71,8 @@ body {
 
 .tag {
     align-self: flex-start;
-    background-color: #e0f2fe; /* 🔵 Azul Clarinho Médico */
-    color: #0369a1;            /* 🔵 Texto Azul Fechado */
+    background-color: #e0f2fe; 
+    color: #0369a1;           
     font-size: 0.85rem;
     font-weight: 600;
     padding: 4px 12px;
@@ -89,16 +83,16 @@ body {
 h1 {
     font-size: 2.2rem;
     line-height: 1.25;
-    color: #0f172a; /* Azul escuro marcante */
-    font-weight: 800; /* Peso extra para dar imponência */
-    letter-spacing: -0.03em; /* Efeito de design de revista/premium */
+    color: #0f172a; 
+    font-weight: 800; 
+    letter-spacing: -0.03em; 
     margin-bottom: 18px;
 }
 
-/* 💻 Ajuste automático para computadores (telas grandes) */
+
 @media (min-width: 768px) {
     h1 {
-        font-size: 3.2rem !important; /* Aumenta no PC para ocupar bem o espaço ao lado do vídeo */
+        font-size: 3.2rem !important; 
         line-height: 1.2;
     }
 }
@@ -109,9 +103,7 @@ h1 {
     font-size: 1.05rem;
     margin-bottom: 25px;
 }
-/* =============================================================
-   4. CAIXA DE CHECKOUT (Preço, Cupom e Botão)
-============================================================= */
+
 .checkout-box {
     background-color: #ffffff;
     border: 1px solid #cbd5e1;
@@ -155,7 +147,7 @@ h1 {
 }
 
 .coupon-group input:focus {
-    border-color: #10b981; /* 🟢 Foco Verde Menta */
+    border-color: #10b981; 
 }
 
 .coupon-group button {
@@ -179,13 +171,13 @@ h1 {
     font-weight: 500;
     margin-bottom: 15px;
 }
-.message.success { color: #059669; } /* 🟢 Verde Médico para sucesso */
-.message.error { color: #dc2626; }   /* Vermelho para erro */
+.message.success { color: #059669; } 
+.message.error { color: #dc2626; }   
 
 /* Botão de Compra Chamativo e Seguro */
 .btn-primary {
     width: 100%;
-    background-color: #10b981; /* 🟢 Verde Saúde Vibrante */
+    background-color: #10b981;
     color: #ffffff;
     border: none;
     padding: 16px;
@@ -198,20 +190,18 @@ h1 {
 }
 
 .btn-primary:hover {
-    background-color: #059669; /* 🟢 Tom Verde mais escuro ao passar o mouse */
+    background-color: #059669; 
     transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
 }
 
-/* =============================================================
-   5. MUDANÇA PARA COMPUTADORES (Telas Maiores que 768px)
-============================================================= */
+
 @media (min-width: 768px) {
     .hero-section {
         padding: 80px 0;
     }
     
-    /* No computador, a foto fica do lado esquerdo e o texto do lado direito */
+    
     .hero-grid {
         flex-direction: row;
         align-items: center;
@@ -219,17 +209,14 @@ h1 {
     }
 
     .product-gallery, .product-info {
-        flex: 1; /* Divide o espaço meio a meio */
+        flex: 1; 
     }
 
     h1 {
         font-size: 2.8rem;
     }
 }
-/* =============================================================
-   6. SEÇÃO COMO FUNCIONA & ESCALA DE CORES PREMIUM
-============================================================ */
-/* Fundo blocado premium para quebrar a monotonia */
+
 .secao-recursos {
     background-color: #f0f9ff !important; /* 🔵 Azul Clínico Ultra Suave */
     border-top: 1px solid #e0f2fe;
@@ -259,11 +246,11 @@ h1 {
 /* Efeito interativo ao passar o mouse */
 .recurso-card:hover {
     transform: translateY(-5px);
-    border-color: #10b981; /* 🟢 Borda muda para o Verde EcoAngel */
+    border-color: #10b981; /* 
     box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
 }
 
-/* Transformando os emojis em ícones de app moderno */
+
 .recurso-card .icon {
     font-size: 2rem;
     margin-bottom: 20px;
@@ -272,7 +259,7 @@ h1 {
     justify-content: center;
     width: 60px;
     height: 60px;
-    background-color: #e0f2fe; /* 🔵 Círculo Azul Clarinho */
+    background-color: #e0f2fe; 
     border-radius: 50%;
 }
 
@@ -289,7 +276,7 @@ h1 {
     line-height: 1.6;
 }
 
-/* Customização fina para a Tabela de Cores Ambulatorial */
+
 .secao-recursos table {
     box-shadow: 0 10px 25px rgba(15, 23, 42, 0.03) !important;
     border: none !important;
@@ -305,7 +292,7 @@ h1 {
     transition: background-color 0.2s;
 }
 
-/* Efeito sutil ao passar o mouse nas linhas da tabela */
+
 .secao-recursos tbody tr:hover {
     background-color: #f8fafc;
 }
